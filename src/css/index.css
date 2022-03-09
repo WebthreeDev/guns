@@ -10,6 +10,7 @@
     --blue3:rgb(3, 50, 104);
     --green:rgb(12, 160, 86);
     --transparentLight:rgba(210, 230, 255, 0.1);
+    --neon:rgb(233, 64, 255);
 }
 h1,h2,h3,h4,h5,h6,p,div{
     color: var(--light1);
@@ -202,11 +203,7 @@ a{
     background-color: var(--light1);
     cursor: pointer;
 }
-.center-v{
-    height: 90vh;
-    display: inline-flex;
-    align-items: center;
-}
+
 .box2{
     height: 280px;
     border-radius: 8px;
@@ -277,4 +274,62 @@ a{
 @keyframes perroAnimacion2 {
   0%   {left:0px; top:0px;}
   100% {left:90%; top:0px;}
+}
+
+.bg-dogs{
+    background: linear-gradient(rgba(0, 17, 7, 0.95),rgba(1, 9, 24, 0.95) ), url(../img/bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 110%;
+    min-height: 99vh;
+    padding-left: 200px;
+    padding-right: 200px;
+}
+/* .marco{
+    background: linear-gradient(rgba(245,190,145, 0.5),rgba(245,105,220, 0.5) );
+    border-radius: 10px;  
+    padding: 80px 40px;
+    display: inline-flex;
+    align-items: center;
+    box-shadow: inset 0px 0px 12px var(--neon);
+    border: 1px solid var(--neon);
+    outline: 1px solid white;
+}
+.neon{
+    transition: 0.5s;
+    padding: 2px;
+    border: 1px solid var(--neon);
+    box-shadow: 0px 0px 12px var(--neon);
+    border-radius: 12px;
+} */
+
+.btn-ccan{
+    background:linear-gradient(rgb(173, 40, 0),rgb(246, 201, 0) );
+    display: block;
+    margin: 0 auto;
+    height: 40px;
+    border-radius: 5px;
+    border: 2px solid rgb(219, 205, 6);
+    outline: 2px solid rgb(143, 45, 0);
+    color: white;    
+    font-weight: 600;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: lighter;
+    font-size: 20px;
+    transition: 0.3s;
+}
+.btn-ccan:hover{
+    background:linear-gradient(rgb(202, 55, 10),rgb(212, 181, 41) );
+    transform: scale(1.01);
+    cursor: pointer;
+    outline: 2px solid rgb(199, 75, 18);
+}
+.nft-img{
+    transition: 0.5s;
+}
+.nft-img:hover{
+    /* transform:skew(1.5deg) rotate(1deg) rotateY(15deg) scale(1.043); */
+    transform: scale3d(20px 20px 20px);
+    box-shadow: -8px 10px 10px rgba(0, 0, 0, 0.466);
+    cursor: pointer;
 }
