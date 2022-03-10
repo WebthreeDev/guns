@@ -1,12 +1,13 @@
-import React, { useState,useContext } from "react"
+import React, { useState, useContext } from "react"
 import { Link } from "react-router-dom"
 import rundog from '../../../img/rundog.gif'
 import { DataContext } from '../../../context/DataContext'
+import walletImg from '../../../img/wallet.png'
 
 const Navbar = () => {
 
-    const { wallet,Connect,resumeWallet } = useContext(DataContext)
-    
+    const { wallet, Connect, resumeWallet } = useContext(DataContext)
+
     const location = "/dashboard"
 
     const bg1 = { backgroundColor: "rgb(19,20,25)" }
@@ -55,10 +56,20 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="d-flex align-items-center">
-                    {wallet!=="" ? <>
-                {resumeWallet(wallet)}
-              </> : <button onClick={Connect} className="buttonLink mx-1"> Connect Wallet </button>
-              }
+                    {wallet? <>
+                        {
+                            <div className="wallet">
+                                <div className="wallet-circle">
+                                    <img height="20px" src={walletImg} />
+                                </div>
+                                <b className="mx-2">
+                                    {resumeWallet(wallet)}
+                                </b>
+
+                            </div>
+                        }
+                    </> : <button onClick={Connect} className="buttonLink mx-1"> Connect Wallet </button>
+                    }
                 </div>
             </div>
         </nav>

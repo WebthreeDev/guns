@@ -325,11 +325,47 @@ a{
     outline: 2px solid rgb(199, 75, 18);
 }
 .nft-img{
-    transition: 0.5s;
+    transition: 2s;
 }
 .nft-img:hover{
-    /* transform:skew(1.5deg) rotate(1deg) rotateY(15deg) scale(1.043); */
+     transform:skew(1.5deg) rotate(-2deg) rotateY(30deg) scale(1.043); 
     transform: scale3d(20px 20px 20px);
-    box-shadow: -8px 10px 10px rgba(0, 0, 0, 0.466);
+    box-shadow: -8px 10px 3px rgba(0, 0, 0, 0.466);
     cursor: pointer;
+}
+.wallet{
+    background-color: rgba(240, 248, 255, 0.116);
+    border-radius:30px;
+    width: 150px;
+    align-items: center;
+    display: flex;
+    height: 25px;
+}
+.wallet-circle{
+    background-color: rgb(37, 37, 37);
+    border: 2px solid rgb(121, 121, 121);
+    padding: 3px;
+    border-radius: 50%;
+    text-align: center;
+    transform: rotate(-20deg);
+    height: 40px;
+    width: 40px;
+}
+.nftBg{
+    background-color: rgba(53, 208, 255, 0.055);
+    border: 1px solid rgba(133, 227, 255, 0.226);
+    padding: 20px 20px;
+    border-radius: 10px;
+}
+.nftBg2{
+    background-color: rgba(111, 0, 121, 0.055);
+    border: 1px solid rgba(250, 91, 255, 0.226);
+    padding: 20px 20px;
+    border-radius: 10px;
+}
+.nftBg3{
+    background-color: rgba(255, 218, 53, 0.055);
+    border: 1px solid rgba(255, 216, 133, 0.226);
+    padding: 20px 20px;
+    border-radius: 10px;
 }
