@@ -3,35 +3,33 @@ import React, { createContext, useState, useEffect } from 'react'
 import gameAlert from './services/gameAlertService'
 //import Connect from './services/connectService'
 import resumeWallet from './services/resumeWallet'
-import w3S from './services/web3Services'
+import w3S from '../services/w3S'
 
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
-    const bsc = 57
+
+    // smart chain ** const bsc = 56
+    const bsc = 97 //testnet
     const [wallet, setWallet] = useState(false)
-    
-    const Connect = async() => {
-        const chainId = await w3S.getChainId()
-        alert(chainId)
-       /*  if(window.ethereum){
-            const account = await w3S.requestAccounts()
-            setWallet(account)
-            const chainId = await w3S.getChainId()
-            if(chainId == bsc){
-                //logueo la wallet en el backend
-            }else{
-                //switch ethereum chain
-            }
-            //si esta en la correcta continuo sino lo cambio de res
-            //al cambiar de res le permito conectarse con sus datos
-            
-        }else{
-            alert("No Metamask detected")
-        } */
-    }
+
     useEffect(() => {
         Connect()
     }, [])
+
+    const Connect = async () => {
+        if (w3S.etherWallet()) {
+            const chainId = await w3S.chainId()
+            if (chainId == bsc) {
+                const account = await w3S.requestAccounts()
+                setWallet(account[0])
+            } else {
+                await w3S.switchEthereumChain(bsc)
+                Connect()
+            }
+        } else {
+            alert("No Metamask Installed!")
+        }
+    }
 
     const functionsOBJ = {
         wallet,

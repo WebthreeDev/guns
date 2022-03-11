@@ -57,7 +57,6 @@ const Shop = () => {
                                         <button onClick={_ => buyLegendaryPackage()} className="btn-ccan mt-2 w-50"> BUY </button>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
