@@ -347,7 +347,6 @@ a{
     padding: 3px;
     border-radius: 50%;
     text-align: center;
-    transform: rotate(-20deg);
     height: 40px;
     width: 40px;
 }
@@ -368,4 +367,13 @@ a{
     border: 1px solid rgba(255, 216, 133, 0.226);
     padding: 20px 20px;
     border-radius: 10px;
+}
+.packages{
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+}
+.gray{
+    color:rgb(117, 122, 138);
 }

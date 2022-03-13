@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { BrowserRouter } from "react-router-dom"
 import Router from "./router"
 import Navbar from "./chunk/navbar/navbar"

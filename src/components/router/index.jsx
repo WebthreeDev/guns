@@ -5,12 +5,16 @@ import Market from "../routes/market/market"
 import Shop from "../routes/shop/shop"
 import Race from "../routes/race/race"
 import Test from "../routes/test/test";
+import Admin from "../routes/admin/admin";
 
 const Router = () => {
     return (
         <Switch>
             <Route path="/market">
                 <Market />
+            </Route>
+            <Route path="/admin">
+                <Admin />
             </Route>
             <Route path="/dashboard">
                 <Dashboard />

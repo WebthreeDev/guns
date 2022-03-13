@@ -60,7 +60,7 @@ const Navbar = () => {
                         {
                             <div className="wallet">
                                 <div className="wallet-circle">
-                                    <img height="20px" src={walletImg} />
+                                    <img alt="" height="17px" src={walletImg} />
                                 </div>
                                 <b className="mx-2">
                                     {resumeWallet(wallet)}

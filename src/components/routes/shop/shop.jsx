@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import sobre1 from "../../../img/sobre.png"
 import sobre2 from "../../../img/sobre2.png"
 import sobre3 from "../../../img/sobre3.png"
-import { buyCommonPackage, buyEpicPackage, buyLegendaryPackage } from "./shopService";
+import { DataContext } from "../../../context/DataContext";
+
+import buyPackage from "./shopService";
 const Shop = () => {
+    const { wallet, Connect } = useContext(DataContext)
 
     return (
         <div className="bg-dogs">
@@ -24,7 +27,10 @@ const Shop = () => {
                                             0.9% Epic<br />
                                             0.1% Legendary
                                         </div>
-                                        <button onClick={_ => buyCommonPackage()} className="btn-ccan mt-2 w-50"> BUY </button>
+                                        {wallet?
+                                        <button onClick={_ => buyPackage(1,wallet)} className="btn-ccan mt-2 w-50"> BUY </button>
+                                        :
+                                        <button onClick={Connect} className="btn-ccan mt-2 w-50"> Connect </button>}
                                     </div>
                                 </div>
                                 <div className="col-12 col-sm-6 mb-3 col-md-4">
@@ -39,7 +45,10 @@ const Shop = () => {
                                             10% Epic<br />
                                             3% Legendary
                                         </div>
-                                        <button onClick={_ => buyEpicPackage()} className="btn-ccan mt-2 w-50"> BUY </button>
+                                        {wallet?
+                                        <button onClick={_ => buyPackage(2,wallet)} className="btn-ccan mt-2 w-50"> BUY </button>
+                                        :
+                                        <button onClick={Connect} className="btn-ccan mt-2 w-50"> Connect </button>}
                                     </div>
                                 </div>
                                 <div className="col-12 col-sm-6 mb-3 col-md-4">
@@ -54,7 +63,10 @@ const Shop = () => {
                                             30% Epic<br />
                                             10% Legendary
                                         </div>
-                                        <button onClick={_ => buyLegendaryPackage()} className="btn-ccan mt-2 w-50"> BUY </button>
+                                        {wallet?
+                                        <button onClick={_ => buyPackage(3,wallet)} className="btn-ccan mt-2 w-50"> BUY </button>
+                                        :
+                                        <button onClick={Connect} className="btn-ccan mt-2 w-50"> Connect </button>}
                                     </div>
                                 </div>
                             </div>
