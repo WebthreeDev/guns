@@ -7,11 +7,17 @@ import 'bootstrap-icons/font/bootstrap-icons.css';
 import { DataProvider } from './context/DataContext'
 
 ReactDOM.render(
+    <DataProvider>
+      <App />
+    </DataProvider>,
+  document.getElementById('root')
+);
+/* ReactDOM.render(
   <React.StrictMode>
     <DataProvider>
       <App />
     </DataProvider>
   </React.StrictMode>,
   document.getElementById('root')
-);
+); */
 

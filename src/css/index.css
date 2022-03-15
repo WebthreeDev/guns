@@ -48,20 +48,29 @@ a{
     color:var(--light1);
     border:none;
     padding: 8px 16px;
-    background-color: rgb(2, 103, 170);
+    background-color: rgba(2, 103, 170, 0);
 }
 .buttonLink:hover{
-    background-color: rgb(0, 129, 214);
+    background-color: rgba(138, 138, 138, 0.178);
 }
 .topNav{
     background-color: var(--dark1);
     color: var(--light1);
+    height: 50px;
 }
 .secondNav{
     border-bottom: 1px solid var(--line);
     display: flex;
 }
+.logo-text{
+    font-size: 20px;
+    margin-top: -4px;
+}
+.he-50px{
+    height: 50px;
+}
 .secondNavButton{
+    border: 1px solid red;
     margin-bottom: -2px;
     padding: 5px 10px;
     background-color: transparent;
@@ -78,27 +87,28 @@ a{
 .loaderContent{
     position: fixed;
     top: 0px;
+    left: 0px;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(2, 22, 39, 0.596);
+    background-color: rgba(0, 0, 0, 0.767);
     display: flex;
     justify-content: center;
     align-items: center;
 }
 .loaderIcon{
-    border-bottom: 3px solid rgba(0, 0, 0, 0);
-    border-left: 3px solid var(--blue);
-    border-right: 3px solid var(--blue);
-    border-top: 3px solid rgba(0, 0, 0, 0);
+    border-bottom: 5px solid rgba(0, 0, 0, 0);
+    border-left: 5px solid white;
+    border-right: 5px solid white;
+    border-top: 5px solid rgba(0, 0, 0, 0);
     border-radius: 50%;
-    height: 50px;
-    width: 50px;
-    animation-name: example;
-    animation-duration: 0.7s;
+    height: 80px;
+    width: 80px;
+    animation-name: loadingIcon;
+    animation-duration: 0.6s;
     animation-iteration-count: infinite;
     animation-timing-function: linear;
 }
-@keyframes example {
+@keyframes loadingIcon {
   100%{ transform: rotate(180deg);}
 }
 .sidebar{
@@ -325,6 +335,7 @@ a{
     outline: 2px solid rgb(199, 75, 18);
 }
 .nft-img{
+    width: 160px;
     transition: 2s;
 }
 .nft-img:hover{
@@ -332,6 +343,12 @@ a{
     transform: scale3d(20px 20px 20px);
     box-shadow: -8px 10px 3px rgba(0, 0, 0, 0.466);
     cursor: pointer;
+}
+.percent{
+    text-align: left;
+    padding-top: 10px;
+    color: gray;
+    font-size: 12px;
 }
 .wallet{
     background-color: rgba(240, 248, 255, 0.116);
@@ -351,8 +368,7 @@ a{
     width: 40px;
 }
 .nftBg{
-    background-color: rgba(53, 208, 255, 0.055);
-    border: 1px solid rgba(133, 227, 255, 0.226);
+    background: linear-gradient(rgba(8, 8, 8, 0.95),rgba(0, 0, 0, 0.95));
     padding: 20px 20px;
     border-radius: 10px;
 }
