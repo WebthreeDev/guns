@@ -9,9 +9,10 @@ import web3 from "../../../tokens/canes/canes"
 import { Contract } from "../../../tokens/canes/canes"
 
 const Shop = () => {
-    const { loading, setLoading, wallet, Connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice } = useContext(DataContext)
+    const { loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice } = useContext(DataContext)
 
-    const buyPackage = (packageId, wallet, price) => {
+    const buyPackage = async (packageId, wallet, price) => {
+        await connect()
         setLoading(true)
         axios.post("https://cryptocans.io/api/v1/cans/", { id: packageId, wallet }).then((res) => {
             const response = res.data.response
@@ -27,23 +28,34 @@ const Shop = () => {
                 const hash = res.transactionHash
                 axios.patch("https://cryptocans.io/api/v1/cans/" + response.id + "/" + hash).then((res) => {
                     console.log(res.data)
-                    alert("Minteo Exitoso")
                     setLoading(false)
+                    alert("Minteo Exitoso")
+                }).catch(error => {
+                    setLoading(false)
+                    console.log(error)
                 })
-            }).catch(error => console.log(error))
+            }).catch(error => {
+                setLoading(false)
+                console.log(error)
+            })
+        }).catch(error => {
+            setLoading(false)
+            console.log(error)
         })
     }
 
-    async function timer() {
+    /* const sobre1 = document.querySelector("sobre1") */
+
+    /* async function timer() {
         setLoading(true)
         setTimeout(() => {
             setLoading(false)
-        }, 2000);
-    }
+        }, 2000)
+    } */
     return (
         <div className="bg-dogs">
             {loading && <Loader />}
-           {/*  <button onClick={timer}> timer  </button> */}
+            {/*  <button onClick={timer}> timer  </button> */}
             <div className="container py-4">
                 <div className="neon">
                     <div className="w-100 ">
@@ -55,15 +67,15 @@ const Shop = () => {
                                             <h4 className="text-white">Minted 0 / 1000 </h4>
                                         </div>
                                         <div className="d-flex justify-content-center">
-                                            <div className=" nft-img2">
-                                                <img className="nft-img " src={sobre1} alt="" />
+                                            <div className="nft-img2">
+                                                <img className="nft-img" src={sobre1} alt="" />
                                                 <div className="text-right">
                                                     <h3 className="text-warning"> {commonPackagePrice} BNB </h3>
                                                     {loading ? <div className="btn w-100 border"><h4>Loading</h4></div> : <>
                                                         {wallet ?
                                                             <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-ccan mt-2 w-100"> Mint </button>
                                                             :
-                                                            <button onClick={Connect} className="btn-ccan mt-2 w-100"> Connect </button>}
+                                                            <button onClick={connect} className="btn-ccan mt-2 w-100"> Connect </button>}
                                                     </>}
                                                     <div className="percent">
                                                         60% Common<br />
@@ -90,7 +102,7 @@ const Shop = () => {
                                                         {wallet ?
                                                             <button onClick={_ => buyPackage(2, wallet, epicPackagePrice)} className="btn-ccan mt-2 w-100"> Mint </button>
                                                             :
-                                                            <button onClick={Connect} className="btn-ccan mt-2 w-100"> Connect </button>}
+                                                            <button onClick={connect} className="btn-ccan mt-2 w-100"> Connect </button>}
                                                     </>}
                                                     <div className="percent">
                                                         30% Common<br />
@@ -118,7 +130,7 @@ const Shop = () => {
                                                         {wallet ?
                                                             <button onClick={_ => buyPackage(3, wallet, legendaryPackagePrice)} className="btn-ccan mt-2 w-100"> Mint </button>
                                                             :
-                                                            <button onClick={Connect} className="btn-ccan mt-2 w-100"> Connect </button>}
+                                                            <button onClick={connect} className="btn-ccan mt-2 w-100"> Connect </button>}
                                                     </>}
                                                     <div className="percent">
                                                         0% Common<br />

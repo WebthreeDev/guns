@@ -7,22 +7,11 @@ import axios from 'axios'
 //import withReactContent from 'sweetalert2-react-content'
 
 const Dashboard = () => {
-    const { wallet } = useContext(DataContext)
+    const { wallet,getCans,cans, setCans } = useContext(DataContext)
 
     useEffect(() => {
         getCans()
     }, [wallet])
-
-    const [cans, setCans] = useState(false)
-
-    const getCans = () => {
-        if (wallet) {
-            axios.get("https://cryptocans.io/api/v1/cans/user/" + wallet).then(res => {
-                console.log(res.data)
-                setCans(res.data.response)
-            })
-        }
-    }
 
     //const MySwal = withReactContent(Swal)
     /* const alertTest = () => { MySwal.fire({title:'Auto close alert!'})  Swal.showLoading() } */
@@ -82,11 +71,11 @@ const Dashboard = () => {
                                 </div>
                                 <div className="text-center">
                                     Numero de NFT'S
-                                    <h3>{cans.length } </h3>
+                                    <h3>{cans.length} </h3>
                                 </div>
                                 <div className="text-center">
                                     Win Rate
-                                    <h3>{cans.length }/10 </h3>
+                                    <h3>{cans.length}/10 </h3>
                                 </div>
                             </div>
                             <div className="row g-2 mb-2">
@@ -105,7 +94,7 @@ const Dashboard = () => {
                                         </div>
                                     </div>
                                 ))}
-                            </div>  
+                            </div>
                         </div>
                     </div>
                 </div>

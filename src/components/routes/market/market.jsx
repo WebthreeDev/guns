@@ -44,28 +44,26 @@ const Market = () => {
                         </div>
                         <div className="mt-3">
                             <div className="sidebarText mb-1">
-                                Raza
+                                Rarity
                             </div>
                             <div>
                                 <div className="row">
                                     <div className="col-6 textRaza">
                                         <div>
-                                            <input type="checkbox" name="" id="" /> Galgo
+                                            <input type="checkbox" name="" id="" /> Common
                                         </div>
                                         <div>
-                                            <input type="checkbox" name="" id="" /> Pastor
-                                        </div>
-                                        <div>
-                                            <input type="checkbox" name="" id="" /> Lobo
+                                            <input type="checkbox" name="" id="" /> Rare
                                         </div>
                                     </div>
                                     <div className="col-6 textRaza">
                                         <div>
-                                            <input type="checkbox" name="" id="" /> Buldog
+                                            <input type="checkbox" name="" id="" /> Épic
                                         </div>
                                         <div>
-                                            <input type="checkbox" name="" id="" /> Puddle
+                                            <input type="checkbox" name="" id="" /> Legendary
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
