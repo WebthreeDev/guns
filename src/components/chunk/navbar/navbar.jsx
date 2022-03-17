@@ -8,7 +8,7 @@ const Navbar = () => {
 
     const { wallet, connect, resumeWallet } = useContext(DataContext)
 
-    console.log(wallet)
+    
 
     /* const location = "/dashboard" */
 

@@ -3,11 +3,14 @@ import cc from '../../../img/cc.png'
 import ccan from '../../../img/ccan.png'
 import { DataContext } from '../../../context/DataContext'
 import axios from 'axios'
+import perro from '../../../img/perro.png'
+import aero from '../../../img/aero.png'
+import Loader from '../../chunk/loader/loader'
 //import Swal from "sweetalert2"
 //import withReactContent from 'sweetalert2-react-content'
 
 const Dashboard = () => {
-    const { wallet,getCans,cans, setCans } = useContext(DataContext)
+    const { wallet, getCans, cans, setCans, bnb, loading } = useContext(DataContext)
 
     useEffect(() => {
         getCans()
@@ -18,21 +21,22 @@ const Dashboard = () => {
 
     return (
         <div className="container-fluid p-2">
+            {loading && <Loader />}
             <div className="row g-2">
-                <div className="col-md-5 ">
+                <div className="col-md-3">
                     <div className="">
                         <div className="row g-2">
-                            <div className="col-6">
+                            <div className="col-12">
                                 <div className="box text-center d-flex align-items-center">
                                     <div className="w-100">
                                         <img className="my-2" height="50px" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png" alt="" />
                                         <div>
-                                            <h5>0.0123 BNB</h5>
+                                            <h5>{bnb} BNB</h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-6">
+                            <div className="col-12">
                                 <div className="box text-center d-flex align-items-center">
                                     <div className="w-100">
                                         <img className="my-2" height="50px" src={ccan} alt="" />
@@ -60,8 +64,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>
-
-                <div className="col-7 ">
+                <div className="col-9 ">
                     <div className="">
                         <div className="dogFeatures">
                             <div className="d-flex justify-content-around">
@@ -79,16 +82,47 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <div className="row g-2 mb-2">
+                                {console.log(cans)}
                                 {cans && cans.map((i) => (
-                                    <div className="col-md-4" key={i.id}>
-                                        <div className="nftSmall d-flex align-items-center justify-content-center">
-                                            <div className="text-center">
-                                                <div>
-                                                    NFT #{i.id}
+                                    <div className="col-md-2" key={i.id}>
+                                        <div className="nftSmall">
+                                            <div className='nftRarity'>
+                                                {i.rarity === "1" ? <> Common </> : <></>}
+                                                {i.rarity === "2" ? <> Rare </> : <></>}
+                                                {i.rarity === "3" ? <> Épic </> : <></>}
+                                                {i.rarity === "4" ? <> Legendary </> : <></>}
+                                            </div>
+                                            <div className="nftImg">
+                                                <img className='imgNft' src={perro} alt="" />
+                                            </div>
+                                            <div className='nftName'>
+                                                {i.name}
+                                            </div>
+                                            <div className='nftStats'>
+                                                <div className="stats">
+                                                    <div className="">
+                                                        <div className='logoNft'>
+                                                            <img className='logoImg' src={aero} alt="" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="">
+                                                        {i.aerodinamica}
+                                                    </div>
+                                                    <div className="">
+                                                        <div className='logoNft'> <img className='logoImg' src={aero} alt="" /></div>
+                                                    </div>
+                                                    <div className="">
+                                                        {i.aceleracion}
+                                                    </div>
+                                                    <div className="">
+                                                        <div className='logoNft'> <img className='logoImg' src={aero} alt="" /></div>
+                                                    </div>
+                                                    <div className="">
+                                                        {i.resistencia}
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    {i.rarity}
-                                                    <button className="btn btn-list btn-sm"><i className="bi-list"></i></button>
+                                                <div className="totalStats">
+                                                    {i.resistencia + i.aceleracion + i.aerodinamica}
                                                 </div>
                                             </div>
                                         </div>
