@@ -1,20 +1,39 @@
-import React, { useState } from "react"
+import axios from "axios"
+import React, { useEffect, useState,useContext } from "react"
 import perro from '../../../img/perro.png'
-
+import Modal from "../../chunk/modal/modal"
+import { DataContext } from "../../../context/DataContext"
 
 const Market = () => {
-
-
+    const _context = useContext(DataContext)
     const [rango, setRango] = useState(0)
+    const [dogList, setdogList] = useState(false)
+
+    const [renderModal,setRenderModal] = useState(false)
+    const [modalText,setModalText] =useState(false)
+
+    useEffect(() => {
+        getCansOnSell()
+    }, [])
 
     const changeRango = (e) => {
         setRango(e.target.value)
     }
 
-    const dogList = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+    const getCansOnSell = async () => {
+        const cansOnSell = await axios.get('https://cryptocans.io/api/v1/market?limit=10&page=1')
+        console.log(cansOnSell.data.response)
+        setdogList(cansOnSell.data.response)
+    }
+
+    const modalRenderer = (text)=>{
+        setModalText(text)
+        setRenderModal(true)
+    }
 
     return (
-        <div>
+        <div> 
+           {renderModal && <Modal text={modalText} setRenderModal={setRenderModal}/>} 
             <div className="secondNav">
                 <button className="secondNavButton active">
                     Dogs
@@ -63,7 +82,6 @@ const Market = () => {
                                         <div>
                                             <input type="checkbox" name="" id="" /> Legendary
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -82,41 +100,40 @@ const Market = () => {
                             </div>
                         </div>
                         <div className="mt-3">
-
                             <button className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
-
                         </div>
                     </div>
                     <div className="col-10 listItems">
-                        <h3> 456 Cans Listed </h3>
+                        <h3> {dogList&& dogList.lenght} Cans Listed </h3>
                         <div className="row gx-2 gy-2">
-                            {dogList.map((item) => {
-                                return (
-                                    <div key={item} className="col-3 ">
-                                        <div className="nftCard pt-2">
-                                            <div className="sidebarText px-2"> #{item} </div>
-                                            <div className="text-center">
-                                                <img height="100px" src={perro} alt="" />
-                                            </div>
-                                            <div className="mt-2">
-                                                <div className="text-light p-2 nftFeatures">
-                                                    <div className="d-flex justify-content-between align-items-center">
-                                                        <h4 className="nftName"> Firulais </h4>
-                                                        <div>0 / 7</div>
-                                                    </div>
-                                                    <div className="d-flex justify-content-between mt-1">
-                                                        <div className="raza">
-                                                            Buldog
+                            {dogList ?
+                                dogList.map((item) => {
+                                    return (
+                                        <div key={item.id} className="col-3">
+                                            <div onClick={_=>modalRenderer("Esta seguro de comprar "+item.name)} className="nftCard pt-2">
+                                                <div className="sidebarText px-2"> #{item.id} </div>
+                                                <div className="text-center">
+                                                    <img height="100px" src={perro} alt="" />
+                                                </div>
+                                                <div className="mt-2">
+                                                    <div className="text-light p-2 nftFeatures">
+                                                        <div className="d-flex justify-content-between align-items-center">
+                                                            <h4 className="nftName"> Firulais </h4>
+                                                            <div>0 / 7</div>
                                                         </div>
-                                                        <i className="rarity">Uncommon </i>
+                                                        <div className="d-flex justify-content-between mt-1">
+                                                            <div className="raza">
+                                                                Buldog
+                                                            </div>
+                                                            <i className="rarity">Uncommon </i>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                )
-                            })}
-
+                                    )
+                                }) : <div className="text-center"><hr/> No cans Listed </div>
+                            }
                         </div>
                     </div>
                 </div>

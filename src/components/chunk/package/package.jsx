@@ -31,6 +31,8 @@ const Package = ({img}) => {
             onMouseLeave={(e) => handleleave(e)}
             className="nft-img"
             style={myStyle}
-            src={img} alt="" />
+            src={img} alt="" 
+               
+            />
 }
 export default Package

@@ -40,11 +40,11 @@ const Race = () => {
         //inicioCarrera
         const body = {id,wallet }
         axios.post("https://cryptocans.io/api/v1/race",body).then((res)=>{
-            const places = res.data.response
-            let place
-            places.forEach((dog,i) => {
+            const _places = res.data.response
+            let place = _places.indexOf(1)+1
+            /* places.forEach((dog,i) => {
                 if(dog == 1) place = i+1
-            })
+            }) */
 
             let er
             if(place === 1 || place === 3) er="er"
@@ -52,6 +52,7 @@ const Race = () => {
             if(place  >  3) er="to"
             
             alert("Llegaste de "+place+er+" lugar")
+            setSelected(false)
             //console.log(places)
         }).catch(_=> console.log(_))
     }

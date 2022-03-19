@@ -10,7 +10,7 @@ import { Contract } from "../../../tokens/canes/canes"
 import Package from "../../chunk/package/package";
 
 const Shop = () => {
-    const { loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice } = useContext(DataContext)
+    const { loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice,getCans } = useContext(DataContext)
 
     const buyPackage = async (packageId, wallet, price) => {
         await connect()
@@ -26,11 +26,15 @@ const Shop = () => {
                 console.log(res)
                 //actualizo el estado del perro
                 //console.log(res.transactionHash)
-                const hash = res.transactionHash
-                axios.patch("https://cryptocans.io/api/v1/cans/" + response.id + "/" + hash).then((res) => {
+                const body = {can:{
+                    hash:res.transactionHash,
+                    status:1
+                }}
+                axios.patch("https://cryptocans.io/api/v1/cans/" + response.id,body).then(async(res) => {
                     //console.log(res.data)
+                    //await getCans(res.data.response.wallet)
                     setLoading(false)
-                    alert("Minteo Exitoso")
+                    alert("Minteo Exitoso: " + response.rarity)
                 }).catch(error => {
                     setLoading(false)
                     console.log(error)
