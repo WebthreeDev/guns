@@ -25,7 +25,7 @@ const Test = () => {
     const [balanceNft, setBalanceNft] = useState(false)
 
     useEffect(() => {
-        console.log(nftMethods)
+        //console.log(nftMethods)
         getBalanceNft()
         setCM(CM)
         getUser()
@@ -41,14 +41,14 @@ const Test = () => {
 
         const user = await eth.selectedAddress
         setUser(user)
-        console.log(user)
+       // console.log(user)
     }
 
     const changeWallet = (e) => {
         //console.log(e.target.value)
         setWallet(e.target.value)
     }
-    console.log()
+    //console.log()
     const getTotalSupply = _ => CM.totalSupply().call().then(res => setTotal(res))
     const getName = _ => CM.name().call().then(res => setName(res))
     const getSymbol = _ => CM.symbol().call().then(res => setSymbol(res))
@@ -61,7 +61,7 @@ const Test = () => {
     const deposit = async () => {
         const ethers = Web3.utils.toWei("0.01", "ether")
         nftMethods.deposit().send({ "from": user, "value": ethers }).then((res1) => {
-            console.log(res1)
+            //console.log(res1)
         })
     }
 

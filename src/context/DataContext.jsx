@@ -14,8 +14,9 @@ export const DataProvider = ({ children }) => {
     const [epicPackagePrice, setEpicPackagePrice] = useState(false)
     const [legendaryPackagePrice, setLegendaryPackagePrice] = useState(false)
     const [newPackagePrice, setNewPackagePrice] = useState(false)
-    const [loading,setLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
     const [cans, setCans] = useState(false)
+    const [bnb, setBnb] = useState(false)
 
     window.ethereum.on('accountsChanged', async () => {
         setWallet(await connect())
@@ -30,40 +31,46 @@ export const DataProvider = ({ children }) => {
     }, [wallet])
 
     const exectConnect = async () => {
+        setLoading(true)
+        await getERC721Contract()
         const wallet = await connect()
         setWallet(wallet)
-        getCans(wallet)
-        getERC721Contract()
+        await getBnb(wallet)
+        await getCans(wallet)
+        setLoading(false)
     }
 
-    const getCans = async (_wallet)=>{
+    const getCans = async (_wallet) => {
+        console.log("getCans")
+        const _cans = await axios.get("https://cryptocans.io/api/v1/cans/user/" + _wallet)
+        setCans(_cans.data.response)
+    }
+
+    const getBnb = async (wallet) => {
+        const bnbWei = await web3.eth.getBalance(wallet)
+        const bnb = web3.utils.fromWei(bnbWei, "ether")
+        const bnbRounded = (Math.round(bnb * 10000)) / 10000
+        setBnb(bnbRounded)
+    }
+
+    const getERC721Contract = async () => {
         setLoading(true)
-        if (_wallet) {
-            axios.get("https://cryptocans.io/api/v1/cans/user/" + _wallet).then(res => {
-                console.log(res.data)
-                setCans(res.data.response)
-                setLoading(false)
+        Contract.methods.nftCommonPrice().call()
+            .then(res => {
+                const _price = web3.utils.fromWei(res, "ether")
+                setCommonPackagePrice(_price)
             })
-        }else{
-            setLoading(false)
+        Contract.methods.nftEpicPrice().call()
+            .then(res => {
+                const _price = web3.utils.fromWei(res, "ether")
+                setEpicPackagePrice(_price)
+            })
 
-        }
-    }
+        const price = await Contract.methods.nftLegentadyPrice().call()
+        const _price = web3.utils.fromWei(price, "ether")
+        setLegendaryPackagePrice(_price)
+        setLoading(false)
 
-
-    const getERC721Contract = () => {
-        Contract.methods.nftCommonPrice().call().then(res => {
-            const _price = web3.utils.fromWei(res, "ether")
-            setCommonPackagePrice(_price)
-        })
-        Contract.methods.nftEpicPrice().call().then(res => {
-            const _price = web3.utils.fromWei(res, "ether")
-            setEpicPackagePrice(_price)
-        })
-        Contract.methods.nftLegentadyPrice().call().then(res => {
-            const _price = web3.utils.fromWei(res, "ether")
-            setLegendaryPackagePrice(_price)
-        })
     }
 
     const _context = {
@@ -75,10 +82,12 @@ export const DataProvider = ({ children }) => {
         legendaryPackagePrice, setLegendaryPackagePrice,
         newPackagePrice, setNewPackagePrice,
         commonPackagePrice, setCommonPackagePrice,
-        loading,setLoading,
-        getCans,cans,setCans
+        loading, setLoading,
+        getCans, cans, setCans,
+        bnb, setBnb,
+        exectConnect
     }
- 
+
     return (
         <DataContext.Provider value={_context}>
             {children}

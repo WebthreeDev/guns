@@ -18,7 +18,7 @@ const Race = () => {
         setWrace("wRace")
         setCorriendo(true)
         setTimeout(() => {
-            console.log("Termino")
+           // console.log("Termino")
             setCorriendo(false)
         }, 20000)
     }
@@ -37,23 +37,23 @@ const Race = () => {
     }
 
     const clickRun = (id,wallet) =>{
+        //inicioCarrera
         const body = {id,wallet }
         axios.post("https://cryptocans.io/api/v1/race",body).then((res)=>{
-            const places = res.data.response
-            let place
-            places.forEach((dog,i) => {
+            const _places = res.data.response
+            let place = _places.indexOf(1)+1
+            /* places.forEach((dog,i) => {
                 if(dog == 1) place = i+1
-            })
+            }) */
+
             let er
-            if(place == 1) er="er"
-            if(place == 2) er="do"
-            if(place == 3) er="er"
-            if(place == 4) er="to"
-            if(place == 5) er="to"
-            if(place == 6) er="to"
+            if(place === 1 || place === 3) er="er"
+            if(place === 2) er="do"
+            if(place  >  3) er="to"
             
             alert("Llegaste de "+place+er+" lugar")
-            console.log(places)
+            setSelected(false)
+            //console.log(places)
         }).catch(_=> console.log(_))
     }
 
@@ -82,7 +82,7 @@ const Race = () => {
                                                             Nombre: {dog.name} <hr />
                                                             Id: {dog.id} <hr />
                                                             Aceleracion: {dog.aceleracion} <hr />
-                                                            Aerodinamica: {dog.aerodimaca} <hr />
+                                                            Aerodinamica: {dog.aerodinamica} <hr />
                                                             Resistencia: {dog.resistencia} <hr />
                                                         </div>
                                                     </div>

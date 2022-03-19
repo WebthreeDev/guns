@@ -7,9 +7,10 @@ import Loader from "../../chunk/loader/loader";
 import axios from "axios"
 import web3 from "../../../tokens/canes/canes"
 import { Contract } from "../../../tokens/canes/canes"
+import Package from "../../chunk/package/package";
 
 const Shop = () => {
-    const { loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice } = useContext(DataContext)
+    const { loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice,getCans } = useContext(DataContext)
 
     const buyPackage = async (packageId, wallet, price) => {
         await connect()
@@ -24,12 +25,16 @@ const Shop = () => {
             Contract.methods.mint(addressTo, tokenId, nftType).send({ from: wallet, value }).then((res) => {
                 console.log(res)
                 //actualizo el estado del perro
-                console.log(res.transactionHash)
-                const hash = res.transactionHash
-                axios.patch("https://cryptocans.io/api/v1/cans/" + response.id + "/" + hash).then((res) => {
-                    console.log(res.data)
+                //console.log(res.transactionHash)
+                const body = {can:{
+                    hash:res.transactionHash,
+                    status:1
+                }}
+                axios.patch("https://cryptocans.io/api/v1/cans/" + response.id,body).then(async(res) => {
+                    //console.log(res.data)
+                    //await getCans(res.data.response.wallet)
                     setLoading(false)
-                    alert("Minteo Exitoso")
+                    alert("Minteo Exitoso: " + response.rarity)
                 }).catch(error => {
                     setLoading(false)
                     console.log(error)
@@ -44,20 +49,13 @@ const Shop = () => {
         })
     }
 
-    /* const sobre1 = document.querySelector("sobre1") */
-
-    /* async function timer() {
-        setLoading(true)
-        setTimeout(() => {
-            setLoading(false)
-        }, 2000)
-    } */
     return (
         <div className="bg-dogs">
+
             {loading && <Loader />}
             {/*  <button onClick={timer}> timer  </button> */}
             <div className="container py-4">
-                <div className="neon">
+                <div className="neon zxc">
                     <div className="w-100 ">
                         <div className=" w-100">
                             <div className="row text-center">
@@ -68,7 +66,7 @@ const Shop = () => {
                                         </div>
                                         <div className="d-flex justify-content-center">
                                             <div className="nft-img2">
-                                                <img className="nft-img" src={sobre1} alt="" />
+                                                <Package img={sobre1} />
                                                 <div className="text-right">
                                                     <h3 className="text-warning"> {commonPackagePrice} BNB </h3>
                                                     {loading ? <div className="btn w-100 border"><h4>Loading</h4></div> : <>
@@ -95,7 +93,7 @@ const Shop = () => {
                                         </div>
                                         <div className="d-flex justify-content-center">
                                             <div className=" nft-img2">
-                                                <img className="nft-img" src={sobre2} alt="" />
+                                                <Package img={sobre2} />
                                                 <div className="text-right">
                                                     <h3 className="text-warning"> {epicPackagePrice} BNB </h3>
                                                     {loading ? <div className="btn w-100 border"><h4>Loading</h4></div> : <>
@@ -123,7 +121,7 @@ const Shop = () => {
                                         <div className="d-flex justify-content-center">
                                             <div className=" nft-img2">
 
-                                                <img className="nft-img" src={sobre3} alt="" />
+                                                <Package img={sobre3} />
                                                 <div className="text-right">
                                                     <h3 className="text-warning"> {legendaryPackagePrice} BNB </h3>
                                                     {loading ? <div className="btn w-100 border"><h4>Loading</h4></div> : <>

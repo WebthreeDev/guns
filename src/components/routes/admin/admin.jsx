@@ -43,7 +43,7 @@ const Admin = () => {
 
     const changeOwner = () => {
         _context.Contract.methods.changeOwner(newOwnerWallet).send({ from: _context.wallet }).then(res => {
-            console.log(res)
+            //console.log(res)
             getERC721Contract()
         })
     }
@@ -51,7 +51,7 @@ const Admin = () => {
 
     const withdraw = () => {
         _context.Contract.methods.withdraw().send({ from: _context.wallet }).then(res => {
-            console.log(res)
+            //console.log(res)
             getERC721Contract()
         })
     }
@@ -60,7 +60,7 @@ const Admin = () => {
     const changeNftPrice = (id) => {
         const newPrice = web3.utils.toWei(_context.newPackagePrice, "ether")
         _context.Contract.methods.changeNftPrice(id, newPrice).send({ from: _context.wallet }).then(res => {
-            console.log(res)
+            //console.log(res)
             getERC721Contract()
         })
     }

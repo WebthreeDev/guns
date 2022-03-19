@@ -147,6 +147,13 @@ a{
 .nftCard{
     border: 1px solid var(--line);
     border-radius: 6px;
+    transition: 0.3s;
+}
+.nftCard:hover{
+    border:1px solid rgb(179, 179, 179);
+    cursor: pointer;
+    transform: scale(1.02);
+    background-color: rgba(240, 248, 255, 0.03);
 }
 .nftFeatures{
     background-color: rgba(0, 0, 0, 0.089);
@@ -183,10 +190,63 @@ a{
     padding: 0px;
 }
 .nftSmall{
-    background-color: var(--transparentLight);
-    height:100px;
+    background: rgb(255,255,255);
+    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,254,255,1) 100%);
     border-radius: 8px;
     padding: 5px;
+    height: 283px;
+}
+.nftRarity{
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 5px;
+    text-align: center;
+    color: aliceblue;
+}
+.nftImg{
+    height: 126px;
+    padding: 5px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.imgNft{
+    height: 100px;
+}
+.nftName{
+    color: black;
+    text-align: center;
+    font-size: small;
+    height: 22px;
+}
+.nftStats{
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 8px;
+    height:75px;
+    padding-top: 4px;
+}
+.stats{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: black;
+}
+.logoImg{
+    height: 20px;
+}
+.logoNft{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+}
+.totalStats{
+    justify-content: space-around;
+    padding-top: 5px;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
 }
 .btn-list{
     color: var(--light1) !important;
@@ -350,14 +410,8 @@ a{
 }
 .nft-img{
     width: 160px;
-    transition: 2s;
 }
-.nft-img:hover{
-     transform:skew(1.5deg) rotate(-2deg) rotateY(30deg) scale(1.043); 
-    transform: scale3d(20px 20px 20px);
-    box-shadow: -8px 10px 3px rgba(0, 0, 0, 0.466);
-    cursor: pointer;
-}
+
 .percent{
     text-align: left;
     padding-top: 10px;
@@ -385,18 +439,15 @@ a{
     background: linear-gradient(rgba(8, 8, 8, 0.95),rgba(0, 0, 0, 0.95));
     padding: 20px 20px;
     border-radius: 10px;
+    animation-duration: 0.5s;
+    animation-direction: normal;
+    animation-name: pack;
+    animation-timing-function: ease-out;
 }
-.nftBg2{
-    background-color: rgba(111, 0, 121, 0.055);
-    border: 1px solid rgba(250, 91, 255, 0.226);
-    padding: 20px 20px;
-    border-radius: 10px;
-}
-.nftBg3{
-    background-color: rgba(255, 218, 53, 0.055);
-    border: 1px solid rgba(255, 216, 133, 0.226);
-    padding: 20px 20px;
-    border-radius: 10px;
+
+@keyframes pack{
+    0%{transform: translateY(100%) scale(.1)}
+    100%{transform: translateY(0px) scale(1) ; }
 }
 .packages{
     margin-bottom: 10px;
@@ -429,4 +480,64 @@ a{
 .pista{
     height: 49px;
     border-bottom: 1px solid red;
+}
+.modalX{
+    height: 100vh;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    background-color: rgba(14, 14, 14, 0.9);
+    position: fixed;
+    z-index: 9999;
+    animation: modalX 0.5s ease-out;
+}
+@keyframes modalX {
+    0%{background-color: transparent;}
+    50%{transform: perspective(50deg);}
+    100%{background-color: rgba(14,14,14,0.9);}
+}
+.modalIn{
+    background-color: rgb(24, 24, 24);
+    padding: 20px;
+    border-radius: 10px;
+    animation: modalIn 0.5s ease-out;
+}
+@keyframes modalIn {
+    0%{transform:translateY(500px);}
+    100%{ transform:translateY(0%);}
+}
+
+.modalbtn{
+    min-width: 80px;
+    margin: 0px 5px;
+}
+
+.reactModal{
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999;
+}
+.modalBody{
+    border: 1px solid rgb(34, 34, 34);
+    border-radius: 10px;
+    background-color: rgb(24, 24, 29);
+}
+.modalHeader{
+    padding: 20px;
+}
+.modalFooter{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.219);
 }
