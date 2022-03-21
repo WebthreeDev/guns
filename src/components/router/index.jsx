@@ -31,6 +31,9 @@ const Router = () => {
             <Route path="/test">
                 <Test/>
             </Route>
+            <Route path="/dapp">
+                <Dashboard/>
+            </Route>
         </Switch>
     )
 }
