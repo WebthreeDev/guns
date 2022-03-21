@@ -1,6 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react'
 import gameAlert from './services/gameAlertService'
 import resumeWallet from './services/resumeWallet'
+import lastForWallet from './services/lastForWallet'
 import w3S, { web3 } from '../services/w3S'
 import { Contract } from '../tokens/canes/canes'
 import connect from './services/connectS'
@@ -73,9 +74,16 @@ export const DataProvider = ({ children }) => {
 
     }
 
+    const setRarity = (rarity)=>{
+        if(rarity === "1"){ return "common" } 
+        if(rarity === "2") return "rare"
+        if(rarity === "3") return "epic"
+        if(rarity === "4") return "legendary"
+    }
+
     const _context = {
         wallet, connect,
-        resumeWallet,
+        resumeWallet,lastForWallet,
         gameAlert,
         w3S, Contract,
         epicPackagePrice, setEpicPackagePrice,
@@ -85,7 +93,7 @@ export const DataProvider = ({ children }) => {
         loading, setLoading,
         getCans, cans, setCans,
         bnb, setBnb,
-        exectConnect
+        exectConnect,setRarity
     }
 
     return (

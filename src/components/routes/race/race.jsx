@@ -40,7 +40,8 @@ const Race = () => {
         //inicioCarrera
         const body = {id,wallet }
         axios.post("https://cryptocans.io/api/v1/race",body).then((res)=>{
-            const _places = res.data.response
+            const _places = res.data.response.places
+            console.log(res.data.response.career)
             let place = _places.indexOf(1)+1
             /* places.forEach((dog,i) => {
                 if(dog == 1) place = i+1
@@ -62,7 +63,7 @@ const Race = () => {
             {_context.loading && <Loader />}
             {pop &&
                 <div className="racePop">
-                    <button className="btn btn-danger" onClick={() => setPop(false)}> Cerrar </button>
+                    <button className="btn btn-danger" onClick={() => {setPop(false);setSelected(false)}}> Cerrar </button>
                     <div className="border bg-dark m-3 p-3 carrera">
                         {!selected ?
                             <div>

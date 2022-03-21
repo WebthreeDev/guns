@@ -10,19 +10,18 @@ import { Contract } from "../../../tokens/canes/canes"
 import Package from "../../chunk/package/package";
 
 const Shop = () => {
-    const { loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice,getCans } = useContext(DataContext)
+    const { exectConnect,loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice,getCans } = useContext(DataContext)
 
     const buyPackage = async (packageId, wallet, price) => {
-        await connect()
-        setLoading(true)
+        setLoading(true)/* 
+        await exectConnect() */
         axios.post("https://cryptocans.io/api/v1/cans/", { id: packageId, wallet }).then((res) => {
             const response = res.data.response
             console.log(response)
             const value = web3.utils.toWei(price, "ether")
-            const addressTo = wallet
             const tokenId = response.id.toString()
             const nftType = response.packageId.toString()
-            Contract.methods.mint(addressTo, tokenId, nftType).send({ from: wallet, value }).then((res) => {
+            Contract.methods.mint(tokenId, nftType).send({ from: wallet, value }).then((res) => {
                 console.log(res)
                 //actualizo el estado del perro
                 //console.log(res.transactionHash)
@@ -33,18 +32,18 @@ const Shop = () => {
                 axios.patch("https://cryptocans.io/api/v1/cans/" + response.id,body).then(async(res) => {
                     //console.log(res.data)
                     //await getCans(res.data.response.wallet)
-                    setLoading(false)
                     alert("Minteo Exitoso: " + response.rarity)
-                }).catch(error => {
                     setLoading(false)
+                }).catch(error => {
+                   /*  setLoading(false) */
                     console.log(error)
                 })
             }).catch(error => {
-                setLoading(false)
+              /*   setLoading(false) */
                 console.log(error)
             })
         }).catch(error => {
-            setLoading(false)
+            /* setLoading(false) */
             console.log(error)
         })
     }

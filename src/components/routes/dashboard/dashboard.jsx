@@ -22,9 +22,9 @@ const Dashboard = () => {
     const sell = async (_id) => {
         setLoading(true)
         let body = { can: { onSale: { sale: true, price: price }, } }
-        const value = web3.utils.toWei((price / 100 * 3).toString(), "ether")
+        const value = web3.utils.toWei((price / 100).toString(), "ether")
         Contract.methods.onSale().send({ from: wallet, value }).then(async (res) => {
-            sendTransaction(_id,body)
+            sendTransaction(_id, body)
         }).catch(error => console.log(error))
     }
 
@@ -34,10 +34,10 @@ const Dashboard = () => {
         setLoading(true)
         setRemove(false)
         let body = { can: { onSale: { sale: false, price: 0 }, } }
-        sendTransaction(_id,body)
+        sendTransaction(_id, body)
     }
 
-    const sendTransaction = async(_id,body)=>{
+    const sendTransaction = async (_id, body) => {
         try {
             const res = await axios.patch("https://cryptocans.io/api/v1/cans/" + _id, body)
             setSelling(false)
@@ -73,7 +73,7 @@ const Dashboard = () => {
                             <p>Nft Price</p>
                             #{id && id}
                             <h3 className='text-warning'>{price} BNB</h3>
-                            <p className='text-warning'> Sales fee: {price / 100 * 3} BNB </p>
+                            <p className='text-warning'> Sales fee: {price / 100} BNB </p>
                             <input className='form-control' type="number" onChange={_price} />
                         </div>
                         <div className='mt-3'>
@@ -148,16 +148,16 @@ const Dashboard = () => {
                             <div className="row g-2 mb-2">
                                 {console.log(cans)}
                                 {cans && cans.map((i) => {
-                                    return (i.status === 1 &&
+                                    return (
                                         <div className="col-md-2" key={i.id}>
                                             <div className="nftSmall">
-                                                <div className='nftRarity'>
-                                                    {i.rarity === "1" ? <> Common </> : <></>}
-                                                    {i.rarity === "2" ? <> Rare </> : <></>}
-                                                    {i.rarity === "3" ? <> Épic </> : <></>}
-                                                    {i.rarity === "4" ? <> Legendary </> : <></>}
-                                                </div>
-                                                <b className='text-dark'> #{i.id} </b>
+
+                                                {i.rarity === "1" && <div className='nftRarity common'> Common </div>}
+                                                {i.rarity === "2" && <div className='nftRarity rare'> Rare </div>}
+                                                {i.rarity === "3" && <div className='nftRarity epic'> Épic </div>}
+                                                {i.rarity === "4" && <div className='nftRarity legendary'> Legendary </div>}
+
+                                                <b className='text-white'> #{i.id} </b>
                                                 <div className="nftImg">
                                                     <img className='imgNft' src={perro} alt="" />
                                                 </div>

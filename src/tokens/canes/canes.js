@@ -1,7 +1,7 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
 const canContract = {
-    address:"0xdBFaB34a151b96074D4daAF76Ee592b5728dc8C8",
+    address:"0x6cb8385E25749dF9256Bb102E318e97e10B81FF9",
     abi:[
         {
             "inputs": [],
@@ -79,6 +79,25 @@ const canContract = {
         {
             "inputs": [
                 {
+                    "internalType": "address payable",
+                    "name": "buyer",
+                    "type": "address"
+                }
+            ],
+            "name": "buyNft",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "payable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
                     "internalType": "uint256",
                     "name": "nftType",
                     "type": "uint256"
@@ -121,11 +140,6 @@ const canContract = {
         },
         {
             "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "to",
-                    "type": "address"
-                },
                 {
                     "internalType": "uint256",
                     "name": "tokenId",

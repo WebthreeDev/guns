@@ -158,14 +158,25 @@ a{
 .nftFeatures{
     background-color: rgba(0, 0, 0, 0.089);
 }
-.nftName{
-    font-size: 20px;
-    margin: 0px;
-}
 .rarity{
     border-radius: 6px;
-    background-color: rgba(94, 191, 255, 0.603);
     padding: 2px 5px;
+    min-width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.common{
+    background-color: rgba(94, 191, 255, 0.603);
+}
+.rare{
+    background-color: rgba(230, 76, 29, 0.904);
+}
+.epic{
+    background-color: rgba(30, 44, 235, 0.904);
+}
+.legendary{
+    background-color: rgba(220, 19, 246, 0.815);
 }
 .raza{
     color: gray;
@@ -190,14 +201,12 @@ a{
     padding: 0px;
 }
 .nftSmall{
-    background: rgb(255,255,255);
-    background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(0,254,255,1) 100%);
+    border: 1px solid rgb(109, 109, 109);
     border-radius: 8px;
     padding: 5px;
     height: 283px;
 }
 .nftRarity{
-    background-color: rgba(0, 0, 0, 0.5);
     border-radius: 5px;
     text-align: center;
     color: aliceblue;
@@ -213,13 +222,12 @@ a{
     height: 100px;
 }
 .nftName{
-    color: black;
+    color:aliceblue;
     text-align: center;
-    font-size: small;
-    height: 22px;
+    font-size: 12px;
 }
 .nftStats{
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.2);
     border-radius: 8px;
     height:75px;
     padding-top: 4px;
@@ -303,7 +311,6 @@ a{
 .box2.l{
     background-color: rgba(163, 80, 241, 0.5);
 }
-
 
 .w-race{
     background-color: rgb(0, 255, 157);
@@ -504,6 +511,8 @@ a{
     padding: 20px;
     border-radius: 10px;
     animation: modalIn 0.5s ease-out;
+    height:400px;
+    width: 400px;
 }
 @keyframes modalIn {
     0%{transform:translateY(500px);}
@@ -540,4 +549,21 @@ a{
     border-bottom-right-radius: 10px;
     padding: 20px;
     background-color: rgba(0, 0, 0, 0.219);
+}
+.btnPagination{
+    border: 1px solid transparent;
+    background-color: rgba(20, 20, 20, 0.719);
+    border-radius: 50%;
+    color: aliceblue;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    margin:0px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.btnPagination:hover{
+    border: 1px solid rgb(51, 51, 51);
+    cursor: pointer;
 }

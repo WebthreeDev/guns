@@ -73,8 +73,8 @@ const Admin = () => {
                         <h1 className="">Contrato Nft</h1><hr></hr>
 
                         <h4>Get Balance</h4>
-                        <h1 className="d-flex align-items-center">
-                            <div className="gray">
+                        <h1 className="">
+                            <div className="text-warning">
                                 {balance} BNB
                             </div>
                             <div>
