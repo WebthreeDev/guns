@@ -21,7 +21,7 @@ const connect = () => {
                         alert("Conection Failed!")
                     }
                 }).catch(error => {
-                    console.log(error)
+                    console.log("Backend Problem:"+ error)
                 })
         } else {
             await w3S.switchEthereumChain(bsc)

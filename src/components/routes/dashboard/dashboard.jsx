@@ -45,7 +45,7 @@ const Dashboard = () => {
             setPrice(0)
             await exectConnect()
         } catch (error) {
-            console.log(error)
+           // console.log(error)
             setSelling(false)
             setRemove(false)
             setPrice(0)
@@ -146,7 +146,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <div className="row g-2 mb-2">
-                                {console.log(cans)}
+                              
                                 {cans && cans.map((i) => {
                                     return (
                                         <div className="col-md-2" key={i.id}>
