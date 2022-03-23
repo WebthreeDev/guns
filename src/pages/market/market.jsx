@@ -1,10 +1,9 @@
 import axios from "axios"
 import React, { useEffect, useState, useContext } from "react"
-import perro from '../../../img/perro.png'
-import Modal from "../../chunk/modal/modal"
-import { DataContext } from "../../../context/DataContext"
-import { arrayify } from "ethers/utils"
-import web3,{ Contract } from "../../../tokens/canes/canes"
+import perro from '../../img/perro.png'
+import Modal from "../../components/modal/modal"
+import { DataContext } from "../../context/DataContext"
+import web3, { Contract } from "../../tokens/canes/canes"
 
 const Market = () => {
     const _context = useContext(DataContext)
@@ -20,72 +19,77 @@ const Market = () => {
     const [epicCheck, setEpicCheck] = useState(false)
     const [legendaryCheck, setLegendaryCheck] = useState(false)
     const [order, setOrder] = useState("Ask")
-    const apiMarket ='https://cryptocans.io/api/v1/marketplace'
+    const apiMarket = 'https://cryptocans.io/api/v1/marketplace'
 
     useEffect(() => {
         getCansOnSell()
     }, [])
 
     const getCansOnSell = async () => {
+        console.log("pasando por aki")
+        _context.setLoading(true)
         const cansOnSell = await axios.get(apiMarket)
-        console.log(cansOnSell.data.response)
-        const filteredCans = cansOnSell.data.response.filter(item => item.status == 1)
-        console.log(filteredCans)
+        const filteredCans = await cansOnSell.data.response.filter(item => item.status == 1)
         setdogList(filteredCans)
+        _context.setLoading(false)
     }
 
     const confirmBuy = async () => {
+        setRenderModal(false)
+        _context.setLoading(true)
         const canId = can.id
         try {
-            const res = await axios.patch(apiMarket,{canId})
+            const res = await axios.patch(apiMarket, { canId })
             const can = res.data.response
             console.log(res.data.response)
             //cobro y envio a el contrato
             const from = _context.wallet
             const price = can.onSale.price.toString()
             console.log(price)
-            const value = web3.utils.toWei(can.onSale.price.toString(),"ether")
+            const value = web3.utils.toWei(can.onSale.price.toString(), "ether")
             const address = can.wallet
-            Contract.methods.buyNft(address).send({from, value}).then(async blockchainRes =>{
-                console.log("res del blockchain:")
-                console.log(blockchainRes)
-                const envio = await axios.post(apiMarket,{
+            Contract.methods.buyNft(address).send({ from, value }).then(async blockchainRes => {
+                //console.log("res del blockchain:")
+                //console.log(blockchainRes)
+                //envio el hash de la compra al back
+                const envio = await axios.post(apiMarket, {
                     canId: can.id,
                     walletBuyer: _context.wallet,
-                    hash: blockchainRes.transactionHash})
-                    console.log(envio.data.response)
-            }).catch(async error =>{
+                    hash: blockchainRes.transactionHash
+                })
+                //console.log(envio.data.response)
+            }).catch(async error => {
                 console.log("Rechazo la transaccion")
-                const trans = await axios.post(apiMarket,{"blockchainStatus": false,canId})
+                console.log(error)
+                const trans = await axios.post(apiMarket, { "blockchainStatus": false, canId })
                 console.log(trans)
             })
-            //envio el hash de la compra al back
-            
         } catch (error) {
             console.log(error)
         }
-        
-        /* .then(res =>{
-        }).catch(error => alert(error.message)) */
+
     }
     return (
         <div>
             {renderModal &&
-                <div className="reactModal">
-                    <div className="modalBody">
-                        <div className="modalHeader">
-                            <h3>
-                            Estas comprando:
-                            </h3>
-                            {can.name}
-                            <div>Rarity: {_context.setRarity(can.rarity)}</div>
-                            <div>
-                            precio <b className="text-warning">{can.onSale.price} BNB</b>
+                <div className="modalX">
+                    <div className="modalIn">
+                        <div className="w-100">
+
+                            <div className="modalHeader">
+                                <h3>
+                                    Estas comprando:
+                                </h3>
+                                {can.name}
+                                <div>Rarity: {_context.setRarity(can.rarity)}</div>
+                                <div>
+                                    precio <b className="text-warning">{can.onSale.price} BNB</b>
+                                </div>
                             </div>
-                        </div>
-                        <div className="modalFooter d-flex justify-content-around">
-                            <button onClick={_ =>{setCan(false); setRenderModal(false)}} className="btn btn-danger mx-1"> Cancel </button>
-                            <button onClick={_ => confirmBuy()} className="btn btn-primary mx-1"> Confirm </button>
+                            <div className="w-50 d-flex justify-content-around">
+                                <button onClick={_ => { setCan(false); setRenderModal(false) }} className="btn btn-danger mx-1"> Cancel </button>
+                                <button onClick={_ => confirmBuy()} className="btn btn-primary mx-1"> Confirm </button>
+                            </div>
                         </div>
                     </div>
                 </div>}
@@ -161,25 +165,25 @@ const Market = () => {
                     </div>
                     <div className="col-10 listItems">
                         <div className="justify-content-between d-flex align-items-center">
-                            <h3> {dogList && dogList.lenght} Cans Listed: {pagination && pagination.totalDocs} </h3>
+                            <h3> {dogList && <>{dogList.length}</>} Cans Listed  </h3>
                             <div className="">
-                                {pagination && <div className="d-flex">
+                                {/* pagination && <div className="d-flex">
                                     <button className="btnPagination"> ◄ </button>
                                     <div className="btnPagination">{pagination.page} </div>
                                     <div className="btnPagination"> {pagination.nextPage}</div>
                                     <div> ... </div>
                                     <div className="btnPagination">{pagination.totalPages}</div>
                                     <button className="btnPagination"> ► </button>
-                                </div>}
+                                </div> */}
                             </div>
                         </div>
 
                         <div className="row gx-2 gy-2">
-                            {dogList ?
+                            {dogList &&
                                 dogList.map((item) => {
                                     return (
                                         <div key={item.id} className="col-3">
-                                            <div onClick={_ => { setCan(item);setModalText("Confirm!"); setRenderModal(true) }} className="nftCard pt-2">
+                                            <div onClick={_ => { setCan(item); setModalText("Confirm!"); setRenderModal(true) }} className="nftCard pt-2">
                                                 <div className="d-flex justify-content-between">
                                                     <div className="sidebarText px-2"> #{item.id} </div>
                                                     <div className="px-2 sidebarText">{_context.lastForWallet(item.wallet)}</div>
@@ -203,14 +207,13 @@ const Market = () => {
                                                             {item.rarity === "2" && <i className="rarity rare">Rare </i>}
                                                             {item.rarity === "3" && <i className="rarity epic">Epic </i>}
                                                             {item.rarity === "4" && <i className="rarity legendary">Legendary </i>}
-
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     )
-                                }) : <div className="text-center"><hr /> No cans Listed </div>
+                                })
                             }
                         </div>
                     </div>

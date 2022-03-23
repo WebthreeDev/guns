@@ -1,8 +1,7 @@
 import React, { useState, useContext } from "react";
-import perrito from '../../../img/rundog.gif'
-import perroEstatico from '../../../img/perroEstatico.png'
-import { DataContext } from "../../../context/DataContext";
-import Loader from "../../chunk/loader/loader";
+import perrito from '../../img/rundog.gif'
+import { DataContext } from "../../context/DataContext";
+import Loader from "../../components/loader/loader";
 import axios from "axios";
 
 const Race = () => {

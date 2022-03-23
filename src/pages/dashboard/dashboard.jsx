@@ -1,55 +1,60 @@
-import React, { useContext, useEffect, useState } from 'react'
-import cc from '../../../img/cc.png'
-import ccan from '../../../img/ccan.png'
-import { DataContext } from '../../../context/DataContext'
+import React, { useContext, useState,useEffect } from 'react'
+import cc from '../../img/cc.png'
+import ccan from '../../img/ccan.png'
+import { DataContext } from '../../context/DataContext'
 import axios from 'axios'
-import perro from '../../../img/perro.png'
-import aero from '../../../img/aero.png'
-import Loader from '../../chunk/loader/loader'
-import web3, { Contract } from '../../../tokens/canes/canes'
+import perro from '../../img/perro.png'
+import aero from '../../img/aero.png'
+import Loader from '../../components/loader/loader'
+import web3, { Contract } from '../../tokens/canes/canes'
 
 const Dashboard = () => {
-    const { cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
+    const { getRaces,race,cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
+
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
     const [remove, setRemove] = useState(false)
     const [selling, setSelling] = useState(false)
 
-    useEffect(() => {
-        exectConnect()
-    }, [])
+    useEffect(()=>{
+        getRaces(wallet)
+        console.log(race)
+    },[])
 
     const sell = async (_id) => {
         setLoading(true)
+        setSelling(false)
         let body = { can: { onSale: { sale: true, price: price }, } }
         const value = web3.utils.toWei((price / 100).toString(), "ether")
         Contract.methods.onSale().send({ from: wallet, value }).then(async (res) => {
-            sendTransaction(_id, body)
-        }).catch(error => console.log(error))
+            await sendTransaction(_id, body)
+            setLoading(false)
+        }).catch(error => {
+            console.log(error)
+            setLoading(false)
+        })
     }
-
-    const _price = (e) => setPrice(e.target.value)
 
     const _remove = async (_id) => {
         setLoading(true)
         setRemove(false)
         let body = { can: { onSale: { sale: false, price: 0 }, } }
-        sendTransaction(_id, body)
+        await sendTransaction(_id, body)
+        setLoading(false)
     }
 
     const sendTransaction = async (_id, body) => {
         try {
-            const res = await axios.patch("https://cryptocans.io/api/v1/cans/" + _id, body)
+            await axios.patch("https://cryptocans.io/api/v1/cans/" + _id, body)
             setSelling(false)
             setRemove(false)
             setPrice(0)
-            await exectConnect()
+            exectConnect()
         } catch (error) {
-           // console.log(error)
+            console.log(error)
             setSelling(false)
             setRemove(false)
             setPrice(0)
-            await exectConnect()
         }
     }
 
@@ -62,24 +67,26 @@ const Dashboard = () => {
                         <h5>¿Esta seguro que desea remover este can del mercado?</h5>
                         <div className='d-flex justify-content-center'>
                             <button onClick={_ => setRemove(false)} className='btn btn-danger'>Cancelar</button>
-                            <button onClick={_ => _remove(id)} className='btn btn-primary mx-2'>Remover</button>
+                            <button onClick={_ => _remove(id)} className='btn btn-primary mx-2'>Remove</button>
                         </div>
                     </div>
                 </div>}
             {selling &&
                 <div className='modalX'>
                     <div className='modalIn'>
-                        <div>
-                            <p>Nft Price</p>
-                            #{id && id}
-                            <h3 className='text-warning'>{price} BNB</h3>
-                            <p className='text-warning'> Sales fee: {price / 100} BNB </p>
-                            <input className='form-control' type="number" onChange={_price} />
-                        </div>
-                        <div className='mt-3'>
-                            <div className="row gx-2">
-                                <button onClick={_ => { setSelling(false); setPrice(0) }} className='btn mx-1 col btn-danger'> Cancel </button>
-                                <button onClick={_ => sell(id)} className='btn mx-1 col btn-primary'> Sell </button>
+                        <div className=' w-100'>
+                            <div className=''>
+                                
+                               Selling  #{id && id} can
+                                <h3 className='text-warning'>{price} BNB</h3>
+                                <p className='text-warning'> Sales fee: {price / 100} BNB </p>
+                                <input className='form-control' type="number" onChange={e => setPrice(e.target.value)} />
+                            </div>
+                            <div className='mt-3'>
+                                <div className="row gx-2">
+                                    <button onClick={_ => { setSelling(false); setPrice(0) }} className='btn mx-1 col btn-danger'> Cancel </button>
+                                    <button onClick={_ => sell(id)} className='btn mx-1 col btn-primary'> Continue </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -146,7 +153,7 @@ const Dashboard = () => {
                                 </div>
                             </div>
                             <div className="row g-2 mb-2">
-                              
+
                                 {cans && cans.map((i) => {
                                     return (
                                         <div className="col-md-2" key={i.id}>
@@ -207,6 +214,13 @@ const Dashboard = () => {
                                 })}
                             </div>
                         </div>
+                            <div className='p-2 border mt-2'>
+                                {race&& race.map(({gainToken,canId,_id},index) =>{
+                                   return <div key={_id} className="border p-1"> 
+                                  Race {index+1} - canId: {canId} - {gainToken == 0 ? <>Lose</>:<>Win: +{gainToken}</>} 
+                                   </div>
+                                })}  
+                            </div>
                     </div>
                 </div>
             </div>

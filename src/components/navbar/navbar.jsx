@@ -1,15 +1,10 @@
 import React, { useState, useContext } from "react"
 import { Link } from "react-router-dom"
-import rundog from '../../../img/rundog.gif'
-import { DataContext } from '../../../context/DataContext'
-import walletImg from '../../../img/wallet.png'
+import { DataContext } from '../../context/DataContext'
+import walletImg from '../../img/wallet.png'
 
 const Navbar = () => {
-
     const { wallet, connect, resumeWallet } = useContext(DataContext)
-
-    
-
     /* const location = "/dashboard" */
 
     /* const bg1 = { backgroundColor: "rgb(19,20,25)" }

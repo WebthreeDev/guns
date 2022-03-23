@@ -1,7 +1,7 @@
 import React from "react"
 import { BrowserRouter } from "react-router-dom"
-import Router from "./router"
-import Navbar from "./chunk/navbar/navbar"
+import Router from "../router"
+import Navbar from "./navbar/navbar"
 
 function App() {
 

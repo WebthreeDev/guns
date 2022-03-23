@@ -1,11 +1,10 @@
 import React from "react";
 import { Switch, Route } from "react-router-dom"
-import Dashboard from "../routes/dashboard/dashboard"
-import Market from "../routes/market/market"
-import Shop from "../routes/shop/shop"
-import Race from "../routes/race/race"
-import Test from "../routes/test/test";
-import Admin from "../routes/admin/admin";
+import Dashboard from "./pages/dashboard/dashboard"
+import Market from "./pages/market/market"
+import Shop from "./pages/shop/shop"
+import Race from "./pages/race/race"
+import Admin from "./pages/admin/admin";
 
 const Router = () => {
     return (
@@ -27,9 +26,6 @@ const Router = () => {
             </Route>
             <Route path="/" exact>
                 <Dashboard />
-            </Route>
-            <Route path="/test">
-                <Test/>
             </Route>
             <Route path="/dapp">
                 <Dashboard/>

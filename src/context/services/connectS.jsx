@@ -24,6 +24,7 @@ const connect = () => {
                     console.log("Backend Problem:"+ error)
                 })
         } else {
+            alert("Wrong network, please switch to BSC")
             await w3S.switchEthereumChain(bsc)
             connect()
         }

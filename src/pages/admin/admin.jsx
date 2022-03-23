@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
-import { DataContext } from "../../../context/DataContext";
-import { web3 } from "../../../services/w3S";
+import { DataContext } from "../../context/DataContext";
+import { web3 } from "../../services/w3S";
 const Admin = () => {
     const _context = useContext(DataContext)
     const [contractOwner, setContractOwner] = useState(false)
