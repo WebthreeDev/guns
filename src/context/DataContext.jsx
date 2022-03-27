@@ -19,6 +19,8 @@ export const DataProvider = ({ children }) => {
     const [cans, setCans] = useState(false)
     const [bnb, setBnb] = useState(false)
     const [race, setRaces] = useState(false)
+    const [balance,setBalance ] = useState(false)
+    const [cct,setCCT] = useState(false)
     
     window.ethereum.on('accountsChanged', async () => {
         setWallet(await exectConnect())
@@ -34,19 +36,29 @@ export const DataProvider = ({ children }) => {
 
     const exectConnect = async () => {
         setLoading(true)
-        const wallet = await connect()
+        const connection = await connect()
+        const wallet = await connection.wallet
+        //console.log(connection)
+        setBalance(connection.balance)
         setWallet(wallet)
         await getBnb(wallet)
+        await getCCT(wallet)
         await getCans(wallet)
         setLoading(false)
         await getRaces(wallet)
         return wallet
     }
 
+    const getCCT = async (wallet)=>{
+       const _cct = await Contract.methods.balanceOf(wallet).call()
+       setCCT(web3.utils.fromWei(_cct,"ether"))
+    }
+
     const getCans = async (_wallet) => {
-        console.log("getCans")
+        //console.log("getCans")
         const _cans = await axios.get("https://cryptocans.io/api/v1/cans/user/" + _wallet)
         setCans(_cans.data.response)
+        //console.log(_cans.data.response)
     }
 
     const getBnb = async (wallet) => {
@@ -57,7 +69,13 @@ export const DataProvider = ({ children }) => {
     }
 
     const getERC721Contract = async () => {
-        Contract.methods.nftCommonPrice().call().then(res => {
+        const _price = 1
+        setCommonPackagePrice(_price)
+        setEpicPackagePrice(_price)
+        setLegendaryPackagePrice(_price)
+        console.log(Contract.methods)
+
+       /*  Contract.methods.nftCommonPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setCommonPackagePrice(_price)
         })
@@ -68,7 +86,7 @@ export const DataProvider = ({ children }) => {
         Contract.methods.nftLegentadyPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setLegendaryPackagePrice(_price)
-        })
+        }) */
     }
 
     const setRarity = (rarity) => {
@@ -98,7 +116,8 @@ export const DataProvider = ({ children }) => {
         bnb, setBnb,
         exectConnect, setRarity,
         getERC721Contract,
-        race, setRaces,getRaces
+        race, setRaces,getRaces,
+        balance,cct
     }
 
     return (

@@ -342,7 +342,7 @@ a{
 }
 
 .bg-dogs{
-    background: linear-gradient(rgba(0, 17, 7, 0.95),rgba(1, 9, 24, 0.95) ), url(../img/bg.png);
+    background: linear-gradient(rgba(104, 114, 177, 0.7),rgba(16, 13, 34, 0.7)), url(../img/bg.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: 110%;
@@ -395,7 +395,7 @@ a{
 }
 
 .nft-img{
-    width: 160px;
+    width: 240px;
 }
 
 .percent{
@@ -430,12 +430,13 @@ a{
 .nftBg{
     background: linear-gradient(rgba(74,85,151,1),rgb(16, 13, 34));
     padding: 20px 20px;
+    border-radius: 10px;
+}
+.animated{
     animation-duration: 0.5s;
     animation-direction: normal;
-    animation-name: pack;
     animation-timing-function: ease-out;
-   
-    border-radius: 10px;
+    animation-name: pack;
 }
 .logoBNB{
     color: aliceblue;
@@ -594,3 +595,17 @@ a{
     cursor: pointer;
 }
 
+.energy{
+    margin: 0px;
+    padding: 0px;
+    font-size: 50px;
+}
+.btn-add-can{
+    border-radius: 8px;
+    height: 50px;
+    width: 50px;
+    background-color: rgb(104, 114, 177);
+    color: aliceblue;
+    font-size: 30px;
+    font-weight: bolder;
+}

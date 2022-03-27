@@ -1,4 +1,4 @@
-import React, { useContext, useState,useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import cc from '../../img/cc.png'
 import ccan from '../../img/ccan.png'
 import { DataContext } from '../../context/DataContext'
@@ -7,19 +7,22 @@ import perro from '../../img/perro.png'
 import aero from '../../img/aero.png'
 import Loader from '../../components/loader/loader'
 import web3, { Contract } from '../../tokens/canes/canes'
+import ClaimModal from '../../components/claimModal/claimModal'
 
 const Dashboard = () => {
-    const { getRaces,race,cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
+    const { cct,balance,getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
     const [remove, setRemove] = useState(false)
     const [selling, setSelling] = useState(false)
+    const [claiming, setClaiming] = useState(false)
+    const [ammountToClaim,setAmmountToClaim] = useState(false)
 
-    useEffect(()=>{
+    useEffect(() => {
         getRaces(wallet)
         console.log(race)
-    },[])
+    }, [])
 
     const sell = async (_id) => {
         setLoading(true)
@@ -58,9 +61,27 @@ const Dashboard = () => {
         }
     }
 
+    const claim = async ()=>{
+        const body = {
+            "wallet": wallet,
+            "amount": ammountToClaim
+        }
+        try {
+            const res = await axios.patch("https://cryptocans.io/api/v1/claim",body)
+            //console.log(res.data.response)
+            console.log(Contract.methods)
+            const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
+            Contract.methods.transferFrom(ownerWallet,wallet,"10000000000000000").call({from:wallet})
+            .then(res => console.log(res))
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return (
         <div className="container-fluid p-2">
             {loading && <Loader />}
+            {claiming && <ClaimModal claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim}/>}
             {remove &&
                 <div className='modalX'>
                     <div className='modalIn'>
@@ -76,8 +97,8 @@ const Dashboard = () => {
                     <div className='modalIn'>
                         <div className=' w-100'>
                             <div className=''>
-                                
-                               Selling  #{id && id} can
+
+                                Selling  #{id && id} can
                                 <h3 className='text-warning'>{price} BNB</h3>
                                 <p className='text-warning'> Sales fee: {price / 100} BNB </p>
                                 <input className='form-control' type="number" onChange={e => setPrice(e.target.value)} />
@@ -112,7 +133,7 @@ const Dashboard = () => {
                                     <div className="w-100">
                                         <img className="my-2" height="50px" src={ccan} alt="" />
                                         <div>
-                                            <h5>105 CCAN</h5>
+                                            <h5>{cct} CCT</h5>
                                         </div>
                                     </div>
                                 </div>
@@ -122,13 +143,13 @@ const Dashboard = () => {
                                     <div className="">
                                         <img className="my-2" height="50px" src={cc} alt="" />
                                         <div>
-                                            <h5>550 CC</h5>
+                                            <h5>{balance?<> {Math.round((balance*100))/100}</>:<>0</>} Credits</h5>
                                         </div>
                                         1000 cc = 1 ccan
                                     </div>
                                     <div className="">
                                         <h5>Current fee 75%</h5>
-                                        <button className="form-control btn btn-primary"> Claim </button>
+                                        <button onClick={()=> setClaiming(true) } className="form-control btn btn-primary"> Claim </button>
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +190,8 @@ const Dashboard = () => {
                                                     <img className='imgNft' src={perro} alt="" />
                                                 </div>
                                                 <div className='nftName'>
-                                                    {i.name}
+                                                    {i.name} - {i.status}
+
                                                 </div>
                                                 <div className='nftStats'>
                                                     <div className="stats">
@@ -214,13 +236,13 @@ const Dashboard = () => {
                                 })}
                             </div>
                         </div>
-                            <div className='p-2 border mt-2'>
-                                {race&& race.map(({gainToken,canId,_id},index) =>{
-                                   return <div key={_id} className="border p-1"> 
-                                  Race {index+1} - canId: {canId} - {gainToken == 0 ? <>Lose</>:<>Win: +{gainToken}</>} 
-                                   </div>
-                                })}  
-                            </div>
+                        <div className='p-2 border mt-2'>
+                            {race && race.map(({ gainToken, canId, _id }, index) => {
+                                return <div key={_id} className="border p-1">
+                                    Race {index + 1} - canId: {canId} - {gainToken == 0 ? <>Lose</> : <>Win: +{gainToken}</>}
+                                </div>
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>

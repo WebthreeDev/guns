@@ -47,6 +47,11 @@ const Navbar = () => {
                                 Shop
                             </div>
                         </Link>
+                        <Link className="link" to="/canodromes">
+                            <div className="buttonLink">
+                                Canodromes
+                            </div>
+                        </Link>
                         <Link className="link" to="/race">
                             <div className="buttonLink">
                                 Race

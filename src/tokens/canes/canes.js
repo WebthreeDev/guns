@@ -1,11 +1,11 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
 const canContract = {
-    address:"0x6cb8385E25749dF9256Bb102E318e97e10B81FF9",
+    address:"0xc132428e463EA668d69e2e781Ee0E29d25F07B5c",
     abi:[
         {
             "inputs": [],
-            "stateMutability": "payable",
+            "stateMutability": "nonpayable",
             "type": "constructor"
         },
         {
@@ -20,13 +20,13 @@ const canContract = {
                 {
                     "indexed": true,
                     "internalType": "address",
-                    "name": "approval",
+                    "name": "spender",
                     "type": "address"
                 },
                 {
-                    "indexed": true,
+                    "indexed": false,
                     "internalType": "uint256",
-                    "name": "tokenId",
+                    "name": "value",
                     "type": "uint256"
                 }
             ],
@@ -34,100 +34,19 @@ const canContract = {
             "type": "event"
         },
         {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "owner",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "internalType": "address",
-                    "name": "operator",
-                    "type": "address"
-                },
-                {
-                    "indexed": false,
-                    "internalType": "bool",
-                    "name": "approved",
-                    "type": "bool"
-                }
-            ],
-            "name": "ApprovalForAll",
-            "type": "event"
-        },
-        {
             "inputs": [
                 {
                     "internalType": "address",
-                    "name": "to",
+                    "name": "spender",
                     "type": "address"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "tokenId",
+                    "name": "amount",
                     "type": "uint256"
                 }
             ],
             "name": "approve",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address payable",
-                    "name": "buyer",
-                    "type": "address"
-                }
-            ],
-            "name": "buyNft",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "nftType",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "price",
-                    "type": "uint256"
-                }
-            ],
-            "name": "changeNftPrice",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address payable",
-                    "name": "newOwner",
-                    "type": "address"
-                }
-            ],
-            "name": "changeOwner",
             "outputs": [
                 {
                     "internalType": "bool",
@@ -142,58 +61,11 @@ const canContract = {
             "inputs": [
                 {
                     "internalType": "uint256",
-                    "name": "tokenId",
-                    "type": "uint256"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "nftType",
+                    "name": "amount",
                     "type": "uint256"
                 }
             ],
-            "name": "mint",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "onSale",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "from",
-                    "type": "address"
-                },
-                {
-                    "internalType": "address",
-                    "name": "to",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "tokenId",
-                    "type": "uint256"
-                }
-            ],
-            "name": "safeTransferFrom",
+            "name": "burn",
             "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
@@ -202,45 +74,23 @@ const canContract = {
             "inputs": [
                 {
                     "internalType": "address",
-                    "name": "from",
-                    "type": "address"
-                },
-                {
-                    "internalType": "address",
-                    "name": "to",
+                    "name": "recipient",
                     "type": "address"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "tokenId",
+                    "name": "amount",
                     "type": "uint256"
-                },
-                {
-                    "internalType": "bytes",
-                    "name": "_data",
-                    "type": "bytes"
                 }
             ],
-            "name": "safeTransferFrom",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "operator",
-                    "type": "address"
-                },
+            "name": "transfer",
+            "outputs": [
                 {
                     "internalType": "bool",
-                    "name": "approved",
+                    "name": "",
                     "type": "bool"
                 }
             ],
-            "name": "setApprovalForAll",
-            "outputs": [],
             "stateMutability": "nonpayable",
             "type": "function"
         },
@@ -260,9 +110,9 @@ const canContract = {
                     "type": "address"
                 },
                 {
-                    "indexed": true,
+                    "indexed": false,
                     "internalType": "uint256",
-                    "name": "tokenId",
+                    "name": "value",
                     "type": "uint256"
                 }
             ],
@@ -273,28 +123,21 @@ const canContract = {
             "inputs": [
                 {
                     "internalType": "address",
-                    "name": "from",
+                    "name": "sender",
                     "type": "address"
                 },
                 {
                     "internalType": "address",
-                    "name": "to",
+                    "name": "recipient",
                     "type": "address"
                 },
                 {
                     "internalType": "uint256",
-                    "name": "tokenId",
+                    "name": "amount",
                     "type": "uint256"
                 }
             ],
             "name": "transferFrom",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "withdraw",
             "outputs": [
                 {
                     "internalType": "bool",
@@ -309,7 +152,31 @@ const canContract = {
             "inputs": [
                 {
                     "internalType": "address",
-                    "name": "owner",
+                    "name": "",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                }
+            ],
+            "name": "allowance",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "",
                     "type": "address"
                 }
             ],
@@ -326,26 +193,33 @@ const canContract = {
         },
         {
             "inputs": [],
-            "name": "contractOwner",
+            "name": "decimals",
             "outputs": [
                 {
-                    "internalType": "address payable",
+                    "internalType": "uint8",
                     "name": "",
-                    "type": "address"
+                    "type": "uint8"
                 }
             ],
             "stateMutability": "view",
             "type": "function"
         },
         {
-            "inputs": [
+            "inputs": [],
+            "name": "name",
+            "outputs": [
                 {
-                    "internalType": "uint256",
-                    "name": "tokenId",
-                    "type": "uint256"
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
                 }
             ],
-            "name": "getApproved",
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "Owner",
             "outputs": [
                 {
                     "internalType": "address",
@@ -358,36 +232,12 @@ const canContract = {
         },
         {
             "inputs": [],
-            "name": "getBalance",
+            "name": "symbol",
             "outputs": [
                 {
-                    "internalType": "uint256",
+                    "internalType": "string",
                     "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "owner",
-                    "type": "address"
-                },
-                {
-                    "internalType": "address",
-                    "name": "operator",
-                    "type": "address"
-                }
-            ],
-            "name": "isApprovedForAll",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
+                    "type": "string"
                 }
             ],
             "stateMutability": "view",
@@ -395,84 +245,7 @@ const canContract = {
         },
         {
             "inputs": [],
-            "name": "nftCommonPrice",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "nftEpicPrice",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "nftLegentadyPrice",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "tokenId",
-                    "type": "uint256"
-                }
-            ],
-            "name": "ownerOf",
-            "outputs": [
-                {
-                    "internalType": "address",
-                    "name": "",
-                    "type": "address"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "bytes4",
-                    "name": "interfaceId",
-                    "type": "bytes4"
-                }
-            ],
-            "name": "supportInterface",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "totalSold",
+            "name": "totalSupply",
             "outputs": [
                 {
                     "internalType": "uint256",

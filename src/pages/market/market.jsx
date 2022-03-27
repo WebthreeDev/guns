@@ -1,9 +1,9 @@
 import axios from "axios"
 import React, { useEffect, useState, useContext } from "react"
 import perro from '../../img/perro.png'
-import Modal from "../../components/modal/modal"
 import { DataContext } from "../../context/DataContext"
 import web3, { Contract } from "../../tokens/canes/canes"
+import Loader from "../../components/loader/loader"
 
 const Market = () => {
     const _context = useContext(DataContext)
@@ -26,7 +26,6 @@ const Market = () => {
     }, [])
 
     const getCansOnSell = async () => {
-        console.log("pasando por aki")
         _context.setLoading(true)
         const cansOnSell = await axios.get(apiMarket)
         const filteredCans = await cansOnSell.data.response.filter(item => item.status == 1)
@@ -35,12 +34,13 @@ const Market = () => {
     }
 
     const confirmBuy = async () => {
-        setRenderModal(false)
         _context.setLoading(true)
+        setRenderModal(false)
         const canId = can.id
         try {
             const res = await axios.patch(apiMarket, { canId })
             const can = res.data.response
+            if(can.status == 3) throw "Ya se vendio"
             console.log(res.data.response)
             //cobro y envio a el contrato
             const from = _context.wallet
@@ -71,16 +71,16 @@ const Market = () => {
     }
     return (
         <div>
+            {_context.loading && <Loader />}
             {renderModal &&
                 <div className="modalX">
                     <div className="modalIn">
                         <div className="w-100">
-
                             <div className="modalHeader">
                                 <h3>
                                     Estas comprando:
                                 </h3>
-                                {can.name}
+                                {can.name}                         
                                 <div>Rarity: {_context.setRarity(can.rarity)}</div>
                                 <div>
                                     precio <b className="text-warning">{can.onSale.price} BNB</b>
@@ -106,7 +106,6 @@ const Market = () => {
             </div>
             <div className="container-fluid">
                 <div className="row">
-
                     <div className="col-2 sidebar">
                         <div className="d-flex justify-content-between align-items-center">
                             <b>Filter</b>
@@ -181,11 +180,12 @@ const Market = () => {
                         <div className="row gx-2 gy-2">
                             {dogList &&
                                 dogList.map((item) => {
-                                    return (
+                                    console.log(item)
+                                    return ( 
                                         <div key={item.id} className="col-3">
                                             <div onClick={_ => { setCan(item); setModalText("Confirm!"); setRenderModal(true) }} className="nftCard pt-2">
                                                 <div className="d-flex justify-content-between">
-                                                    <div className="sidebarText px-2"> #{item.id} </div>
+                                                    <div className="sidebarText px-2"> #{item.id} - {item.status} </div>
                                                     <div className="px-2 sidebarText">{_context.lastForWallet(item.wallet)}</div>
                                                 </div>
                                                 <div className="text-center">

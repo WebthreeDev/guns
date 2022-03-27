@@ -5,12 +5,16 @@ import Market from "./pages/market/market"
 import Shop from "./pages/shop/shop"
 import Race from "./pages/race/race"
 import Admin from "./pages/admin/admin";
+import Canodromes from "./pages/canodromes/canodromes";
 
 const Router = () => {
     return (
         <Switch>
             <Route path="/market">
                 <Market />
+            </Route>
+            <Route path="/canodromes">
+                <Canodromes />
             </Route>
             <Route path="/admin">
                 <Admin />
