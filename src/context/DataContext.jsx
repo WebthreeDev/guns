@@ -6,6 +6,7 @@ import { nftContract } from '../tokens/canes/canes'
 import { cctContract } from '../tokens/cct/cct'
 import connect from './services/connectS'
 import axios from 'axios'
+import changeStateCanInMarket from './services/changeStateCanInMarket'
 
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
@@ -24,31 +25,47 @@ export const DataProvider = ({ children }) => {
     const [cct, setCCT] = useState(false)
     const [canodromes, setCanodromes] = useState(false)
 
+    const gas = web3.utils.toWei("0.0001", "gwei")
+    const gasPrice = web3.utils.toWei("10", "gwei")
+
     useEffect(() => {
         exectConnect()
-    }, [wallet])
+    }, [])
 
     window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
     window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
 
     const exectConnect = async () => {
+        //localstorage
+        const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null
+        if(storageCanId){
+            console.log("antes de la funcion")
+            changeStateCanInMarket(storageCanId)
+        }  
+
         setLoading(true)
         /* const accounts = await */
-            window.ethereum.request({ method: "eth_requestAccounts" })
-                .then(async accounts => {
-                    //const connection = await connect(accounts[0])
-                    const wallet = accounts[0]
-                    //console.log(connection)
-                    //setBalance(connection.balance)
-                    setWallet(wallet)
-                    await getCanodromes(wallet)
-                    await getBnb(wallet)
-                    await getCCT(wallet)
-                    await getCans(wallet)
-                    setLoading(false)
-                    await getRaces(wallet)
-                    return wallet
-                })
+        window.ethereum.request({ method: "eth_requestAccounts" })
+            .then(async accounts => {
+                await connect(accounts[0])
+                const wallet = accounts[0]
+
+                axios.post("https://cryptocans.io/api/v1/login", { wallet })
+                    .then(async (res) => {
+                        console.log("pasando por la coneccion")
+                        console.log(res.data)
+                        setWallet(wallet)
+                        await getCanodromes(wallet)
+                        await getBnb(wallet)
+                        await getCCT(wallet)
+                        await getCans(wallet)
+                        setLoading(false)
+                        //resolve(res.data.response)
+                    }).catch(error => {
+                        console.log("Backend Problem:" + error)
+                    })
+                return wallet
+            })
 
     }
     //const _canodromes = await axios.get("https://cryptocans.io/api/v1/canodromes", { params: { "wallet":__wallet } })
@@ -58,10 +75,12 @@ export const DataProvider = ({ children }) => {
         fetch("https://cryptocans.io/api/v1/canodromes?wallet=" + wallet)
             .then((res) => res.json())
             .then(res => {
-               // console.log(res.response)
+                // console.log(res.response)
                 setCanodromes(res.response)
             })
     }
+
+    
 
     const getCCT = async (wallet) => {
         const _cct = await cctContract.methods.balanceOf(wallet).call()
@@ -83,12 +102,6 @@ export const DataProvider = ({ children }) => {
     }
 
     const getERC721Contract = async () => {
-        const _price = 1
-        setCommonPackagePrice(_price)
-        setEpicPackagePrice(_price)
-        setLegendaryPackagePrice(_price)
-        console.log(nftContract.methods)
-
         nftContract.methods.nftCommonPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setCommonPackagePrice(_price)
@@ -132,7 +145,8 @@ export const DataProvider = ({ children }) => {
         race, setRaces, getRaces,
         balance, cct,
         alert, setAlert,
-        getCanodromes, canodromes
+        getCanodromes, canodromes,
+        gas,gasPrice
     }
 
     return (

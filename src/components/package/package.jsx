@@ -4,7 +4,7 @@ const Package = ({img}) => {
     const [myStyle, setStyle] = useState({ transform: "" })
 
     const motionMatchMedia = window.matchMedia("(prefers-reduced-motion)");
-    const THRESHOLD = 15;
+    const THRESHOLD = 5;
 
     function handleHover(e) {
         const { clientX, clientY, currentTarget } = e;

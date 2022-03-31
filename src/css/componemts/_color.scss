@@ -2,12 +2,14 @@ $gradient1:rgb(19,19,19);
 $gradient1transp:rgba(19,19,19,0.9);
 $gradient2:rgb(41, 44, 49);
 $gradient2transp:rgba(41, 44, 49, 0.9);
-$text:rgb(92,95,110);
+$text:#6e7191;
 .unikeNav{
     position: fixed;
+    z-index: 1;
     width: 100%;
     color: var(--light1);
     height: 52px;
+    background-color: $gradient1;
     border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 .unikeRouter{
@@ -28,7 +30,7 @@ $text:rgb(92,95,110);
 .nftBg{
     background: linear-gradient($gradient2,$gradient1);
     padding: 20px 20px;
-    border-radius: 10px;
+    border-radius: 30px;
 }
 .btn-ccan{
     height: 40px;
@@ -40,10 +42,10 @@ $text:rgb(92,95,110);
     font-size: 18px;
     transition: 0.3s;
     position: relative;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: $gradient2;
     &:hover{
         transform: scale(1.05) rotate(-1deg);
-        background-color: rgb(31, 31, 31);
+        box-shadow: inset -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
     }
 
 }
@@ -96,4 +98,51 @@ $text:rgb(92,95,110);
 .marketName{
     font-size: 18px;
     font-weight: 600;
+}
+.button-market{
+    width: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40px;
+    border-radius: 20px;
+    border: none;
+    box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
+    color: $text;    
+    font-weight:600;
+    font-size: 18px;
+    transition: 0.3s;
+    position: relative;
+    background-color: $gradient2;
+}
+.lb-color{
+    color: $text;
+}
+.item-id{
+    font-size: 20px;
+    font-weight: 600;
+}
+.wallet-market{
+    font-size: 12px;
+}
+.nft-name{
+    font-size: 18px;
+    font-weight: 600;
+}
+.sidebar{
+    color: $text;
+    padding-top: 60px;
+    position: relative;
+}
+.sidebar-bg{
+    border-radius: 30px;
+    padding: 20px;
+    min-height: 500px;
+    background: linear-gradient($gradient2, $gradient1);
+    position: sticky;
+    top:60px;
+    width: 100%;
+}
+progress{
+    max-width: 140px;
 }
