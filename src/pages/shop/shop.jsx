@@ -7,14 +7,16 @@ import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios"
 import web3 from "../../tokens/canes/canes"
-import { Contract } from "../../tokens/canes/canes"
+import { nftContract } from "../../tokens/canes/canes"
 import Package from "../../components/package/package";
 import MintModal from "../../components/mintModal/mintModal";
+import bnbLogo from "../../img/bnbLogo.svg"
+//import NftPack from "../../components/nftPack/nftPack";
 
 const Shop = () => {
     const { getCans, getERC721Contract, loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice } = useContext(DataContext)
-    const [minted,setMinted]=useState(false)
-    const [canMinted,setCanMinted] = useState(false)
+    const [minted, setMinted] = useState(false)
+    const [canMinted, setCanMinted] = useState(false)
     useEffect(_ => {
         const erc721 = async () => await getERC721Contract()
         erc721()
@@ -27,13 +29,9 @@ const Shop = () => {
         const gas = web3.utils.toWei("0.0001", "gwei")
         const gasPrice = web3.utils.toWei("10", "gwei")
         try {
-            const contractResponse = await Contract.methods.mintId(packageId).send({ from: wallet, value, gas, gasPrice })
+            const contractResponse = await nftContract.methods.mint(packageId).send({ from: wallet, value, gas, gasPrice })
             const canId = await contractResponse.events.Transfer.returnValues.tokenId
-            const body = {
-                "wallet": wallet,
-                "packageId": packageId,
-                "canId": canId
-            }
+            const body = { wallet, packageId, canId }
             const mintedCan = await axios.post("https://cryptocans.io/api/v1/cans/", body)
             console.log(mintedCan.data.response)
             setCanMinted(mintedCan.data.response)
@@ -47,181 +45,185 @@ const Shop = () => {
     }
 
     return (
-        <div className="bg-dogs">
-            {minted && <MintModal getCans={getCans} wallet={wallet} canMinted={canMinted} setMinted={setMinted}/>}
+        <div className="bg1 unikeRouter">
+            {minted && <MintModal getCans={getCans} wallet={wallet} canMinted={canMinted} setMinted={setMinted} />}
             {loading && <Loader />}
             <div className="container py-4">
-                <div className="neon zxc">
-                    
-                        <div className="w-100">
+                <div className="w-100">
+                    {/* <div className="container">
                             <div className="row">
-                                <div className="col-12 col-sm-6 mb-3 col-md-4">
-                                    <div className="nftBorder animated">
-                                        <div className="nftBg">
-                                            <div className="d-flex justify-content-between">
-                                                <div className="text-warning">
-                                                    <div className="d-flex align-items-center">
-                                                        <div>
-                                                            <img height="24px" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png" alt="" />
-                                                        </div>
-                                                        <div className="text-warning">
-                                                            <b className="mx-1">
-                                                                {commonPackagePrice} BNB
-                                                            </b>
-                                                        </div>
-                                                    </div>
+                                <div className="col-12 col-md-4">
+                                    <NftPack />
+                                </div>
+                            </div>
+                        </div> */}
+                    <div className="row">
+                        <div className="col-12 col-sm-6 mb-3 col-md-4">
+                            <div className="nftBorder animated">
+                                <div className="nftBg">
+                                    <div className="d-flex justify-content-between">
+                                        <div className="text-warning">
+                                            <div className="d-flex align-items-center">
+                                                <div>
+                                                    <img height="24px" src={bnbLogo} alt="" />
                                                 </div>
                                                 <div className="">
-                                                    {loading ? <div className="border p-1 text-center">Loading</div> : <>
-                                                        {wallet ?
-                                                            <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-ccan w-100"> MINT </button>
-                                                            :
-                                                            <button onClick={connect} className="btn-ccan"> Connect </button>}
-                                                    </>}
-                                                    <div className="minted-text">
-                                                        Minted 0 / 1000
-                                                    </div>
-
-                                                </div>
-                                            </div>
-                                            <div className="d-flex">
-                                                <div className="commonText">
-
-                                                    <img className="commonImg" src={common} alt="" />
-                                                </div>
-                                                <div className="">
-                                                    <Package img={sobre1} />
-                                                    {/* <img className="imgNft1" src={sobre1} alt="" /> */}
-                                                    <div className="d-flex p-2 justify-content-center">
-                                                        <div className="p-2 ">
-                                                            <div>Common</div>
-                                                            <div> <h5> 60%</h5> </div>
-                                                            <div>Epic</div>
-                                                            <div> <h5>0.9%</h5>  </div>
-                                                        </div>
-                                                        <div className="p-2 ">
-                                                            <div>Rare</div>
-                                                            <div> <h5>30%</h5>  </div>
-                                                            <div>Legendary</div>
-                                                            <div> <h5>0.1%</h5> </div>
-                                                        </div>
-                                                    </div>
+                                                    <b className="mx-1">
+                                                        {commonPackagePrice} BNB
+                                                    </b>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-
-                                </div>
-                                <div className="col-12 col-sm-6 mb-3 col-md-4">
-                                    <div className="nftBorder animated">
-                                        <div className="nftBg">
-                                            <div className="d-flex justify-content-between">
-                                                <div className="text-warning">
-                                                    <div className="d-flex align-items-center">
-                                                        <div>
-                                                            <img height="24px" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png" alt="" />
-                                                        </div>
-                                                        <div className="text-warning">
-                                                            <b className="mx-1">
-                                                                {epicPackagePrice} BNB
-                                                            </b>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div className="">
-                                                    {loading ? <div className="border p-1 text-center">Loading</div> : <>
-                                                        {wallet ?
-                                                            <button onClick={() => buyPackage("2", wallet, epicPackagePrice)} className="btn-ccan w-100"> MINT </button>
-                                                            :
-                                                            <button onClick={connect} className="btn-ccan"> Connect </button>}
-                                                    </>}
-                                                    <div className="minted-text">
-                                                        Minted 0 / 500
-                                                    </div>
-                                                </div>
+                                        <div className="">
+                                            {loading ? <button className="btn-ccan w-100">Loading</button> : <>
+                                                {wallet ?
+                                                    <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-ccan w-100"> MINT </button>
+                                                    :
+                                                    <button onClick={connect} className="btn-ccan w-100"> Connect </button>}
+                                            </>}
+                                            <div className="minted-text">
+                                                Minted 0/1000
                                             </div>
-                                            <div className="d-flex">
-                                                <div className="commonText">
+                                        </div>
+                                    </div>
+                                    <div className="d-flex">
+                                        <div className="commonText">
 
-                                                    <img className="commonImg" src={sobre2} alt="" />
+                                            <img className="commonImg" src={common} alt="" />
+                                        </div>
+                                        <div className="">
+                                            <Package img={sobre1} />
+                                            {/* <img className="imgNft1" src={sobre1} alt="" /> */}
+                                            <div className="d-flex p-2 justify-content-center">
+                                                <div className="p-2 textGray">
+                                                    <div>Common</div>
+                                                    <div> <h5> 60%</h5> </div>
+                                                    <div>Epic</div>
+                                                    <div> <h5>0.9%</h5>  </div>
                                                 </div>
-                                                <div className="">
-                                                    <Package img={sobre1} />
-                                                    {/* <img className="imgNft1" src={sobre1} alt="" /> */}
-                                                    <div className="d-flex p-2 justify-content-center">
-                                                        <div className="p-2 ">
-                                                            <div>Common</div>
-                                                            <div> <h5> 30%</h5> </div>
-                                                            <div>Epic</div>
-                                                            <div> <h5>10%</h5>  </div>
-                                                        </div>
-                                                        <div className="p-2 ">
-                                                            <div>Rare</div>
-                                                            <div> <h5>60%</h5>  </div>
-                                                            <div>Legendary</div>
-                                                            <div> <h5>3%</h5> </div>
-                                                        </div>
-                                                    </div>
+                                                <div className="p-2 textGray">
+                                                    <div>Rare</div>
+                                                    <div> <h5>30%</h5>  </div>
+                                                    <div>Legendary</div>
+                                                    <div> <h5>0.1%</h5> </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="col-12 col-sm-6 mb-3 col-md-4">
-                                    <div className="nftBorder animated">
-                                        <div className="nftBg">
-                                            <div className="d-flex justify-content-between">
-                                                <div className="text-warning">
-                                                    <div className="d-flex align-items-center">
-                                                        <div>
-                                                            <img height="24px" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png" alt="" />
-                                                        </div>
-                                                        <div className="text-warning">
-                                                            <b className="mx-1">
-                                                                {legendaryPackagePrice} BNB
-                                                            </b>
-                                                        </div>
-                                                    </div>
+                            </div>
+
+                        </div>
+                        <div className="col-12 col-sm-6 mb-3 col-md-4">
+                            <div className="nftBorder animated">
+                                <div className="nftBg">
+                                    <div className="d-flex justify-content-between">
+                                        <div className="">
+                                            <div className="d-flex align-items-center">
+                                                <div> 
+                                                    <img height="24px" src={bnbLogo} alt="" />
                                                 </div>
                                                 <div className="">
-                                                    {loading ? <div className="btn-ccan"><h4>Loading</h4></div> : <>
-                                                        {wallet ?
-                                                            <button onClick={() => buyPackage("3", wallet, legendaryPackagePrice)} className="btn-ccan w-100"> MINT </button>
-                                                            :
-                                                            <button onClick={connect} className="btn-ccan"> Connect </button>}
-                                                    </>}
-                                                    <div className="minted-text">
-                                                        Minted 0 / 100
-                                                    </div>
+                                                    <b className="mx-1">
+                                                        {epicPackagePrice} BNB
+                                                    </b>
                                                 </div>
                                             </div>
-                                            <div className="d-flex">
-                                                <div className="commonText">
-                                                    <img className="commonImg" src={sobre3} alt="" />
+                                        </div>
+                                        <div className="">
+                                            {loading ? <button className="btn-ccan w-100">Loading</button> : <>
+                                                {wallet ?
+                                                    <button onClick={() => buyPackage("2", wallet, epicPackagePrice)} className="btn-ccan w-100"> MINT </button>
+                                                    :
+                                                    <button onClick={connect} className="btn-ccan w-100"> Connect </button>}
+                                            </>}
+                                            <div className="minted-text">
+                                                Minted 0/500
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex">
+                                        <div className="commonText">
+
+                                            <img className="commonImg" src={sobre2} alt="" />
+                                        </div>
+                                        <div className="">
+                                            <Package img={sobre1} />
+                                            {/* <img className="imgNft1" src={sobre1} alt="" /> */}
+                                            <div className="d-flex p-2 justify-content-center">
+                                                <div className="p-2 textGray">
+                                                    <div>Common</div>
+                                                    <div> <h5> 30%</h5> </div>
+                                                    <div>Epic</div>
+                                                    <div> <h5>10%</h5>  </div>
                                                 </div>
-                                                <div className="">
-                                                    <Package img={sobre1} />
-                                                    {/*  <img className="imgNft1" src={sobre1} alt="" /> */}
-                                                    <div className="d-flex p-2 justify-content-center">
-                                                        <div className="p-2 ">
-                                                            <div>Common</div>
-                                                            <div> <h5> 0%</h5> </div>
-                                                            <div>Epic</div>
-                                                            <div> <h5>30%</h5>  </div>
-                                                        </div>
-                                                        <div className="p-2 ">
-                                                            <div>Rare</div>
-                                                            <div> <h5>60%</h5>  </div>
-                                                            <div>Legendary</div>
-                                                            <div> <h5>10%</h5> </div>
-                                                        </div>
-                                                    </div>
+                                                <div className="p-2 textGray">
+                                                    <div>Rare</div>
+                                                    <div> <h5>60%</h5>  </div>
+                                                    <div>Legendary</div>
+                                                    <div> <h5>3%</h5> </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                {/* <div className="col-12 col-sm-6 mb-3 col-md-4">
+                            </div>
+                        </div>
+                        <div className="col-12 col-sm-6 mb-3 col-md-4">
+                            <div className="nftBorder animated">
+                                <div className="nftBg">
+                                    <div className="d-flex justify-content-between">
+                                        <div className="">
+                                            <div className="d-flex align-items-center">
+                                                <div>
+                                                    <img height="24px" src={bnbLogo} alt="" />
+                                                </div>
+                                                <div className="">
+                                                    <b className="mx-1">
+                                                        {legendaryPackagePrice} BNB
+                                                    </b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="">
+                                            {loading ? <button className="btn-ccan w-100">Loading</button> : <>
+                                                {wallet ?
+                                                    <button onClick={() => buyPackage("3", wallet, legendaryPackagePrice)} className="btn-ccan w-100"> MINT </button>
+                                                    :
+                                                    <button onClick={connect} className="btn-ccan w-100"> Connect </button>}
+                                            </>}
+                                            <div className="minted-text">
+                                                Minted 0/250
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="d-flex">
+                                        <div className="commonText">
+                                            <img className="commonImg" src={sobre3} alt="" />
+                                        </div>
+                                        <div className="">
+                                            <Package img={sobre1} />
+                                            {/*  <img className="imgNft1" src={sobre1} alt="" /> */}
+                                            <div className="d-flex p-2 justify-content-center">
+                                                <div className="p-2 textGray">
+                                                    <div>Common</div>
+                                                    <div> <h5> 0%</h5> </div>
+                                                    <div>Epic</div>
+                                                    <div> <h5>30%</h5>  </div>
+                                                </div>
+                                                <div className="p-2 textGray">
+                                                    <div>Rare</div>
+                                                    <div> <h5>60%</h5>  </div>
+                                                    <div>Legendary</div>
+                                                    <div> <h5>10%</h5> </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {/* <div className="col-12 col-sm-6 mb-3 col-md-4">
                                     <div className="nftBg">
                                         <div className="text-center">
                                             <h4 className="text-white">Minted 0 / 500 </h4>
@@ -275,10 +277,9 @@ const Shop = () => {
                                             </div>
                                         </div>
                                     </div>
-                                </div> */}
-                            </div>
-                        </div>
-                    
+                                </div>
+                            */}
+                    </div>
                 </div>
             </div>
         </div>

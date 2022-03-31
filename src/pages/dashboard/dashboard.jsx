@@ -6,22 +6,22 @@ import axios from 'axios'
 import perro from '../../img/perro.png'
 import aero from '../../img/aero.png'
 import Loader from '../../components/loader/loader'
-import web3, { Contract } from '../../tokens/canes/canes'
+import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
-
+import Alert from '../../components/alert/alert'
 const Dashboard = () => {
-    const { cct,balance,getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
+    const { alert, setAlert, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
     const [remove, setRemove] = useState(false)
     const [selling, setSelling] = useState(false)
     const [claiming, setClaiming] = useState(false)
-    const [ammountToClaim,setAmmountToClaim] = useState(false)
+    const [ammountToClaim, setAmmountToClaim] = useState(false)
 
     useEffect(() => {
         getRaces(wallet)
-        console.log(race)
+        //console.log(race)
     }, [])
 
     const sell = async (_id) => {
@@ -29,7 +29,7 @@ const Dashboard = () => {
         setSelling(false)
         let body = { can: { onSale: { sale: true, price: price }, } }
         const value = web3.utils.toWei((price / 100).toString(), "ether")
-        Contract.methods.onSale().send({ from: wallet, value }).then(async (res) => {
+        nftContract.methods.onSale().send({ from: wallet, value }).then(async (res) => {
             await sendTransaction(_id, body)
             setLoading(false)
         }).catch(error => {
@@ -61,27 +61,28 @@ const Dashboard = () => {
         }
     }
 
-    const claim = async ()=>{
+    const claim = async () => {
         const body = {
             "wallet": wallet,
             "amount": ammountToClaim
         }
         try {
-            const res = await axios.patch("https://cryptocans.io/api/v1/claim",body)
+            const res = await axios.patch("https://cryptocans.io/api/v1/claim", body)
             //console.log(res.data.response)
-            console.log(Contract.methods)
+            console.log(nftContract.methods)
             const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
-            Contract.methods.transferFrom(ownerWallet,wallet,"10000000000000000").call({from:wallet})
-            .then(res => console.log(res))
+            nftContract.methods.transferFrom(ownerWallet, wallet, "10000000000000000").call({ from: wallet })
+                .then(res => console.log(res))
         } catch (error) {
             console.log(error)
         }
     }
 
     return (
-        <div className="container-fluid p-2">
+        <div className="unikeRouter">
+            <Alert text="Alert Text" />
             {loading && <Loader />}
-            {claiming && <ClaimModal claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim}/>}
+            {claiming && <ClaimModal claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
             {remove &&
                 <div className='modalX'>
                     <div className='modalIn'>
@@ -113,53 +114,57 @@ const Dashboard = () => {
                     </div>
                 </div>
             }
-            <div className="row g-2">
-                <div className="col-md-3">
-                    <div className="">
-                        <div className="row g-2">
-                            <div className="col-12">
-                                <div className="box text-center d-flex align-items-center">
+            <div className="container-fluid">
+                <div className="row">
+                    <div className="col-md-2 min-h-100-50 p-3">
+                        <div className='boxMenuDark'>
+                            <div className="menuSectionDshboard separator">
+                                <div className="text-center h-100 d-flex align-items-center">
                                     <div className="w-100">
                                         <img className="my-2" height="50px" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png" alt="" />
                                         <div>
-                                            <h5>{bnb} BNB
+                                            <h5>{bnb ? bnb : 0} BNB
                                             </h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-12">
-                                <div className="box text-center d-flex align-items-center">
+                            <div className="col-md-12 col-3 menuSectionDshboard separator">
+                                <div className="text-center h-100 d-flex align-items-center">
                                     <div className="w-100">
                                         <img className="my-2" height="50px" src={ccan} alt="" />
                                         <div>
-                                            <h5>{cct} CCT</h5>
+                                            <h5>{cct ? cct : 0} CCT</h5>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div className="col-12">
-                                <div className="box text-center justify-content-around d-flex align-items-center">
+
+                            <div className="col-md-12 col-3 menuSectionDshboard separator">
+                                <div className="text-center h-100 justify-content-center d-flex align-items-center">
                                     <div className="">
                                         <img className="my-2" height="50px" src={cc} alt="" />
                                         <div>
-                                            <h5>{balance?<> {Math.round((balance*100))/100}</>:<>0</>} Credits</h5>
+                                            <h5>{balance ? <> {Math.round((balance * 100)) / 100}</> : <>0</>} Credits</h5>
                                         </div>
-                                        1000 cc = 1 ccan
                                     </div>
+                                </div>
+                            </div>
+
+                            <div className="col-md-12 col-3 menuSectionDshboard separator">
+                                <div className="d-flex justify-content-center align-items-center  h-100">
                                     <div className="">
                                         <h5>Current fee 75%</h5>
-                                        <button onClick={()=> setClaiming(true) } className="form-control btn btn-primary"> Claim </button>
+                                        <button onClick={() => setClaiming(true)} className="form-control btn btn-primary"> Claim </button>
                                     </div>
                                 </div>
                             </div>
                         </div>
+
                     </div>
-                </div>
-                <div className="col-9 ">
-                    <div className="">
+                    <div className="col-md-10 ">
                         <div className="dogFeatures">
-                            <div className="d-flex justify-content-around">
+                            {/* <div className="d-flex justify-content-around">
                                 <div className="text-center">
                                     Carreras
                                     <h3>0</h3>
@@ -172,26 +177,24 @@ const Dashboard = () => {
                                     Win Rate
                                     <h3>{cans.length}/10 </h3>
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="row g-2 mb-2">
 
                                 {cans && cans.map((i) => {
                                     return (
                                         <div className="col-md-2" key={i.id}>
                                             <div className="nftSmall">
-
                                                 {i.rarity === "1" && <div className='nftRarity common'> Common </div>}
                                                 {i.rarity === "2" && <div className='nftRarity rare'> Rare </div>}
                                                 {i.rarity === "3" && <div className='nftRarity epic'> Épic </div>}
                                                 {i.rarity === "4" && <div className='nftRarity legendary'> Legendary </div>}
 
-                                                <b className='text-white'> #{i.id} </b>
+                                                <b className='text-white mx-2'> #{i.id} </b>
                                                 <div className="nftImg">
                                                     <img className='imgNft' src={perro} alt="" />
                                                 </div>
                                                 <div className='nftName'>
-                                                    {i.name} - {i.status}
-
+                                                    {i.name}  - {i.status}
                                                 </div>
                                                 <div className='nftStats'>
                                                     <div className="stats">
@@ -232,11 +235,12 @@ const Dashboard = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>)
+                                        </div>
+                                    )
                                 })}
                             </div>
                         </div>
-                        <div className='p-2 border mt-2'>
+                        <div className='p-2 mt-2'>
                             {race && race.map(({ gainToken, canId, _id }, index) => {
                                 return <div key={_id} className="border p-1">
                                     Race {index + 1} - canId: {canId} - {gainToken == 0 ? <>Lose</> : <>Win: +{gainToken}</>}
@@ -244,10 +248,10 @@ const Dashboard = () => {
                             })}
                         </div>
                     </div>
+
                 </div>
             </div>
         </div>
-
     )
 }
 

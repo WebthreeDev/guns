@@ -1,57 +1,71 @@
 import React, { createContext, useState, useEffect } from 'react'
-import gameAlert from './services/gameAlertService'
 import resumeWallet from './services/resumeWallet'
 import lastForWallet from './services/lastForWallet'
 import w3S, { web3 } from '../services/w3S'
-import { Contract } from '../tokens/canes/canes'
+import { nftContract } from '../tokens/canes/canes'
+import { cctContract } from '../tokens/cct/cct'
 import connect from './services/connectS'
 import axios from 'axios'
 
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
-    
+
     const [wallet, setWallet] = useState(false)
     const [commonPackagePrice, setCommonPackagePrice] = useState(false)
     const [epicPackagePrice, setEpicPackagePrice] = useState(false)
     const [legendaryPackagePrice, setLegendaryPackagePrice] = useState(false)
     const [newPackagePrice, setNewPackagePrice] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [alert, setAlert] = useState(false)
     const [cans, setCans] = useState(false)
     const [bnb, setBnb] = useState(false)
     const [race, setRaces] = useState(false)
-    const [balance,setBalance ] = useState(false)
-    const [cct,setCCT] = useState(false)
-    
-    window.ethereum.on('accountsChanged', async () => {
-        setWallet(await exectConnect())
-    })
-
-    window.ethereum.on('chainChanged', async () => {
-        setWallet(await exectConnect())
-    })
+    const [balance, setBalance] = useState(false)
+    const [cct, setCCT] = useState(false)
+    const [canodromes, setCanodromes] = useState(false)
 
     useEffect(() => {
         exectConnect()
     }, [wallet])
 
+    window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
+    window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
+
     const exectConnect = async () => {
         setLoading(true)
-        const connection = await connect()
-        const wallet = await connection.wallet
-        //console.log(connection)
-        setBalance(connection.balance)
-        setWallet(wallet)
-        await getBnb(wallet)
-        await getCCT(wallet)
-        await getCans(wallet)
-        setLoading(false)
-        await getRaces(wallet)
-        return wallet
+        /* const accounts = await */
+            window.ethereum.request({ method: "eth_requestAccounts" })
+                .then(async accounts => {
+                    //const connection = await connect(accounts[0])
+                    const wallet = accounts[0]
+                    //console.log(connection)
+                    //setBalance(connection.balance)
+                    setWallet(wallet)
+                    await getCanodromes(wallet)
+                    await getBnb(wallet)
+                    await getCCT(wallet)
+                    await getCans(wallet)
+                    setLoading(false)
+                    await getRaces(wallet)
+                    return wallet
+                })
+
+    }
+    //const _canodromes = await axios.get("https://cryptocans.io/api/v1/canodromes", { params: { "wallet":__wallet } })
+
+    const getCanodromes = async (wallet) => {
+        console.log("obtener canodromos de esta wallet: " + wallet)
+        fetch("https://cryptocans.io/api/v1/canodromes?wallet=" + wallet)
+            .then((res) => res.json())
+            .then(res => {
+               // console.log(res.response)
+                setCanodromes(res.response)
+            })
     }
 
-    const getCCT = async (wallet)=>{
-       const _cct = await Contract.methods.balanceOf(wallet).call()
-       setCCT(web3.utils.fromWei(_cct,"ether"))
+    const getCCT = async (wallet) => {
+        const _cct = await cctContract.methods.balanceOf(wallet).call()
+        setCCT(web3.utils.fromWei(_cct, "ether"))
     }
 
     const getCans = async (_wallet) => {
@@ -73,20 +87,20 @@ export const DataProvider = ({ children }) => {
         setCommonPackagePrice(_price)
         setEpicPackagePrice(_price)
         setLegendaryPackagePrice(_price)
-        console.log(Contract.methods)
+        console.log(nftContract.methods)
 
-       /*  Contract.methods.nftCommonPrice().call().then(res => {
+        nftContract.methods.nftCommonPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setCommonPackagePrice(_price)
         })
-        Contract.methods.nftEpicPrice().call().then(res => {
+        nftContract.methods.nftEpicPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setEpicPackagePrice(_price)
         })
-        Contract.methods.nftLegentadyPrice().call().then(res => {
+        nftContract.methods.nftLegentadyPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setLegendaryPackagePrice(_price)
-        }) */
+        })
     }
 
     const setRarity = (rarity) => {
@@ -105,8 +119,7 @@ export const DataProvider = ({ children }) => {
     const _context = {
         wallet, connect,
         resumeWallet, lastForWallet,
-        gameAlert,
-        w3S, Contract,
+        w3S, nftContract, cctContract,
         epicPackagePrice, setEpicPackagePrice,
         legendaryPackagePrice, setLegendaryPackagePrice,
         newPackagePrice, setNewPackagePrice,
@@ -116,8 +129,10 @@ export const DataProvider = ({ children }) => {
         bnb, setBnb,
         exectConnect, setRarity,
         getERC721Contract,
-        race, setRaces,getRaces,
-        balance,cct
+        race, setRaces, getRaces,
+        balance, cct,
+        alert, setAlert,
+        getCanodromes, canodromes
     }
 
     return (

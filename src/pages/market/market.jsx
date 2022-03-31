@@ -2,13 +2,15 @@ import axios from "axios"
 import React, { useEffect, useState, useContext } from "react"
 import perro from '../../img/perro.png'
 import { DataContext } from "../../context/DataContext"
-import web3, { Contract } from "../../tokens/canes/canes"
+import web3, { nftContract } from "../../tokens/canes/canes"
 import Loader from "../../components/loader/loader"
+import NftCard from "../../components/nftCard/nftCard"
 
 const Market = () => {
     const _context = useContext(DataContext)
     const [rango, setRango] = useState(200)
     const [dogList, setdogList] = useState(false)
+
     const [renderModal, setRenderModal] = useState(false)
     const [modalText, setModalText] = useState(false)
     const [pagination, setPagination] = useState(false)
@@ -32,7 +34,36 @@ const Market = () => {
         setdogList(filteredCans)
         _context.setLoading(false)
     }
-
+    {/* <div className="col-3">
+                                        <div onClick={_ => { setCan(item); setModalText("Confirm!"); setRenderModal(true) }} className="nftCard pt-2">
+                                            <div className="d-flex justify-content-between">
+                                                <div className="sidebarText px-2"> #{item.id} - {item.status} </div>
+                                                <div className="px-2 sidebarText">{_context.lastForWallet(item.wallet)}</div>
+                                            </div>
+                                            <div className="text-center">
+                                                <img height="100px" src={perro} alt="" />
+                                            </div>
+                                            <div className="mt-2">
+                                                <div className="text-light p-2 nftFeatures">
+                                                    <div className="d-flex justify-content-between align-items-center ">
+                                                        <div className="nftName "> {item.name} </div>
+                                                        <div className="">
+                                                            {item.aceleracion}/{item.resistencia}/{item.aerodinamica}/{item.aceleracion + item.resistencia + item.aerodinamica}
+                                                        </div>
+                                                    </div>
+                                                    <div className="d-flex justify-content-between mt-1">
+                                                        <h4 className="raza text-warning">
+                                                            {item.onSale.price} BNB
+                                                        </h4>
+                                                        {item.rarity === "1" && <i className="rarity common">Common </i>}
+                                                        {item.rarity === "2" && <i className="rarity rare">Rare </i>}
+                                                        {item.rarity === "3" && <i className="rarity epic">Epic </i>}
+                                                        {item.rarity === "4" && <i className="rarity legendary">Legendary </i>}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> */}
     const confirmBuy = async () => {
         _context.setLoading(true)
         setRenderModal(false)
@@ -40,7 +71,7 @@ const Market = () => {
         try {
             const res = await axios.patch(apiMarket, { canId })
             const can = res.data.response
-            if(can.status == 3) throw "Ya se vendio"
+            if (can.status == 3) throw "Ya se vendio"
             console.log(res.data.response)
             //cobro y envio a el contrato
             const from = _context.wallet
@@ -48,7 +79,7 @@ const Market = () => {
             console.log(price)
             const value = web3.utils.toWei(can.onSale.price.toString(), "ether")
             const address = can.wallet
-            Contract.methods.buyNft(address).send({ from, value }).then(async blockchainRes => {
+            nftContract.methods.buyNft(address).send({ from, value }).then(async blockchainRes => {
                 //console.log("res del blockchain:")
                 //console.log(blockchainRes)
                 //envio el hash de la compra al back
@@ -80,7 +111,7 @@ const Market = () => {
                                 <h3>
                                     Estas comprando:
                                 </h3>
-                                {can.name}                         
+                                {can.name}
                                 <div>Rarity: {_context.setRarity(can.rarity)}</div>
                                 <div>
                                     precio <b className="text-warning">{can.onSale.price} BNB</b>
@@ -92,8 +123,9 @@ const Market = () => {
                             </div>
                         </div>
                     </div>
-                </div>}
-            <div className="secondNav">
+                </div>
+            }
+            <div className="secondNav mt-50px">
                 <button className="secondNavButton active">
                     Dogs
                 </button>
@@ -105,7 +137,7 @@ const Market = () => {
                 </button>
             </div>
             <div className="container-fluid">
-                <div className="row">
+                <div className="row mt-2">
                     <div className="col-2 sidebar">
                         <div className="d-flex justify-content-between align-items-center">
                             <b>Filter</b>
@@ -164,7 +196,7 @@ const Market = () => {
                     </div>
                     <div className="col-10 listItems">
                         <div className="justify-content-between d-flex align-items-center">
-                            <h3> {dogList && <>{dogList.length}</>} Cans Listed  </h3>
+                            <h3> {dogList && dogList.length} Cans Listed  </h3>
                             <div className="">
                                 {/* pagination && <div className="d-flex">
                                     <button className="btnPagination"> ◄ </button>
@@ -176,41 +208,12 @@ const Market = () => {
                                 </div> */}
                             </div>
                         </div>
-
                         <div className="row gx-2 gy-2">
                             {dogList &&
                                 dogList.map((item) => {
-                                    console.log(item)
-                                    return ( 
-                                        <div key={item.id} className="col-3">
-                                            <div onClick={_ => { setCan(item); setModalText("Confirm!"); setRenderModal(true) }} className="nftCard pt-2">
-                                                <div className="d-flex justify-content-between">
-                                                    <div className="sidebarText px-2"> #{item.id} - {item.status} </div>
-                                                    <div className="px-2 sidebarText">{_context.lastForWallet(item.wallet)}</div>
-                                                </div>
-                                                <div className="text-center">
-                                                    <img height="100px" src={perro} alt="" />
-                                                </div>
-                                                <div className="mt-2">
-                                                    <div className="text-light p-2 nftFeatures">
-                                                        <div className="d-flex justify-content-between align-items-center ">
-                                                            <div className="nftName "> {item.name} </div>
-                                                            <div className="">
-                                                                {item.aceleracion}/{item.resistencia}/{item.aerodinamica}/{item.aceleracion + item.resistencia + item.aerodinamica}
-                                                            </div>
-                                                        </div>
-                                                        <div className="d-flex justify-content-between mt-1">
-                                                            <h4 className="raza text-warning">
-                                                                {item.onSale.price} BNB
-                                                            </h4>
-                                                            {item.rarity === "1" && <i className="rarity common">Common </i>}
-                                                            {item.rarity === "2" && <i className="rarity rare">Rare </i>}
-                                                            {item.rarity === "3" && <i className="rarity epic">Epic </i>}
-                                                            {item.rarity === "4" && <i className="rarity legendary">Legendary </i>}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    return (
+                                        <div className="col-3">
+                                            <NftCard setRenderModal={setRenderModal} setModalText={setModalText} setCan={setCan} key={item.id} item={item} />
                                         </div>
                                     )
                                 })

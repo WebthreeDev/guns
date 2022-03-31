@@ -1,3 +1,5 @@
+@import "./componemts/color";
+@import "./componemts/dashboardMenu";
 :root{
     --dark1:rgb(19,20,25);
     --dark2:rgb(32,34,46);
@@ -19,7 +21,6 @@ h1,h2,h3,h4,h5,h6,p,div{
 }
 body{
     color: var(--light1);
-    background-color:red;
     margin: 0px;
     padding:0px;
     min-height: 100vh;
@@ -48,16 +49,12 @@ a{
     color:var(--light1);
     border:none;
     padding: 8px 16px;
-    background-color: rgba(2, 103, 170, 0);
+    border-radius: 20px;
 }
 .buttonLink:hover{
     background-color: rgba(138, 138, 138, 0.178);
 }
-.topNav{
-    background-color: var(--dark1);
-    color: var(--light1);
-    height: 50px;
-}
+
 .secondNav{
     border-bottom: 1px solid var(--line);
     display: flex;
@@ -70,7 +67,6 @@ a{
     height: 50px;
 }
 .secondNavButton{
-    border: 1px solid red;
     margin-bottom: -2px;
     padding: 5px 10px;
     background-color: transparent;
@@ -84,11 +80,8 @@ a{
     background-color: rgba(255, 255, 255, 0.096);
     cursor: pointer;
 }
-
-
 .sidebar{
-
-    height: 100vh;
+    
     color: white;
     padding: 20px 0 20px 0;
 }
@@ -118,17 +111,7 @@ a{
     padding-top: 20px;
     border-left:1px solid var(--line);
 }
-.nftCard{
-    border: 1px solid var(--line);
-    border-radius: 6px;
-    transition: 0.3s;
-}
-.nftCard:hover{
-    border:1px solid rgb(179, 179, 179);
-    cursor: pointer;
-    transform: scale(1.02);
-    background-color: rgba(240, 248, 255, 0.03);
-}
+
 .nftFeatures{
     background-color: rgba(0, 0, 0, 0.089);
 }
@@ -141,16 +124,16 @@ a{
     align-items: center;
 }
 .common{
-    background-color: rgba(94, 191, 255, 0.603);
+    background-color: rgba(94, 191, 255, 0.425);
 }
 .rare{
-    background-color: rgba(230, 76, 29, 0.904);
+    background-color: rgba(230, 76, 29, 0.562);
 }
 .epic{
-    background-color: rgba(30, 44, 235, 0.904);
+    background-color: rgba(30, 44, 235, 0.493);
 }
 .legendary{
-    background-color: rgba(220, 19, 246, 0.815);
+    background-color: rgba(220, 19, 246, 0.479);
 }
 .raza{
     color: gray;
@@ -166,43 +149,41 @@ a{
 .dogFeatures{
     padding: 10px;
     border-radius: 8px;
-    background-color: var(--transparentLight);
     width: 100%;
-    position: relative;
 }
 .hr{
     margin: 5px 0px; 
     padding: 0px;
 }
 .nftSmall{
-    border: 1px solid rgb(109, 109, 109);
+    border: 1px solid var(--line);
     border-radius: 8px;
-    padding: 5px;
-    height: 283px;
 }
 .nftRarity{
-    border-radius: 5px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
     text-align: center;
     color: aliceblue;
 }
 .nftImg{
-    height: 126px;
     padding: 5px;
     justify-content: center;
     display: flex;
     align-items: center;
 }
 .imgNft{
-    height: 100px;
+    width: 100%;
 }
 .nftName{
     color:aliceblue;
     text-align: center;
     font-size: 12px;
+    margin-bottom: 5px;
 }
 .nftStats{
     background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
     height:75px;
     padding-top: 4px;
 }
@@ -341,17 +322,6 @@ a{
   100% {left:90%; top:0px;}
 }
 
-.bg-dogs{
-    background: linear-gradient(rgba(104, 114, 177, 0.7),rgba(16, 13, 34, 0.7)), url(../img/bg.png);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 110%;
-    min-height: 99vh;
-}
-.minted-text{
-    font-size: 14px;
-    font-weight: 600;
-}
 .commonText{
     padding-top: 170px;
 }
@@ -361,37 +331,6 @@ a{
 }
 .imgNft1{
     width: 245px;
-}
-/* .marco{
-    background: linear-gradient(rgba(245,190,145, 0.5),rgba(245,105,220, 0.5) );
-    border-radius: 10px;  
-    padding: 80px 40px;
-    display: inline-flex;
-    align-items: center;
-    box-shadow: inset 0px 0px 12px var(--neon);
-    border: 1px solid var(--neon);
-    outline: 1px solid white;
-}
-.neon{
-    transition: 0.5s;
-    padding: 2px;
-    border: 1px solid var(--neon);
-    box-shadow: 0px 0px 12px var(--neon);
-    border-radius: 12px;
-} */
-/* rgb(129,143,206) */
-.btn-ccan{
-    background:linear-gradient(rgb(77,91,154),rgb(19,24,66) );
-    display: block;
-    margin: 0 auto;
-    height: 40px;
-    border-radius: 8px;
-    color: white;    
-    font-weight: 600;
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-weight: lighter;
-    font-size: 20px;
-    transition: 0.3s;
 }
 
 .nft-img{
@@ -403,34 +342,6 @@ a{
     padding-top: 10px;
     color: gray;
     font-size: 12px;
-}
-.wallet{
-    background-color: rgba(240, 248, 255, 0.116);
-    border-radius:30px;
-    width: 150px;
-    align-items: center;
-    display: flex;
-    height: 25px;
-}
-.wallet-circle{
-    background-color: rgb(37, 37, 37);
-    border: 2px solid rgb(121, 121, 121);
-    padding: 3px;
-    border-radius: 50%;
-    text-align: center;
-    height: 40px;
-    width: 40px;
-}
-.nftBorder{
-    border-radius: 12px;
-    padding: 3px;
-    background: linear-gradient(rgb(104, 114, 177),rgb(16, 13, 34));
-    background-color: rgb(0, 204, 255);
-}
-.nftBg{
-    background: linear-gradient(rgba(74,85,151,1),rgb(16, 13, 34));
-    padding: 20px 20px;
-    border-radius: 10px;
 }
 .animated{
     animation-duration: 0.5s;
@@ -498,7 +409,9 @@ a{
 }
 .modalIn{
     box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.8);
-    background:linear-gradient( rgb(24, 24, 24),rgb(10, 10, 10));
+    background:linear-gradient( rgba(24, 24, 24, 0.98),rgba(10, 10, 10, 0.98)),url(../img/bg.png);
+    background-position: center;
+    background-size: cover;
     padding: 20px;
     border-radius: 10px;
     animation: modalIn 0.3s ease-out;
@@ -608,4 +521,11 @@ a{
     color: aliceblue;
     font-size: 30px;
     font-weight: bolder;
+}
+
+.mt-50px{
+    padding-top: 50px;
+}
+.btn{
+    border-radius: 20px !important;
 }
