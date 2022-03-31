@@ -1,0 +1,531 @@
+@import "./componemts/color";
+@import "./componemts/dashboardMenu";
+:root{
+    --dark1:rgb(19,20,25);
+    --dark2:rgb(32,34,46);
+    --dark3:rgb(50,50,50);
+    --light1:rgba(255, 255, 255, 0.781);
+    --light2:rgba(255, 255, 255, 0.5);
+    --line:rgb(65,60,80);
+    --blue:rgb(0, 79, 168);
+    --blue2:rgb(13, 99, 197);
+    --blue3:rgb(3, 50, 104);
+    --green:rgb(12, 160, 86);
+    --transparentLight:rgba(210, 230, 255, 0.1);
+    --neon:rgb(233, 64, 255);
+}
+h1,h2,h3,h4,h5,h6,p,div{
+    color: var(--light1);
+    margin: 0px;
+    padding: 0px;
+}
+body{
+    color: var(--light1);
+    margin: 0px;
+    padding:0px;
+    min-height: 100vh;
+}
+a{
+    text-decoration: none;
+    color: var(--light1);
+}
+.clearFilterButton{
+    text-decoration: none;
+    background-color: var(--blue);
+    color: var(--light1);
+    padding: 2px 6px;
+    border-radius: 3px;
+}
+.clearFilterButton:hover{
+    color: antiquewhite;
+    background-color: var(--blue2);
+}
+
+.link{
+    border: none;
+    text-decoration: none;
+}
+.buttonLink{
+    color:var(--light1);
+    border:none;
+    padding: 8px 16px;
+    border-radius: 20px;
+}
+.buttonLink:hover{
+    background-color: rgba(138, 138, 138, 0.178);
+}
+
+.secondNav{
+    border-bottom: 1px solid var(--line);
+    display: flex;
+}
+.logo-text{
+    font-size: 20px;
+    margin-top: -4px;
+}
+.he-50px{
+    height: 50px;
+}
+.secondNavButton{
+    margin-bottom: -2px;
+    padding: 5px 10px;
+    background-color: transparent;
+    border: none;
+    color:var(--light1);
+}
+.active{
+    border-bottom: 3px solid var(--blue);
+}
+.secondNavButton:hover{
+    background-color: rgba(255, 255, 255, 0.096);
+    cursor: pointer;
+}
+.sidebar{
+    
+    color: white;
+    padding: 20px 0 20px 0;
+}
+.select{
+    background-color: transparent;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    font-size: 14px;
+    width: 100%;
+    color: var(--light1);
+    padding: 5px;
+}
+.optionFilter{
+    background-color: var(--dark1);
+    color: var(--light1);
+}
+.sidebarText{
+    font-size: 14px;
+    font-weight: 300;
+    color: var(--light2);
+}
+
+.textRaza{
+    font-size: 14px;
+}
+.listItems{
+    padding-top: 20px;
+    border-left:1px solid var(--line);
+}
+
+.nftFeatures{
+    background-color: rgba(0, 0, 0, 0.089);
+}
+.rarity{
+    border-radius: 6px;
+    padding: 2px 5px;
+    min-width: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.common{
+    background-color: rgba(94, 191, 255, 0.425);
+}
+.rare{
+    background-color: rgba(230, 76, 29, 0.562);
+}
+.epic{
+    background-color: rgba(30, 44, 235, 0.493);
+}
+.legendary{
+    background-color: rgba(220, 19, 246, 0.479);
+}
+.raza{
+    color: gray;
+}
+.box{
+    background-color: var(--transparentLight);
+    height: 180px;
+    min-width: 150px;
+    text-align: center;
+    padding: 10px;
+    border-radius: 8px;
+}
+.dogFeatures{
+    padding: 10px;
+    border-radius: 8px;
+    width: 100%;
+}
+.hr{
+    margin: 5px 0px; 
+    padding: 0px;
+}
+.nftSmall{
+    border: 1px solid var(--line);
+    border-radius: 8px;
+}
+.nftRarity{
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    text-align: center;
+    color: aliceblue;
+}
+.nftImg{
+    padding: 5px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+}
+.imgNft{
+    width: 100%;
+}
+.nftName{
+    color:aliceblue;
+    text-align: center;
+    font-size: 12px;
+    margin-bottom: 5px;
+}
+.nftStats{
+    background-color: rgba(0, 0, 0, 0.2);
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    height:75px;
+    padding-top: 4px;
+}
+.stats{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: black;
+}
+.logoImg{
+    height: 20px;
+}
+.logoNft{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    font-weight: bold;
+    width: 20px;
+    height: 20px;
+}
+.totalStats{
+    justify-content: space-around;
+    padding-top: 5px;
+    display: flex;
+    align-items: center;
+    font-size: 20px;
+}
+.btn-list{
+    color: var(--light1) !important;
+    background-color: var(--transparentLight) !important;
+}
+.btn-list:hover{
+    background-color: var(--line) !important;
+}
+.race{
+    color: gray;
+    font-size: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    height: 50vh;
+    margin-top: 50px;
+    border: 2px solid var(--light1);
+    transition: 0.3s;
+    background-color: black;
+}
+.race2{
+    color: gray;
+    font-size: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    height: 50vh;
+    margin-top: 50px;
+    border: 2px solid var(--light1);
+    transition: 0.5s;
+    background-color: var(--transparentLight);
+}
+.race:hover{
+    border: 2px solid gray;
+    transform: rotate(-1deg);
+    background-color: var(--light1);
+    cursor: pointer;
+}
+
+.box2{
+    height: 280px;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 40px;
+}
+.box2.c{
+    background-color: rgba(38, 127, 179, 0.5);
+}
+.box2.e{
+    background-color: rgba(7, 156, 111, 0.5);
+}
+.box2.l{
+    background-color: rgba(163, 80, 241, 0.5);
+}
+
+.w-race{
+    background-color: rgb(0, 255, 157);
+}
+
+.wRace{
+    border: 2px solid rgb(180, 101, 10);
+    width: 100%;
+    background-color: rgba(95, 33, 22, 0.89);
+    background-image: url(../img/piso.png);
+    background-position: 0%;
+    animation-duration: 20s;
+    animation-name: piso;
+}
+.wRace2{
+    border: 2px solid rgb(180, 101, 10);
+    width: 100%;
+    background-image: url(../img/piso.png);
+}
+
+@keyframes piso{
+    0% { background-position: 200%;}
+    100% {background-position: 0%;}
+}
+
+
+.parado{
+    height:50px;
+    margin-left: 90%;
+}
+.corriendo{
+    height: 50px;
+    position: relative;
+    animation-name: perroAnimacion;
+    animation-duration: 20s;
+    animation-timing-function:ease-in;
+}
+
+@keyframes perroAnimacion {
+  0%   {left:0px; top:0px;}
+  100% {left:90%; top:0px;}
+}
+
+.corriendo2{
+    height: 50px;
+    position: relative;
+    animation-name: perroAnimacion2;
+    animation-duration: 19.7s;
+    animation-timing-function:ease-in;
+}
+
+@keyframes perroAnimacion2 {
+  0%   {left:0px; top:0px;}
+  100% {left:90%; top:0px;}
+}
+
+.commonText{
+    padding-top: 170px;
+}
+.commonImg{
+    height: 220px;
+    padding-right: 10px;
+}
+.imgNft1{
+    width: 245px;
+}
+
+.nft-img{
+    width: 240px;
+}
+
+.percent{
+    text-align: left;
+    padding-top: 10px;
+    color: gray;
+    font-size: 12px;
+}
+.animated{
+    animation-duration: 0.5s;
+    animation-direction: normal;
+    animation-timing-function: ease-out;
+    animation-name: pack;
+}
+.logoBNB{
+    color: aliceblue;
+    font-size: 28px;
+}
+
+@keyframes pack{
+    0%{transform: translateY(100%) scale(.1)}
+    100%{transform: translateY(0px) scale(1) ; }
+}
+.packages{
+    margin-bottom: 10px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+    border-radius: 5px;
+}
+.gray{
+    color:rgb(117, 122, 138);
+}
+.racePop{
+    background-color: rgba(0, 6, 12, 0.856);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    padding: 10px;
+    z-index: 90000;
+}
+.carrera{
+    overflow-y: scroll;
+    height: 80vh;
+}
+.carreraFondo{
+    height: 300px;
+    background-color: rgb(11, 97, 172);
+    margin: 10px 0px;
+}
+.pista{
+    height: 49px;
+    border-bottom: 1px solid red;
+}
+.modalX{
+    height: 100vh;
+    top: 0px;
+    left: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    background-color: rgba(14, 14, 14, 0.9);
+    position: fixed;
+    z-index: 9999;
+    animation: modalX 0.3s ease-out;
+}
+@keyframes modalX {
+    0%{background-color: transparent;}
+    100%{background-color: rgba(14,14,14,0.9);}
+}
+.modalIn{
+    box-shadow: 7px 7px 7px rgba(0, 0, 0, 0.8);
+    background:linear-gradient( rgba(24, 24, 24, 0.98),rgba(10, 10, 10, 0.98)),url(../img/bg.png);
+    background-position: center;
+    background-size: cover;
+    padding: 20px;
+    border-radius: 10px;
+    animation: modalIn 0.3s ease-out;
+    height:400px;
+    width: 400px;
+    display: flex;
+    align-items: center;
+}
+@keyframes modalIn {
+    0%{transform:scale(0.1);}
+    100%{ transform:scale(1);}
+}
+
+.loaderWrap{
+    padding: 10px;
+    margin: 0 auto;
+}
+.loaderIcon{
+    border-bottom: 3px solid transparent;
+    border-left: 3px solid aliceblue;
+    border-right: 3px solid aliceblue;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    height: 50px;
+    width: 50px;
+    margin: 10px auto;
+    animation-name: loadingIcon;
+    animation-duration: 0.6s;
+    animation-iteration-count: infinite;
+    animation-timing-function: linear;
+}
+.loaderTitle{
+    color: aliceblue;
+    font-size: 24px;
+    text-align: center;
+}
+.loaderText{
+    color: rgb(133, 133, 133);
+    font-size: 18px;
+    text-align: center;
+}
+
+
+@keyframes loadingIcon {
+  100%{ transform: rotate(180deg);}
+}
+
+.modalbtn{
+    min-width: 80px;
+    margin: 0px 5px;
+}
+
+.reactModal{
+    background-color: rgba(0, 0, 0, 0.5);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999999;
+}
+.modalBody{
+    border: 1px solid rgb(34, 34, 34);
+    border-radius: 10px;
+    background-color: rgb(24, 24, 29);
+}
+.modalHeader{
+    padding: 20px;
+}
+.modalFooter{
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    padding: 20px;
+    background-color: rgba(0, 0, 0, 0.219);
+}
+.btnPagination{
+    border: 1px solid transparent;
+    background-color: rgba(20, 20, 20, 0.719);
+    border-radius: 50%;
+    color: aliceblue;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    margin:0px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.btnPagination:hover{
+    border: 1px solid rgb(51, 51, 51);
+    cursor: pointer;
+}
+
+.energy{
+    margin: 0px;
+    padding: 0px;
+    font-size: 50px;
+}
+.btn-add-can{
+    border-radius: 8px;
+    height: 50px;
+    width: 50px;
+    background-color: rgb(104, 114, 177);
+    color: aliceblue;
+    font-size: 30px;
+    font-weight: bolder;
+}
+
+.mt-50px{
+    padding-top: 50px;
+}
+.btn{
+    border-radius: 20px !important;
+}
