@@ -6,15 +6,15 @@ const NftPack = () => {
     const { wallet, loading, connect } = useContext(DataContext)
     const [myStyle, setStyle] = useState({ transform: "" })
     const motionMatchMedia = window.matchMedia("(prefers-reduced-motion)");
-    const THRESHOLD = 15;
+    const THRESHOLD = 150;
     function handleHover(e) {
         const { clientX, clientY, currentTarget } = e;
         const { clientWidth, clientHeight, offsetLeft, offsetTop } = currentTarget;
 
         const horizontal = (clientX - offsetLeft) / clientWidth;
         const vertical = (clientY - offsetTop) / clientHeight;
-        const rotateX = (THRESHOLD / 2 - horizontal * THRESHOLD).toFixed(2);
-        const rotateY = (vertical * THRESHOLD - THRESHOLD / 2).toFixed(2);
+        const rotateX = (THRESHOLD / 20 - horizontal * THRESHOLD).toFixed(20);
+        const rotateY = (vertical * THRESHOLD - THRESHOLD / 20).toFixed(20);
 
         let transformStyle = `perspective(${clientWidth}px) rotateX(${rotateY}deg) rotateY(${rotateX}deg) scale3d(1, 1, 1)`;
         setStyle({ transform: transformStyle });

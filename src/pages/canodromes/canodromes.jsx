@@ -2,16 +2,24 @@ import energyLogo from '../../img/energy.png'
 import canodrome from '../../img/canodrome.png'
 import { useContext, useEffect } from 'react'
 import { DataContext } from '../../context/DataContext'
+import axios from 'axios'
+import { Alert } from 'bootstrap'
 const Canodromes = () => {
     const _context = useContext(DataContext)
 
+
     useEffect(_ => {
-        console.log(_context.canodromes)
+        //console.log(_context.canodromes)
     }, [_context.canodromes])
 
     const addCan = (id,item)=>{
-        alert(id)
         console.log(item)
+        showCans()
+        //axios.patch(process.env.REACT_APP_BASEURL+"canodromes/"+id,{body:item})
+    }
+
+    const showCans = ()=>{
+        alert()
     }
 
     return <div className='container pt-50'>

@@ -4,7 +4,7 @@ import { DataContext } from '../../context/DataContext'
 import walletImg from '../../img/wallet.png'
 
 const Navbar = () => {
-    const { wallet, connect, resumeWallet } = useContext(DataContext)
+    const { wallet, connect, resumeWallet,exectConnect } = useContext(DataContext)
     /* const location = "/dashboard" */
     /* const bg1 = { backgroundColor: "rgb(19,20,25)" }
     const bg2 = { backgroundColor: "rgb(32,34,46)" }
@@ -60,13 +60,13 @@ const Navbar = () => {
                     {wallet ?
                         <div className="wallet">
                             <div className="wallet-circle">
-                                <img alt="" height="17px" src={walletImg} />
+                                <img alt="" height="17px" src="https://cryptocans.io/public/static/media/ico-wallet.e442439e75ab448c94c85f336099647e.svg" />
                             </div>
                             <b className="mx-2">
                                 {resumeWallet(wallet)}
                             </b>
                         </div>
-                        : <button onClick={connect} className="buttonLink btn text-light bg-primary mx-1"> Connect Wallet </button>
+                        : <button onClick={exectConnect} className="buttonLink btn text-light bg-primary mx-1"> Connect Wallet </button>
                     }
                 </div>
             </div>

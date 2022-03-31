@@ -14,7 +14,7 @@ import bnbLogo from "../../img/bnbLogo.svg"
 //import NftPack from "../../components/nftPack/nftPack";
 
 const Shop = () => {
-    const { getCans, getERC721Contract, loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice } = useContext(DataContext)
+    const {gas,gasPrice, getCans, getERC721Contract, loading, setLoading, wallet, connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice } = useContext(DataContext)
     const [minted, setMinted] = useState(false)
     const [canMinted, setCanMinted] = useState(false)
     useEffect(_ => {
@@ -26,8 +26,6 @@ const Shop = () => {
         setLoading(true)
         //envio a la blockchain el packageId
         const value = web3.utils.toWei(price.toString(), "ether")
-        const gas = web3.utils.toWei("0.0001", "gwei")
-        const gasPrice = web3.utils.toWei("10", "gwei")
         try {
             const contractResponse = await nftContract.methods.mint(packageId).send({ from: wallet, value, gas, gasPrice })
             const canId = await contractResponse.events.Transfer.returnValues.tokenId
@@ -115,8 +113,8 @@ const Shop = () => {
 
                         </div>
                         <div className="col-12 col-sm-6 mb-3 col-md-4">
-                            <div className="nftBorder animated">
-                                <div className="nftBg">
+                            <div className="animated">
+                                <div className="nftBg ">
                                     <div className="d-flex justify-content-between">
                                         <div className="">
                                             <div className="d-flex align-items-center">
@@ -170,7 +168,7 @@ const Shop = () => {
                             </div>
                         </div>
                         <div className="col-12 col-sm-6 mb-3 col-md-4">
-                            <div className="nftBorder animated">
+                            <div className="animated">
                                 <div className="nftBg">
                                     <div className="d-flex justify-content-between">
                                         <div className="">
