@@ -16,12 +16,14 @@ const Canodromes = () => {
     }
     const setCan = async can => {
         //can = objCan
-        const body = JSON.parse(can)
+        console.log(can)
         alert(can.id)
-       /*  const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodromes/" + can.id, body)
+        const body = JSON.stringify(can)
+        console.log(process.env.REACT_APP_BASEURL)
+        const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodromes/" + can.id, body)
         console.log(res.data.response)
         setSelectCans(false)
-        _context.getCanodromes(_context.wallet) */
+        _context.getCanodromes(_context.wallet)
 
     }
     const setRenderModal = _ => { }

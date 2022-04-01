@@ -184,10 +184,10 @@ const Dashboard = () => {
                                 </div>
                             </div> */}
                             <div className="row g-2 mb-2">
-
+    
                                 {cans && cans.map((i) => {
                                     return (
-                                        <div className='col-md-3'>
+                                        <div key={i.id} className='col-md-3'>
                                             <NftCard 
                                                 setRenderModal={setRenderModal} 
                                                 setModalText={setModalText} 
