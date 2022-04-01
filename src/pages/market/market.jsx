@@ -246,7 +246,13 @@ const Market = () => {
                                 dogList.map((item) => {
                                     return (
                                         <div key={item.id} className="col-3">
-                                            <NftCard setRenderModal={setRenderModal} setModalText={setModalText} setCan={setCan} item={item} />
+                                            <NftCard 
+                                                setRenderModal={setRenderModal} 
+                                                setModalText={setModalText} 
+                                                setCan={setCan} 
+                                                item={item} 
+                                                btnPrice={true}
+                                            />
                                         </div>
                                     )
                                 })
