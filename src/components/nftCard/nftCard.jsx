@@ -1,14 +1,16 @@
 import perro from '../../img/perro.png'
 import { useContext } from 'react';
 import { DataContext } from '../../context/DataContext';
-const NftCard = ({ item, setCan, setModalText, setRenderModal }) => {
+const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
     const _context = useContext(DataContext)
     return (
         <div onClick={_ => { setCan(item); setRenderModal(true); setModalText("Confirm!") }} className="nftCard">
             <div className="d-flex justify-content-between">
-                <div className='button-market px-1'>
-                    <img src="" alt="" /> {item.onSale.price} BNB
-                </div>
+                {btnPrice && (
+                    <div className='button-market px-1'>
+                        <img src="" alt="" /> {item.onSale.price} BNB
+                    </div>
+                )}  
                 <div className="px-2 lb-color item-id"> #{item.id} </div>
             </div>
             <div>
@@ -24,7 +26,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal }) => {
                     </div>
                     <div>
                         <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color '>
+                            <div className='lb-color'>
                                 Acceleration
                                 <progress className='' min={"0"} value={item.aceleracion} max={"300"} name="" id="" />
                             </div>
