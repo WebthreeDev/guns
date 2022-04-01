@@ -146,3 +146,38 @@ $text:#6e7191;
 progress{
     max-width: 140px;
 }
+.cansSelection{
+    z-index: 99;
+    background-color: $gradient1transp;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+}
+.selectTittle{
+    height: 50px;
+    background-color: #1d1d1d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.selectTittle .tittle{
+    padding-left: 1em;
+}
+.selectTittle button{
+    background-color: transparent;
+    font-size: 20px;
+    border: none;
+    height: 50px;
+    width: 50px;
+    color: aliceblue;
+    &:hover{
+        background-color: rgb(224, 13, 13);
+    }
+}
+
+.containerSelectCans{
+    overflow:scroll;
+    height: 100vh;
+}

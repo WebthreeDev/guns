@@ -5,7 +5,6 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal }) => {
     const _context = useContext(DataContext)
     return (
         <div onClick={_ => { setCan(item); setRenderModal(true); setModalText("Confirm!") }} className="nftCard">
-
             <div className="d-flex justify-content-between">
                 <div className='button-market px-1'>
                     <img src="" alt="" /> {item.onSale.price} BNB
