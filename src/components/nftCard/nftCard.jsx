@@ -10,7 +10,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                     <div className='button-market px-1'>
                         <img src="" alt="" /> {item.onSale.price} BNB
                     </div>
-                )}  
+                )}
                 <div className="px-2 lb-color item-id"> #{item.id} </div>
             </div>
             <div>
@@ -27,24 +27,41 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                     <div>
                         <div className='d-flex justify-content-between  align-items-center'>
                             <div className='lb-color'>
-                                Acceleration
-                                <progress className='' min={"0"} value={item.aceleracion} max={"300"} name="" id="" />
+                                <div>
+                                    Acceleration
+                                </div>
+                                <div>
+                                    <progress className='' min={"0"} value={item.aceleracion} max={"300"} name="" id="" />
+                                </div>
                             </div>
                             <div className='totalStats lb-color'> {item.aceleracion} </div>
                         </div>
                         <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color'>Aerodinamic
+                            <div className='lb-color'>
+                                <div>
+                                    Aerodinamic
+                                </div>
                                 <div > <progress min={"0"} value={item.aerodinamica} max={"300"} name="" id="" /> </div>
 
                             </div>
                             <div className='totalStats lb-color'> {item.aerodinamica} </div>
                         </div>
                         <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color'>Resistence
+                            <div className='lb-color'>
+                                <div>
+                                    Resistence
+                                </div>
                                 <div> <progress min={"0"} value={item.resistencia} max={"300"} name="" id="" /> </div>
-
                             </div>
                             <div className='totalStats lb-color'> {item.resistencia} </div>
+                        </div>
+                        <div className='totalStatsCard'>
+                            <div>
+                                Total stats
+                            </div>
+                            <div>
+                                {item.resistencia+item.aceleracion+item.aerodinamica}
+                            </div>
                         </div>
 
                     </div>

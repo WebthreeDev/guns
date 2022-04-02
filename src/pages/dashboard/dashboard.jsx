@@ -121,7 +121,7 @@ const Dashboard = () => {
             }
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-2 min-h-100-50 p-3">
+                    <div className="col-md-2 min-h-100-50 p-3 w-dash">
                         <div className='boxMenuDark'>
                             <div className="menuSectionDshboard separator">
                                 <div className="text-center h-100 d-flex align-items-center">
@@ -167,7 +167,7 @@ const Dashboard = () => {
                         </div>
 
                     </div>
-                    <div className="col-md-10 ">
+                    <div className="col-md-10 dashBody">
                         <div className="dogFeatures">
                             {/* <div className="d-flex justify-content-around">
                                 <div className="text-center">
@@ -208,7 +208,6 @@ const Dashboard = () => {
                             })}
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
