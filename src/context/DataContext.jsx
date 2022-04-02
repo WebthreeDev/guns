@@ -30,6 +30,7 @@ export const DataProvider = ({ children }) => {
 
     useEffect(() => {
         exectConnect()
+        
     }, [])
 
     window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
@@ -38,10 +39,10 @@ export const DataProvider = ({ children }) => {
     const exectConnect = async () => {
         //localstorage
         const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null
-        if(storageCanId){
-            console.log("antes de la funcion")
+        if (storageCanId) {
+           // console.log("antes de la funcion")
             changeStateCanInMarket(storageCanId)
-        }  
+        }
 
         setLoading(true)
         /* const accounts = await */
@@ -52,14 +53,15 @@ export const DataProvider = ({ children }) => {
 
                 axios.post("https://cryptocans.io/api/v1/login", { wallet })
                     .then(async (res) => {
-                        console.log("pasando por la coneccion")
-                        console.log(res.data)
+                       // console.log("pasando por la coneccion")
+                       // console.log(res.data)
                         setWallet(wallet)
                         await getCanodromes(wallet)
                         await getBnb(wallet)
                         await getCCT(wallet)
                         await getCans(wallet)
                         setLoading(false)
+                       
                         //resolve(res.data.response)
                     }).catch(error => {
                         console.log("Backend Problem:" + error)
@@ -67,20 +69,24 @@ export const DataProvider = ({ children }) => {
                 return wallet
             })
 
+
     }
     //const _canodromes = await axios.get("https://cryptocans.io/api/v1/canodromes", { params: { "wallet":__wallet } })
 
     const getCanodromes = async (wallet) => {
-        console.log("obtener canodromos de esta wallet: " + wallet)
+        //console.log("obtener canodromos de esta wallet: " + wallet)
         fetch("https://cryptocans.io/api/v1/canodromes?wallet=" + wallet)
             .then((res) => res.json())
-            .then(res => {
+            .then( res => {
                 // console.log(res.response)
                 setCanodromes(res.response)
+                //return res.response
             })
     }
 
     
+
+
 
     const getCCT = async (wallet) => {
         const _cct = await cctContract.methods.balanceOf(wallet).call()
@@ -146,7 +152,7 @@ export const DataProvider = ({ children }) => {
         balance, cct,
         alert, setAlert,
         getCanodromes, canodromes,
-        gas,gasPrice
+        gas, gasPrice
     }
 
     return (
