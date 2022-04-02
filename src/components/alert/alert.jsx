@@ -1,4 +1,4 @@
-import alertIcon from '../../img/alert.svg'
+
 import { useContext } from 'react'
 import { DataContext } from '../../context/DataContext'
 const Alert = ({ text }) => {
@@ -8,7 +8,7 @@ const Alert = ({ text }) => {
         <div className="modalX">
             <div className="modalIn">
                 <div className="loaderWrap text-center">
-                    <img height={"100px"} src={alertIcon} alt="" />
+                    img alert
                     <div className="loaderText my-2">{text}</div>
                     <button className='btn btn-primary'> Continue </button>
                 </div>

@@ -10,7 +10,7 @@ import web3 from "../../tokens/canes/canes"
 import { nftContract } from "../../tokens/canes/canes"
 import Package from "../../components/package/package";
 import MintModal from "../../components/mintModal/mintModal";
-import bnbLogo from "../../img/bnbLogo.svg"
+import bnbLogo from "../../img/bnbLogo.png"
 //import NftPack from "../../components/nftPack/nftPack";
 
 const Shop = () => {

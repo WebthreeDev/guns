@@ -21,7 +21,7 @@ $text:#6e7191;
 }
 
 .bg1{
-    background:linear-gradient($gradient1transp,$gradient2transp), url(../../img/bg.png);
+    background:linear-gradient(rgba(0, 0, 0, 0.913),rgba(0, 0, 0, 0.662)), url(../../img/fondo.jpg);
     background-position:center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -145,4 +145,58 @@ $text:#6e7191;
 }
 progress{
     max-width: 140px;
+}
+.cansSelection{
+    z-index: 99;
+    background-color: $gradient1transp;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+}
+.selectTittle{
+    height: 50px;
+    background-color: #1d1d1d;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.selectTittle .tittle{
+    padding-left: 1em;
+}
+.selectTittle button{
+    background-color: transparent;
+    font-size: 20px;
+    border: none;
+    height: 50px;
+    width: 50px;
+    color: aliceblue;
+    &:hover{
+        background-color: rgb(224, 13, 13);
+    }
+}
+
+.containerSelectCans{
+    overflow:scroll;
+    height: 100vh;
+    padding-bottom: 50px;
+}
+.totalStatsCard{
+    justify-content: space-between;
+    display: flex;
+    align-items: center;
+}
+.totalStatsCard div{
+    font-size: 10px;
+    color:$text;
+}
+.racePop{
+    background-color: $gradient1transp;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    width: 100vw;
+    height: 100vh;
+    z-index: 90000;
 }

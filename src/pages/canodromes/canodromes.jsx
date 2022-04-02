@@ -1,29 +1,58 @@
 import energyLogo from '../../img/energy.png'
 import canodrome from '../../img/canodrome.png'
-import { useContext, useEffect } from 'react'
+import { useContext, useState } from 'react'
 import { DataContext } from '../../context/DataContext'
+import NftCard from '../../components/nftCard/nftCard'
 import axios from 'axios'
-import { Alert } from 'bootstrap'
+import Loader from '../../components/loader/loader'
+
 const Canodromes = () => {
     const _context = useContext(DataContext)
+    const [selectCans, setSelectCans] = useState(false)
+    const [selectedCanodrome, setSelectedCanodrome] = useState(false)
+    const addCansButtons = [0, 1, 2]
 
-
-    useEffect(_ => {
-        //console.log(_context.canodromes)
-    }, [_context.canodromes])
-
-    const addCan = (id,item)=>{
-        console.log(item)
-        showCans()
-        //axios.patch(process.env.REACT_APP_BASEURL+"canodromes/"+id,{body:item})
+    const addCan = (id, item) => {
+        setSelectCans(true)
+        setSelectedCanodrome(item)
+        console.log(selectedCanodrome)
+        console.log(_context.canodromes)
     }
+    const setCan = async can => {
+       
+        const body = JSON.stringify(can)
+        console.log(process.env.REACT_APP_BASEURL)
+        const res = await axios.patch("https://cryptocans.io/api/v1/canodromes/" + selectedCanodrome._id, body)
+        console.log(res.data.response)
+        setSelectCans(false)
+        _context.getCanodromes(_context.wallet)
 
-    const showCans = ()=>{
-        alert()
     }
+    const setRenderModal = _ => { }
+    const setModalText = _ => { }
+
 
     return <div className='container pt-50'>
-        {_context.canodromes && _context.canodromes.map(item => {
+        {_context.loading && <Loader />}
+        {selectCans &&
+            <div className='cansSelection'>
+                <div className='selectTittle'>
+                    <div className='tittle'> Select your can </div>
+                    <button onClick={_ => setSelectCans(false)}> X </button>
+                </div>
+                <div className='container-fluid px-5 containerSelectCans'>
+                    <div className="row gx-4 px-5">
+                        {_context.cans && _context.cans.map((item) => {
+                            return (
+                                <div key={item.id} className="col-lg-3 col-md-4 col-sm-6 col-12 p-2">
+                                    <NftCard setRenderModal={setRenderModal} setModalText={setModalText} setCan={setCan} item={item} />
+                                </div>
+                            )
+                        })}
+                    </div>
+                </div>
+            </div>}
+        {_context.canodromes && _context.canodromes.map((item, index) => {
             return (
                 <div key={item._id} className='row border mt-4'>
                     <div className='col-4 p-1'>
@@ -46,13 +75,16 @@ const Canodromes = () => {
                                 <div className='col-8 '>
                                     <h1 className='text-center'>No cans added</h1>
                                     <div className=' d-flex justify-content-around'>
-                                        {item.cans[0]? 
-                                        <div> perro : {item.cans[0].id} </div>
-                                        :
-                                            <button onClick={()=>addCan(1,item)} className='btn-add-can'> + </button>
-                                        }
-                                        <button onClick={()=>addCan(2,item)} className='btn-add-can'> + </button>
-                                        <button onClick={()=>addCan(3,item)} className='btn-add-can'> + </button>
+                                        {addCansButtons.map(id => {
+                                            return (
+                                                <div key={id}>
+                                                    {item.cans[id]? 
+                                                    <> {item.cans[id].can.id} </>:
+                                                    <button onClick={()=>{ addCan(id,item);setSelectedCanodrome(item._id) }}>  + {id} </button>
+                                                }
+                                                </div>
+                                            )
+                                        })}
                                     </div>
                                 </div>
                             </div>

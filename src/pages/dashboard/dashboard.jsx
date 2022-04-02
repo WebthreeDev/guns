@@ -9,6 +9,7 @@ import Loader from '../../components/loader/loader'
 import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
+import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
     const { alert, setAlert, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
 
@@ -18,6 +19,10 @@ const Dashboard = () => {
     const [selling, setSelling] = useState(false)
     const [claiming, setClaiming] = useState(false)
     const [ammountToClaim, setAmmountToClaim] = useState(false)
+
+    const [renderModal, setRenderModal] = useState(false)
+    const [modalText, setModalText] = useState(false)
+    const [can, setCan] = useState(false)
 
     useEffect(() => {
         getRaces(wallet)
@@ -116,7 +121,7 @@ const Dashboard = () => {
             }
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-2 min-h-100-50 p-3">
+                    <div className="col-md-2 min-h-100-50 p-3 w-dash">
                         <div className='boxMenuDark'>
                             <div className="menuSectionDshboard separator">
                                 <div className="text-center h-100 d-flex align-items-center">
@@ -162,7 +167,7 @@ const Dashboard = () => {
                         </div>
 
                     </div>
-                    <div className="col-md-10 ">
+                    <div className="col-md-10 dashBody">
                         <div className="dogFeatures">
                             {/* <div className="d-flex justify-content-around">
                                 <div className="text-center">
@@ -179,65 +184,20 @@ const Dashboard = () => {
                                 </div>
                             </div> */}
                             <div className="row g-2 mb-2">
-
+    
                                 {cans && cans.map((i) => {
                                     return (
-                                        <div className="col-md-2" key={i.id}>
-                                            <div className="nftSmall">
-                                                {i.rarity === "1" && <div className='nftRarity common'> Common </div>}
-                                                {i.rarity === "2" && <div className='nftRarity rare'> Rare </div>}
-                                                {i.rarity === "3" && <div className='nftRarity epic'> Épic </div>}
-                                                {i.rarity === "4" && <div className='nftRarity legendary'> Legendary </div>}
-
-                                                <b className='text-white mx-2'> #{i.id} </b>
-                                                <div className="nftImg">
-                                                    <img className='imgNft' src={perro} alt="" />
-                                                </div>
-                                                <div className='nftName'>
-                                                    {i.name}  - {i.status}
-                                                </div>
-                                                <div className='nftStats'>
-                                                    <div className="stats">
-                                                        <div className="">
-                                                            <div className='logoNft'>
-                                                                <img className='logoImg' src={aero} alt="" />
-                                                            </div>
-                                                        </div>
-                                                        <div className="">
-                                                            {i.aerodinamica}
-                                                        </div>
-                                                        <div className="">
-                                                            <div className='logoNft'> <img className='logoImg' src={aero} alt="" /></div>
-                                                        </div>
-                                                        <div className="">
-                                                            {i.aceleracion}
-                                                        </div>
-                                                        <div className="">
-                                                            <div className='logoNft'> <img className='logoImg' src={aero} alt="" /></div>
-                                                        </div>
-                                                        <div className="">
-                                                            {i.resistencia}
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                    </div>
-                                                    <div className="totalStats">
-                                                        <div>
-                                                            {i.onSale.sale ?
-                                                                <button onClick={_ => { setRemove(true); setId(i.id) }} className='btn btn-sm btn-warning'> Remove </button>
-                                                                :
-                                                                <button onClick={_ => { setSelling(true); setId(i.id) }} className='btn btn-sm btn-primary mx-2'> Sell </button>
-                                                            }
-                                                        </div>
-                                                        <div>
-                                                            {i.resistencia + i.aceleracion + i.aerodinamica}
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                        <div key={i.id} className='col-md-3'>
+                                            <NftCard 
+                                                setRenderModal={setRenderModal} 
+                                                setModalText={setModalText} 
+                                                setCan={setCan} 
+                                                item={i}
+                                            />
                                         </div>
                                     )
                                 })}
+
                             </div>
                         </div>
                         <div className='p-2 mt-2'>
@@ -248,7 +208,6 @@ const Dashboard = () => {
                             })}
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
