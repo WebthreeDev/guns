@@ -5,13 +5,16 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
     const _context = useContext(DataContext)
     return (
         <div onClick={_ => { setCan(item); setRenderModal(true); setModalText("Confirm!") }} className="nftCard">
-
             <div className="d-flex justify-content-between">
                 {btnPrice && (
                     <div className='button-market px-1'>
                         <img src="" alt="" /> {item.onSale.price} BNB
                     </div>
+<<<<<<< HEAD
                 )}  
+=======
+                )}
+>>>>>>> 1ae50864257f4de6da212d1fb59fee850a8632f7
                 <div className="px-2 lb-color item-id"> #{item.id} </div>
             </div>
             <div>
@@ -28,24 +31,46 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                     <div>
                         <div className='d-flex justify-content-between  align-items-center'>
                             <div className='lb-color'>
+<<<<<<< HEAD
                                 Acceleration
                                 <progress className='' min={"0"} value={item.aceleracion} max={"300"} name="" id="" />
+=======
+                                <div>
+                                    Acceleration
+                                </div>
+                                <div>
+                                    <progress className='' min={"0"} value={item.aceleracion} max={"300"} name="" id="" />
+                                </div>
+>>>>>>> 1ae50864257f4de6da212d1fb59fee850a8632f7
                             </div>
                             <div className='totalStats lb-color'> {item.aceleracion} </div>
                         </div>
                         <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color'>Aerodinamic
+                            <div className='lb-color'>
+                                <div>
+                                    Aerodinamic
+                                </div>
                                 <div > <progress min={"0"} value={item.aerodinamica} max={"300"} name="" id="" /> </div>
 
                             </div>
                             <div className='totalStats lb-color'> {item.aerodinamica} </div>
                         </div>
                         <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color'>Resistence
+                            <div className='lb-color'>
+                                <div>
+                                    Resistence
+                                </div>
                                 <div> <progress min={"0"} value={item.resistencia} max={"300"} name="" id="" /> </div>
-
                             </div>
                             <div className='totalStats lb-color'> {item.resistencia} </div>
+                        </div>
+                        <div className='totalStatsCard'>
+                            <div>
+                                Total stats
+                            </div>
+                            <div>
+                                {item.resistencia+item.aceleracion+item.aerodinamica}
+                            </div>
                         </div>
 
                     </div>

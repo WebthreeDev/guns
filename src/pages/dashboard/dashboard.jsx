@@ -3,15 +3,13 @@ import cc from '../../img/cc.png'
 import ccan from '../../img/ccan.png'
 import { DataContext } from '../../context/DataContext'
 import axios from 'axios'
-import perro from '../../img/perro.png'
-import aero from '../../img/aero.png'
 import Loader from '../../components/loader/loader'
 import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const { alert, setAlert, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
+    const { nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -26,7 +24,6 @@ const Dashboard = () => {
 
     useEffect(() => {
         getRaces(wallet)
-        //console.log(race)
     }, [])
 
     const sell = async (_id) => {
@@ -87,7 +84,7 @@ const Dashboard = () => {
         <div className="unikeRouter">
             <Alert text="Alert Text" />
             {loading && <Loader />}
-            {claiming && <ClaimModal claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
+            {claiming && <ClaimModal setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
             {remove &&
                 <div className='modalX'>
                     <div className='modalIn'>
@@ -121,7 +118,7 @@ const Dashboard = () => {
             }
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-2 min-h-100-50 p-3">
+                    <div className="col-md-2 min-h-100-50 p-3 w-dash">
                         <div className='boxMenuDark'>
                             <div className="menuSectionDshboard separator">
                                 <div className="text-center h-100 d-flex align-items-center">
@@ -167,7 +164,7 @@ const Dashboard = () => {
                         </div>
 
                     </div>
-                    <div className="col-md-10 ">
+                    <div className="col-md-10 dashBody">
                         <div className="dogFeatures">
                             {/* <div className="d-flex justify-content-around">
                                 <div className="text-center">
@@ -184,10 +181,14 @@ const Dashboard = () => {
                                 </div>
                             </div> */}
                             <div className="row g-2 mb-2">
-
+    
                                 {cans && cans.map((i) => {
                                     return (
+<<<<<<< HEAD
                                         <div className='col-md-3'>
+=======
+                                        <div key={i.id} className='col-md-3'>
+>>>>>>> 1ae50864257f4de6da212d1fb59fee850a8632f7
                                             <NftCard 
                                                 setRenderModal={setRenderModal} 
                                                 setModalText={setModalText} 
@@ -208,7 +209,6 @@ const Dashboard = () => {
                             })}
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
