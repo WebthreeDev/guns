@@ -87,7 +87,10 @@ $text:#6e7191;
     border-radius: 30px;
     transition: 0.3s;
     padding: 20px ;
-    border: 1px solid $gradient2;
+    //border: 1px solid $gradient2;
+    /* border: 1px solid red;
+    */
+    position: relative; 
     &:hover{
         border:1px solid rgb(179, 179, 179);
         cursor: pointer;
@@ -199,4 +202,20 @@ progress{
     width: 100vw;
     height: 100vh;
     z-index: 90000;
+}
+.card{
+    position: absolute;
+    border: 5px solid red;
+}
+.onSale{
+    background-color: rgba(209, 142, 18, 0.5);
+    width: 100%;
+    left: 0px;
+    top:100px;
+    text-align: right;
+    color: #1d1d1d;
+    font-size: 20px;
+    font-weight: 700;
+    padding: 10px;
+    position: absolute;
 }
