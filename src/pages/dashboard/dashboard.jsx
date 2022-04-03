@@ -3,15 +3,13 @@ import cc from '../../img/cc.png'
 import ccan from '../../img/ccan.png'
 import { DataContext } from '../../context/DataContext'
 import axios from 'axios'
-import perro from '../../img/perro.png'
-import aero from '../../img/aero.png'
 import Loader from '../../components/loader/loader'
 import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const { alert, setAlert, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
+    const { nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -26,7 +24,6 @@ const Dashboard = () => {
 
     useEffect(() => {
         getRaces(wallet)
-        //console.log(race)
     }, [])
 
     const sell = async (_id) => {
@@ -87,7 +84,7 @@ const Dashboard = () => {
         <div className="unikeRouter">
             <Alert text="Alert Text" />
             {loading && <Loader />}
-            {claiming && <ClaimModal claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
+            {claiming && <ClaimModal setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
             {remove &&
                 <div className='modalX'>
                     <div className='modalIn'>

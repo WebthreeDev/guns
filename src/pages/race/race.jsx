@@ -31,41 +31,30 @@ const Race = () => {
         }
     }
 
-    const selectDog = async (item,_canodromeId) => {
+    const selectDog = async (item, _canodromeId) => {
         setCanodromeId(_canodromeId)
         setDog(item)
         setSelected(true)
     }
 
-    const clickRun = (canId, wallet) => {
-        //alert("preparado para correr: " + id + " - " + wallet + " - " + canodromeId)
-        //inicioCarrera
-        const _body = { canId:canId, wallet:wallet, canodromeId:canodromeId }
-        const body = JSON.stringify(_body)
-        /* carrera = {
-            "id":8,
-            "wallet":"0x20a4dabc7c80c1139ffc84c291af4d80397413da",
-            "canodromeId":"6245f31615ab45fd04dc0839"
-        } */
-
-        axios.post("https://cryptocans.io/api/v1/race",{
-            canId: 8,
-            wallet: "0x20a4dabc7c80c1139ffc84c291af4d80397413da",
-            canodromeId: "6245f31615ab45fd04dc0839"
-        }).then((res) => {
+    const clickRun = async (canId, canodromeId) => {
+        const body = { canId,wallet:_context.wallet,canodromeId } 
+        try {
+            const res = await axios.post("https://cryptocans.io/api/v1/race",body) 
             const _places = res.data.response.places
-            console.log(res.data.response)
             let place = _places.indexOf(1) + 1
             let er
             if (place === 1 || place === 3) er = "er"
             if (place === 2) er = "do"
             if (place > 3) er = "to"
-
             alert("Llegaste de " + place + er + " lugar")
             setSelected(false)
-            //console.log(places)
-        }).catch(_ => console.log(_))
+
+        } catch (error) {alert(error.response.data.error)}
+
     }
+
+
     const setRenderModal = _ => { }
     const setModalText = _ => { }
     const setCan = _ => { }
@@ -108,6 +97,7 @@ const Race = () => {
                                                     }
                                                     )
                                                     :
+                                                    
                                                     <div>
                                                         <div>
                                                             {dog && <>
@@ -144,7 +134,7 @@ const Race = () => {
                                                                                         <img height="40px" src={perrito} alt="" />
                                                                                     </div>
                                                                                 </div>
-                                                                                <button onClick={() => clickRun(dog.id, _context.wallet)} className="btn btn-danger form-control"> play </button>
+                                                                                <button onClick={() => clickRun(dog.id, item._id)} className="btn btn-danger form-control"> play </button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -199,3 +189,27 @@ const Race = () => {
     )
 }
 export default Race
+
+/* .then((res) => {
+            const _places = res.data.response.places
+            console.log(res.data.response)
+            let place = _places.indexOf(1) + 1
+            let er
+            if (place === 1 || place === 3) er = "er"
+            if (place === 2) er = "do"
+            if (place > 3) er = "to"
+
+            alert("Llegaste de " + place + er + " lugar")
+            setSelected(false)
+            //console.log(places)
+        }).catch(_ => console.log(_)) */
+
+        //alert("preparado para correr: " + id + " - " + wallet + " - " + canodromeId)
+        //inicioCarrera
+/* const _body = { canId:canId, wallet:wallet, canodromeId:canodromeId }
+const body = JSON.stringify(_body) */
+/* carrera = {
+    "id":8,
+    "wallet":"0x20a4dabc7c80c1139ffc84c291af4d80397413da",
+    "canodromeId":"6245f31615ab45fd04dc0839"
+} */
