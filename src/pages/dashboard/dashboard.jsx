@@ -37,7 +37,7 @@ const Dashboard = () => {
         const _x = web3.utils.fromWei(x, "ether")
         setApproved(_x)
     }
-
+ 
     const setCan = (can) => {
         setSelectedCan(can)
         setId(can.id)
