@@ -28,23 +28,23 @@ export const DataProvider = ({ children }) => {
     const gas = web3.utils.toWei("0.0001", "gwei")
     const gasPrice = web3.utils.toWei("10", "gwei")
 
-    /* useEffect(() => {
+    useEffect(() => {
         exectConnect()
-    }, []) */
+    }, [])
 
     window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
     window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
 
     const exectConnect = async () => {
         
+        setLoading(true)
         const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null
         if (storageCanId) {
             changeStateCanInMarket(storageCanId)
         }
-        setLoading(true)
+
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
-                await connect(accounts[0])
                 const wallet = accounts[0]
                 console.log("antes de enviar")
                 axios.post("https://cryptocans.io/api/v1/login", { wallet })
@@ -57,10 +57,34 @@ export const DataProvider = ({ children }) => {
                         await getCCT(wallet)
                         await getCans(wallet)
                         setLoading(false)
+                        return res.data.response
                     }).catch(error => {
-                        console.log("Backend Problem:" + error)
+                        setLoading(false)
+                        if (error.response) {
+                            // La respuesta fue hecha y el servidor respondió con un código de estado
+                            // que esta fuera del rango de 2xx
+                            console.log("error con response")
+                            console.log(error.response.data);
+                            console.log(error.response.status);
+                            console.log(error.response.headers);
+                        } else if (error.request) {
+                              console.log("error con request")
+                              // La petición fue hecha pero no se recibió respuesta
+                              // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
+                              // http.ClientRequest en node.js
+                              console.log(error.request);
+                            } else {
+                              console.log("error con message")
+                            // Algo paso al preparar la petición que lanzo un Error
+                            console.log('Error', error.message);
+                          }
+                          console.log(error.config);
                     })
                 return wallet
+            }).catch(error =>{
+                console.log("Metamask error:")
+                console.log(error)
+                setLoading(false)
             })
 
 
@@ -124,7 +148,7 @@ export const DataProvider = ({ children }) => {
     }
 
     const getRaces = async (wallet) => {
-        const _races = await axios.get("https://cryptocans.io/api/v1/race/0x7daF5a75C7B3f6d8c5c2b53117850a5d09006168")
+        const _races = await axios.get("https://cryptocans.io/api/v1/race/"+wallet)
         //console.log(_races.data.response)
         setRaces(_races.data.response)
     }

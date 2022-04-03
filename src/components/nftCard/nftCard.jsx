@@ -5,12 +5,18 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
     const _context = useContext(DataContext)
     return (
         <div onClick={_ => { setCan(item); setRenderModal(true); setModalText("Confirm!") }} className="nftCard">
+            {item.onSale.sale && 
+                <div className='onSale'>
+                    On sale
+                </div>
+            }
             <div className="d-flex justify-content-between">
-                {btnPrice && (
+                {btnPrice != 0 && (
                     <div className='button-market px-1'>
                         <img src="" alt="" /> {item.onSale.price} BNB
                     </div>
                 )}
+
                 <div className="px-2 lb-color item-id"> #{item.id} </div>
             </div>
             <div>
@@ -60,7 +66,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                                 Total stats
                             </div>
                             <div>
-                                {item.resistencia+item.aceleracion+item.aerodinamica}
+                                {item.resistencia + item.aceleracion + item.aerodinamica}
                             </div>
                         </div>
 
