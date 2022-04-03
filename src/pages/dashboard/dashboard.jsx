@@ -8,8 +8,9 @@ import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
+import { cctContract } from '../../tokens/cct/cct'
 const Dashboard = () => {
-    const { nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
+    const { cctContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -17,18 +18,35 @@ const Dashboard = () => {
     const [selling, setSelling] = useState(false)
     const [claiming, setClaiming] = useState(false)
     const [ammountToClaim, setAmmountToClaim] = useState(false)
+    const [selectedCan, setSelectedCan] = useState(false)
 
-    const [renderModal, setRenderModal] = useState(false)
-    const [modalText, setModalText] = useState(false)
-    const [can, setCan] = useState(false)
+    const [renderModal, setRenderModal] = useState(false)//viene true
+    const [modalText, setModalText] = useState(false)////viene texto confirm
+
+    const [approved, setApproved] = useState(false)
 
     useEffect(() => {
-        getRaces(wallet)
+        // getRaces(wallet)
+        getApproved()
     }, [])
+
+    const getApproved = async () => {
+        const sender = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
+        const recipient = "0x7daF5a75C7B3f6d8c5c2b53117850a5d09006168"
+        const x = await cctContract.methods.allowance(sender, recipient).call()
+        const _x = web3.utils.fromWei(x, "ether")
+        setApproved(_x)
+    }
+
+    const setCan = (can) => {
+        setSelectedCan(can)
+        setId(can.id)
+    }
 
     const sell = async (_id) => {
         setLoading(true)
         setSelling(false)
+        setRenderModal(false)
         let body = { can: { onSale: { sale: true, price: price }, } }
         const value = web3.utils.toWei((price / 100).toString(), "ether")
         nftContract.methods.onSale().send({ from: wallet, value }).then(async (res) => {
@@ -46,6 +64,7 @@ const Dashboard = () => {
         let body = { can: { onSale: { sale: false, price: 0 }, } }
         await sendTransaction(_id, body)
         setLoading(false)
+        setRenderModal(false)
     }
 
     const sendTransaction = async (_id, body) => {
@@ -56,6 +75,13 @@ const Dashboard = () => {
             setPrice(0)
             exectConnect()
         } catch (error) {
+            if (error.response) {
+                console.log(error.response)
+            } else if (error.request) {
+                console.log("error con request")
+            } else {
+                console.log(error.message)
+            }
             console.log(error)
             setSelling(false)
             setRemove(false)
@@ -64,17 +90,27 @@ const Dashboard = () => {
     }
 
     const claim = async () => {
+        setLoading(true)
+        setClaiming(false)
         const body = {
             "wallet": wallet,
             "amount": ammountToClaim
         }
         try {
-            const res = await axios.patch("https://cryptocans.io/api/v1/claim", body)
-            //console.log(res.data.response)
-            console.log(nftContract.methods)
-            const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
-            nftContract.methods.transferFrom(ownerWallet, wallet, "10000000000000000").call({ from: wallet })
-                .then(res => console.log(res))
+            axios.patch("https://cryptocans.io/api/v1/claim", body).then((res) => {
+                console.log(res.data.response)
+                setTimeout(() => {
+                    console.log(cctContract.methods)
+                    const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
+                    const claiming = web3.utils.toWei(ammountToClaim, "ether")
+                    cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet })
+                        .then(res => {
+                            console.log(res)
+                            exectConnect()
+                        })
+                }, 20000)
+            })
+
         } catch (error) {
             console.log(error)
         }
@@ -83,6 +119,7 @@ const Dashboard = () => {
     return (
         <div className="unikeRouter">
             <Alert text="Alert Text" />
+
             {loading && <Loader />}
             {claiming && <ClaimModal setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
             {remove &&
@@ -95,23 +132,36 @@ const Dashboard = () => {
                         </div>
                     </div>
                 </div>}
-            {selling &&
+            {renderModal &&
                 <div className='modalX'>
                     <div className='modalIn'>
                         <div className=' w-100'>
                             <div className=''>
-
-                                Selling  #{id && id} can
+                                {selectedCan.onSale.sale &&
+                                    <div className='d-flex align-items-center justify-content-between'>
+                                        <div className='text-warning'> Price: {selectedCan.onSale.price} BNB </div>
+                                        <button onClick={()=>_remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
+                                    </div>
+                                }
+                                <div className='d-flex align-items-center justify-content-between'>
+                                    <div>
+                                        Selling canId: #{selectedCan && selectedCan.id}
+                                    </div>
+                                    
+                                </div>
+                                name: {selectedCan && selectedCan.name} <hr />
+                                Rarity: {selectedCan && selectedCan.rarity} <hr />
                                 <h3 className='text-warning'>{price} BNB</h3>
                                 <p className='text-warning'> Sales fee: {price / 100} BNB </p>
                                 <input className='form-control' type="number" onChange={e => setPrice(e.target.value)} />
                             </div>
                             <div className='mt-3'>
                                 <div className="row gx-2">
-                                    <button onClick={_ => { setSelling(false); setPrice(0) }} className='btn mx-1 col btn-danger'> Cancel </button>
+                                    <button onClick={_ => { setRenderModal(false); setPrice(0) }} className='btn mx-1 col btn-danger'> Cancel </button>
                                     <button onClick={_ => sell(id)} className='btn mx-1 col btn-primary'> Continue </button>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -137,6 +187,9 @@ const Dashboard = () => {
                                         <img className="my-2" height="50px" src={ccan} alt="" />
                                         <div>
                                             <h5>{cct ? cct : 0} CCT</h5>
+                                        </div>
+                                        <div>
+                                            {approved && approved} approved
                                         </div>
                                     </div>
                                 </div>
@@ -181,19 +234,16 @@ const Dashboard = () => {
                                 </div>
                             </div> */}
                             <div className="row g-2 mb-2">
-    
+
                                 {cans && cans.map((i) => {
                                     return (
-<<<<<<< HEAD
-                                        <div className='col-md-3'>
-=======
                                         <div key={i.id} className='col-md-3'>
->>>>>>> 1ae50864257f4de6da212d1fb59fee850a8632f7
-                                            <NftCard 
-                                                setRenderModal={setRenderModal} 
-                                                setModalText={setModalText} 
-                                                setCan={setCan} 
+                                            <NftCard
+                                                setRenderModal={setRenderModal}
+                                                setModalText={setModalText}
+                                                setCan={setCan}
                                                 item={i}
+                                                btnPrice={i.onSale.price}
                                             />
                                         </div>
                                     )
