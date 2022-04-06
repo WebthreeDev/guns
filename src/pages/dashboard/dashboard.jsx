@@ -96,7 +96,7 @@ const Dashboard = () => {
             "amount": ammountToClaim
         }
         try {
-            axios.patch("https://cryptocans.io/api/v1/claim", body).then((res) => {
+            axios.patch(process.env.REACT_APP_BASEURL+"claim", body).then((res) => {
                 console.log(res.data.response)
                 setTimeout(() => {
                     console.log(cctContract.methods)

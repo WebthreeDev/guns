@@ -24,7 +24,7 @@ const Race = () => {
             let place = _places.indexOf(1)
             let lugar = ["er", "do", "er", "to", "to", "to"]
             let er = lugar[place]
-            await _context.getCans()
+            await _context.getCanodromes(_context.wallet)
             alert("Llegaste de " + (place + 1) + er + " lugar")
             setModalRaceActive(false)
         } catch (error) { alert(error.response.data.error) }
@@ -69,7 +69,7 @@ const Race = () => {
                                         <div className="row">
                                             {canodrome.cans && canodrome.cans.map((can, index) => {
                                                 return (
-                                                    <div key={index} className="col-4 border" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
+                                                    <div key={index} className="col-4" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
                                                         <NftCard
                                                             btnPrice={false}
                                                             setRenderModal={setRenderModal}

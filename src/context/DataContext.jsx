@@ -24,12 +24,24 @@ export const DataProvider = ({ children }) => {
     const [balance, setBalance] = useState(false)
     const [cct, setCCT] = useState(false)
     const [canodromes, setCanodromes] = useState(false)
+    const [claimPercent, setClaimPersent] = useState(false)
+
+    const getClaimPersent = async (wallet) => {
+        /* try {
+            const res = await axios.get(process.env.REACT_APP_BASEURL + "claim/" + wallet)
+            console.log(res.data.response)
+            setClaimPersent(res.data.response)
+        } catch (error) {
+            console.log(error.response)
+        } */
+    }
 
     const gas = web3.utils.toWei("0.0001", "gwei")
     const gasPrice = web3.utils.toWei("10", "gwei")
 
     useEffect(() => {
         exectConnect()
+        getClaimPersent()
     }, [])
 
     window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
@@ -52,10 +64,10 @@ export const DataProvider = ({ children }) => {
                         console.log("enviado desde el axios")
                         setBalance(res.data.response.balance)
                         setWallet(wallet)
+                        await getCans(wallet)
                         await getCanodromes(wallet)
                         await getBnb(wallet)
                         await getCCT(wallet)
-                        await getCans(wallet)
                         setLoading(false)
                         return res.data.response
                     }).catch(error => {
@@ -91,11 +103,26 @@ export const DataProvider = ({ children }) => {
     }
 
     const getCanodromes = async (wallet) => {
-        await reset(wallet)
+        //await reset(wallet)
+        let canes = await getCans(wallet)
+        let newCanodromes = []
         fetch("https://cryptocans.io/api/v1/canodromes?wallet=" + wallet)
             .then((res) => res.json())
             .then(res => {
-                setCanodromes(res.response)
+                res.response.map(canodrome => {
+                    let aux = canodrome
+                    let newCansList = []
+                    canodrome.cans.map((can, index) => {
+                        canes.map(allCans => {
+                            if (can.can.id == allCans.id) {
+                                newCansList.push(allCans)
+                            }
+                        })
+                        aux.cans[index].can = newCansList[index]
+                    })
+                    newCanodromes.push(aux)
+                })
+                setCanodromes(newCanodromes)
             }).catch(error => console.log(error))
     }
 
@@ -108,11 +135,11 @@ export const DataProvider = ({ children }) => {
         await reset(_wallet)
         const _cans = await axios.get("https://cryptocans.io/api/v1/cans/user/" + _wallet)
         setCans(_cans.data.response)
-        //console.log(_cans.data.response)
+        return (_cans.data.response)
     }
-    
-    const reset = async (wallet) => {
-        await axios.get(process.env.REACT_APP_BASEURL + "/reset/" + wallet)
+
+    const reset = async (_wallet) => {
+        if (_wallet) await axios.get(process.env.REACT_APP_BASEURL + "reset/" + _wallet)
     }
 
     const getBnb = async (wallet) => {
@@ -173,7 +200,7 @@ export const DataProvider = ({ children }) => {
         alert, setAlert,
         getCanodromes, canodromes,
         gas, gasPrice,
-        converType
+        converType, claimPercent
     }
 
     return (

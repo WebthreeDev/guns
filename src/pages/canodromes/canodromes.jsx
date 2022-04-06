@@ -19,7 +19,6 @@ const Canodromes = () => {
     }, [_context.wallet, _context.canodromes])
 
     const addCan = async (canodromeId) => {
-        console.log(takedCans)
         let _filteredCans = []
 
         _context.cans.map(item => {
@@ -34,7 +33,6 @@ const Canodromes = () => {
             }
         })
 
-        console.log(_filteredCans)
         setFilteredCans(_filteredCans)
         setSelectedCanodrome(canodromeId)
         setSelectCans(true)
@@ -57,7 +55,6 @@ const Canodromes = () => {
     const getTakedCans = async _ => {
         if (_context.wallet) {
             if (_context.canodromes) {
-                console.log(_context.canodromes)
                 let _takedCans = []
                 _context.canodromes.map((canodrome) => {
                     _takedCans = [...canodrome.cans]
@@ -72,7 +69,6 @@ const Canodromes = () => {
 
     const deleteCan = async (canodromeId, canId) => {
         _context.setLoading(true)
-        console.log()
         const baseUrl = process.env.REACT_APP_BASEURL
         await axios.delete(baseUrl + "canodromes/" + canodromeId + "/" + canId)
         await _context.getCanodromes(_context.wallet)
@@ -120,7 +116,7 @@ const Canodromes = () => {
                                 <div className="container-fluid">
                                     <div className='row'>
                                         {canodromeItems.map((index) => {
-                                            return <div className="col-4">
+                                            return <div key={index} className="col-4">
                                                 {canodromeItem.cans[index] ?
                                                     <div className='cardCanodrome'>
                                                         <div className='d-flex justify-content-between'>
