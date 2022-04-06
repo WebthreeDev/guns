@@ -8,7 +8,6 @@ import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
-import { cctContract } from '../../tokens/cct/cct'
 const Dashboard = () => {
     const { cctContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
 
@@ -26,7 +25,7 @@ const Dashboard = () => {
     const [approved, setApproved] = useState(false)
 
     useEffect(() => {
-        // getRaces(wallet)
+        getRaces(wallet)
         getApproved()
     }, [])
 

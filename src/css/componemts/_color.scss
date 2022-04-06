@@ -102,6 +102,9 @@ $text:#6e7191;
     font-size: 18px;
     font-weight: 600;
 }
+.h40{
+    height: 40px;
+}
 .button-market{
     width: 140px;
     display: flex;
@@ -218,4 +221,91 @@ progress{
     font-weight: 700;
     padding: 10px;
     position: absolute;
+}
+.canodromeCard{
+    padding: 10px;
+    border-radius: 20px;
+    background: linear-gradient($gradient2, $gradient1);
+}
+.cardCanodrome{
+    background: linear-gradient($gradient1,$gradient2);
+    padding: 10px;
+    border-radius: 15px;
+}
+.imgCanodromeBg{
+    background: linear-gradient($gradient1,$gradient2);
+    border-radius: 20px;
+}
+.btnaddcan{
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: 900;
+    color: #6e7191;
+    padding: 30px;
+    background-color: transparent;
+    border: 1px dotted #6e7191;
+    width: 100%;
+    height: 132px;
+}
+.racebg{
+    height: 100vh;
+    padding:70px 20px 20px 20px;
+    background: rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+
+}
+.raceButton{
+    height: 270px;
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
+    background-color: $gradient1;
+    transition: 0.5s;
+    &:hover{
+        box-shadow: inset -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
+        background-color: $gradient2;
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+}
+.raceCanodrome{
+    background: linear-gradient($gradient1,$gradient2);
+    box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
+    padding: 15px;
+    border-radius: 15px;
+}
+.pista{
+    background:linear-gradient( rgba(225, 0, 255, 0.653),rgba(48, 162, 255, 0.733)),url(../../img/stadium.webp);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    height:420px !important;
+    margin-bottom: 15px;
+}
+.carril{
+    height: 70px;
+    border-bottom: 1px solid rgb(151, 229, 255);
+    display: flex;
+}
+
+.canInCarril{
+    height: 69px;
+    background-color: rgba(127, 255, 212, 0.5);
+    width: 15%;
+    &:hover{
+        background-color: rgba(127, 255, 212, 0.7);
+    }
+}
+.runCarril{
+    height: 69px;
+    background-color: rgba(0, 166, 255, 0.5);
+    width: 85%;
+    &:hover{
+        background-color: rgba(0, 166, 255, 0.7); 
+    }
 }

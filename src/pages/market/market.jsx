@@ -10,6 +10,7 @@ import changeStateCanInMarket from "../../context/services/changeStateCanInMarke
 const Market = () => {
     const _context = useContext(DataContext)
     const [rango, setRango] = useState(200)
+    const [rango2, setRango2] = useState(360)
     const [dogList, setdogList] = useState(false)
 
     const [renderModal, setRenderModal] = useState(false)
@@ -22,7 +23,7 @@ const Market = () => {
     const [epicCheck, setEpicCheck] = useState(false)
     const [legendaryCheck, setLegendaryCheck] = useState(false)
     const [order, setOrder] = useState("Ask")
-    const apiMarket = 'https://cryptocans.io/api/v1/marketplace'
+    const apiMarket = process.env.REACT_APP_BASEURL+'/marketplace'
 
     useEffect(() => {
         getCansOnSell()
@@ -36,42 +37,8 @@ const Market = () => {
         await _context.setLoading(false)
     }
 
-    {/* <div className="col-3">
-        <div onClick={_ => { setCan(item); setModalText("Confirm!"); setRenderModal(true) }} className="nftCard pt-2">
-            <div className="d-flex justify-content-between">
-                <div className="sidebarText px-2"> #{item.id} - {item.status} </div>
-                <div className="px-2 sidebarText">{_context.lastForWallet(item.wallet)}</div>
-            </div>
-            <div className="text-center">
-                <img height="100px" src={perro} alt="" />
-            </div>
-            <div className="mt-2">
-                <div className="text-light p-2 nftFeatures">
-                    <div className="d-flex justify-content-between align-items-center ">
-                        <div className="nftName "> {item.name} </div>
-                        <div className="">
-                            {item.aceleracion}/{item.resistencia}/{item.aerodinamica}/{item.aceleracion + item.resistencia + item.aerodinamica}
-                        </div>
-                    </div>
-                    <div className="d-flex justify-content-between mt-1">
-                        <h4 className="raza text-warning">
-                            {item.onSale.price} BNB
-                        </h4>
-                        {item.rarity === "1" && <i className="rarity common">Common </i>}
-                        {item.rarity === "2" && <i className="rarity rare">Rare </i>}
-                        {item.rarity === "3" && <i className="rarity epic">Epic </i>}
-                        {item.rarity === "4" && <i className="rarity legendary">Legendary </i>}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> */}
-
     const confirmBuy = async () => {
-        
         const storage = JSON.parse(localStorage.getItem('windowsData'))
-       
-        
         if (!storage) {
             localStorage.setItem('windowsData', JSON.stringify({ id: can.id }));
             _context.setLoading(true)
@@ -81,11 +48,11 @@ const Market = () => {
             setTimeout(() => {
                 const _storage = JSON.parse(localStorage.getItem('windowsData')) || null
                 console.log(_storage)
-                if(_storage){
+                if (_storage) {
                     console.log("este es el timeout")
                     changeStateCanInMarket(_storage)
-                } 
-            }, 200000); 
+                }
+            }, 200000);
 
             try {
                 const apiGetCan = "https://cryptocans.io/api/v1/cans/" + canId
@@ -124,11 +91,23 @@ const Market = () => {
             } catch (error) {
                 console.log(error)
             }
-        }else{
+        } else {
             alert("Usted tiene una transaccion pendiente por favor espere 3 minutos")
         }
 
     }
+
+    const find = async ()=>{
+        console.log(dogList)
+        const newDogList = await dogList.filter(item =>compareRarity(item))
+        setdogList(newDogList)
+    }
+
+    const compareRarity = ()=>{
+        
+        return true
+    }
+
     return (
         <div>
             {_context.loading && <Loader />}
@@ -160,7 +139,6 @@ const Market = () => {
                     <div className="col-3 sidebar">
                         <div className="sidebar-bg">
                             <div className="d-flex justify-content-between align-items-center">
-
                                 <b>Filter</b>
                                 <button className="btn btn-primary btn-sm" href="">Clear filter</button>
                             </div>
@@ -181,18 +159,18 @@ const Market = () => {
                                     <div className="row">
                                         <div className="col-6 textRaza">
                                             <div>
-                                                <input onChange={e => setCommonCheck(e.target.checked)} type="checkbox" name="commonCheck" id="1" /> Common
+                                                <input onChange={e => setCommonCheck(e.target.checked)} type="checkbox" name="commonCheck" id="1" checked={commonCheck} /> Common
                                             </div>
                                             <div>
-                                                <input type="checkbox" name="" id="" /> Rare
+                                                <input onChange={e => setRareCheck(e.target.checked)} type="checkbox" name="" id="" checked={rareCheck} /> Rare
                                             </div>
                                         </div>
                                         <div className="col-6 textRaza">
                                             <div>
-                                                <input type="checkbox" name="" id="" /> Épic
+                                                <input onChange={e => setEpicCheck(e.target.checked)} type="checkbox" name="" id="" checked={epicCheck} /> Épic
                                             </div>
                                             <div>
-                                                <input type="checkbox" name="" id="" /> Legendary
+                                                <input onChange={e => setLegendaryCheck(e.target.checked)} type="checkbox" name="" id="" checked={legendaryCheck} /> Legendary
                                             </div>
                                         </div>
                                     </div>
@@ -204,15 +182,18 @@ const Market = () => {
                                         Stats
                                     </div>
                                     <div>
-                                        <h3 className="breedCount">{rango}</h3>
+                                        <h3 className="breedCount"> min {rango} max {rango2}</h3>
                                     </div>
                                 </div>
                                 <div>
-                                    <input onChange={e => setRango(e.target.value)} min="200" max="360" className="w-100" type="range" value={rango} name="" id="" />
+                                    <input onChange={e => setRango(e.target.value)} min="200" max={rango2} className="w-100" type="range" value={rango} name="" id="" />
+                                </div>
+                                <div>
+                                    <input onChange={e => setRango2(e.target.value)} min={rango} max="360" className="w-100" type="range" value={rango2} name="" id="" />
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <button className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
+                                <button onClick={find} className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
                             </div>
                         </div>
                     </div>
@@ -245,12 +226,12 @@ const Market = () => {
                             {dogList &&
                                 dogList.map((item) => {
                                     return (
-                                        <div key={item.id} className="col-3">
-                                            <NftCard 
-                                                setRenderModal={setRenderModal} 
-                                                setModalText={setModalText} 
-                                                setCan={setCan} 
-                                                item={item} 
+                                        <div key={item.id} className="col-4">
+                                            <NftCard
+                                                setRenderModal={setRenderModal}
+                                                setModalText={setModalText}
+                                                setCan={setCan}
+                                                item={item}
                                                 btnPrice={true}
                                             />
                                         </div>

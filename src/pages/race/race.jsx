@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
-import perrito from '../../img/rundog.gif'
+import canodromeImg from '../../img/canodrome.png'
+import runDog from '../../img/rundog.gif'
 import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios";
@@ -7,209 +8,169 @@ import NftCard from "../../components/nftCard/nftCard";
 const Race = () => {
     const _context = useContext(DataContext)
 
-    const [corriendo, setCorriendo] = useState(false)
-    const [wRace, setWrace] = useState("wRace2")
-    const [pop, setPop] = useState(false)
-    const [selected, setSelected] = useState(false)
-    const [dog, setDog] = useState([])
-    const [canodromeId, setCanodromeId] = useState(false)
+    const [modalRace, setModalRace] = useState(false)
+    const [modalRaceActive, setModalRaceActive] = useState(false)
+    const [selectedCan, setSelectedCan] = useState(false)
+    const [selectedCanodrome, setSelectedCanodrome] = useState(false)
 
-    const inicioCarrera = () => {
-        setWrace("wRace")
-        setCorriendo(true)
-        setTimeout(() => {
-            // console.log("Termino")
-            setCorriendo(false)
-        }, 20000)
-    }
-
-    const racePopUp = async (index) => {
-        if (_context.wallet) {
-            setPop(true)
-        } else {
-            _context.connect()
-        }
-    }
-
-    const selectDog = async (item, _canodromeId) => {
-        setCanodromeId(_canodromeId)
-        setDog(item)
-        setSelected(true)
-    }
-
-    const clickRun = async (canId, canodromeId) => {
-        const body = { canId,wallet:_context.wallet,canodromeId } 
+    const clickRun = async () => {
+        const canId = selectedCan.id
+        const canodromeId = selectedCanodrome._id
+        const body = { canId, wallet: _context.wallet, canodromeId }
+        console.log(body)
         try {
-            const res = await axios.post("https://cryptocans.io/api/v1/race",body) 
+            const res = await axios.post(process.env.REACT_APP_BASEURL + "race", body)
             const _places = res.data.response.places
-            let place = _places.indexOf(1) + 1
-            let er
-            if (place === 1 || place === 3) er = "er"
-            if (place === 2) er = "do"
-            if (place > 3) er = "to"
-            alert("Llegaste de " + place + er + " lugar")
-            setSelected(false)
-
-        } catch (error) {alert(error.response.data.error)}
-
+            let place = _places.indexOf(1)
+            let lugar = ["er", "do", "er", "to", "to", "to"]
+            let er = lugar[place]
+            await _context.getCans()
+            alert("Llegaste de " + (place + 1) + er + " lugar")
+            setModalRaceActive(false)
+        } catch (error) { alert(error.response.data.error) }
     }
-
 
     const setRenderModal = _ => { }
     const setModalText = _ => { }
-    const setCan = _ => { }
-    return (
-        <div className="container p-2">
-            {_context.loading && <Loader />}
-            {pop &&
-                <div className="cansSelection">
-                    <div className="selectTittle">
-                        <div className="tittle">
-                            Select cans
-                        </div>
-                        <div>
-                            <button onClick={() => { setPop(false); setSelected(false) }}> X </button>
-                        </div>
-                    </div>
-                    <div className="container-fluid px-5 containerSelectCans">
-                        <div className="row gx-4 px-5">
-                            {_context.canodromes && _context.canodromes.map((item, index) => {
-                                return (
-                                    <div key={index} className="col-12 p-4 border mb-2 bg-primary">
-                                        Canodrome #{index} - Energy: {item.energy} - {item.rarity}
-                                        <h2>Elija un can para correr</h2>
-                                        <div className="container-fluid">
-                                            <div className="row">
-                                                {!selected ?
-                                                    item.cans && item.cans.map((_item, i) => {
-                                                        return (
-                                                            <div key={i} onClick={_ => selectDog(_item.can, item._id)} className="col-4 p-2">
-                                                                <NftCard
-                                                                    setRenderModal={setRenderModal}
-                                                                    setModalText={setModalText}
-                                                                    setCan={setCan}
-                                                                    item={_item.can}
-                                                                    btnPrice={false}
-                                                                />
+    const setCan = can => {
+        setSelectedCan(can)
+        setModalRace(false)
+        setModalRaceActive(true)
+    }
 
-                                                            </div>
-                                                        )
-                                                    }
-                                                    )
-                                                    :
-                                                    
-                                                    <div>
-                                                        <div>
-                                                            {dog && <>
-                                                                <div className="border">
-                                                                    <div className="container-flid">
-                                                                        <div className="row">
-                                                                            <div className="col-4">
-                                                                                <div className="p-2">
-                                                                                    Nombre: {dog.name} <hr />
-                                                                                    Id: {dog.id} <hr />
-                                                                                    Aceleracion: {dog.aceleracion} <hr />
-                                                                                    Aerodinamica: {dog.aerodinamica} <hr />
-                                                                                    Resistencia: {dog.resistencia} <hr />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="col-8">
-                                                                                <div className="border carreraFondo">
-                                                                                    <div className="pista">
-                                                                                        <img height="40px" src={perrito} alt="" />
-                                                                                    </div>
-                                                                                    <div className="pista">
-                                                                                        <img height="40px" src={perrito} alt="" />
-                                                                                    </div>
-                                                                                    <div className="pista">
-                                                                                        <img height="40px" src={perrito} alt="" />
-                                                                                    </div>
-                                                                                    <div className="pista">
-                                                                                        <img height="40px" src={perrito} alt="" />
-                                                                                    </div>
-                                                                                    <div className="pista">
-                                                                                        <img height="40px" src={perrito} alt="" />
-                                                                                    </div>
-                                                                                    <div className="pista">
-                                                                                        <img height="40px" src={perrito} alt="" />
-                                                                                    </div>
-                                                                                </div>
-                                                                                <button onClick={() => clickRun(dog.id, item._id)} className="btn btn-danger form-control"> play </button>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </>}
-                                                        </div>
+    const race = (selector) => {
+        if (selector === 0) singleRace()
+        if (selector === 1) rankRace()
+        if (selector === 2) beatsRace()
+    }
+
+    const singleRace = () => setModalRace(true)
+    const rankRace = () => alert("Coming Soon!")
+    const beatsRace = () => alert("Coming Soon!")
+
+    return (
+        <div className="container">
+            {_context.loading && <Loader />}
+            {modalRace && <div className="cansSelection">
+                <div className='selectTittle'>
+                    <div className='tittle'> Single Race </div>
+                    <button onClick={_ => setModalRace(false)}> X </button>
+                </div>
+                <div className="container py-4">
+                    {_context.canodromes && _context.canodromes.map((canodrome, index) => {
+                        return (
+                            <div key={index} className="row raceCanodrome mb-2">
+                                <div className="col-md-2 col-12">
+                                    {canodrome.energy} / {_context.converType(canodrome.type)}
+                                    <img className="w-100" src={canodromeImg} alt="" />
+                                </div>
+                                <div className="col-md-10 col-12">
+                                    <div className="container-fluid">
+                                        <div className="row">
+                                            {canodrome.cans && canodrome.cans.map((can, index) => {
+                                                return (
+                                                    <div key={index} className="col-4 border" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
+                                                        <NftCard
+                                                            btnPrice={false}
+                                                            setRenderModal={setRenderModal}
+                                                            setModalText={setModalText}
+                                                            setCan={setCan}
+                                                            item={can.can} />
                                                     </div>
-                                                }
-                                            </div>
+                                                )
+                                            })}
                                         </div>
                                     </div>
-                                )
-                            })}
-                        </div>
+                                </div>
+                            </div>
+                        )
+                    })}
 
+                </div>
+            </div>}
+
+            {modalRaceActive && <div className="cansSelection">
+                <div className='selectTittle'>
+                    <div className='tittle'> Single Race </div>
+                    <button onClick={_ => setModalRaceActive(false)}> X </button>
+                </div>
+                <div className="container-fluid">
+                    <div className="row p-4">
+                        <div className="col-3">
+                            {selectedCan &&
+                                <NftCard
+                                    btnPrice={false}
+                                    setRenderModal={setRenderModal}
+                                    setModalText={setModalText}
+                                    setCan={setCan}
+                                    item={selectedCan} />
+                            }
+                        </div>
+                        <div className="col-9">
+                            <div className="pista">
+                                <div className="carril">
+                                    <div className="canInCarril">
+                                    </div>
+                                    <div className="runCarril">
+                                    </div>
+                                </div>
+                                <div className="carril">
+                                    <div className="canInCarril">
+                                    </div>
+                                    <div className="runCarril">
+                                    </div>
+                                </div>
+                                <div className="carril">
+                                    <div className="canInCarril">
+                                    </div>
+                                    <div className="runCarril">
+                                    </div>
+                                </div>
+                                <div className="carril">
+                                    <div className="canInCarril">
+                                    </div>
+                                    <div className="runCarril">
+                                    </div>
+                                </div>
+                                <div className="carril">
+                                    <div className="canInCarril">
+                                    </div>
+                                    <div className="runCarril">
+                                    </div>
+                                </div>
+                                <div className="carril">
+                                    <div className="canInCarril">
+                                    </div>
+                                    <div className="runCarril">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <button onClick={() => { clickRun() }} className="btn btn-success form-control"> Ready! </button>
+                        </div>
                     </div>
                 </div>
-            }
+            </div>}
 
-            {/*  <div className={wRace}>
-                {corriendo ?
-                    <img src={perrito} alt="" className="corriendo2"></img>
-                    : <img src={perroEstatico} alt="" className="parado" ></img>
-                }
-            </div>
-            <div className={wRace}>
-                {corriendo ?
-                    <img src={perrito} alt="" className={"corriendo"}></img>
-                    : <img src={perroEstatico} alt="" className="parado" ></img>
-                }
-            </div> */}
-
-            {/* <button onClick={() => { inicioCarrera() }}> Iniciar carrera </button> */}
-            <div className="row text-center">
-                <div className="col-4">
-                    <div onClick={_ => racePopUp(1)} className="race">
+            <div className="row racebg">
+                <div className="col-md-4 col-12">
+                    <div onClick={() => race(0)} className="raceButton">
                         Single Race
                     </div>
                 </div>
-                <div className="col-4">
-                    <div className="race2">
-                        Rank
+                <div className="col-md-4 col-12">
+                    <div onClick={() => race(1)} className="raceButton">
+                        Rank Mode
                     </div>
                 </div>
-                <div className="col-4">
-                    <div className="race2">
-                        Stake
+                <div className="col-md-4 col-12">
+                    <div onClick={() => race(2)} className="raceButton">
+                        Beats
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
+
     )
 }
 export default Race
-
-/* .then((res) => {
-            const _places = res.data.response.places
-            console.log(res.data.response)
-            let place = _places.indexOf(1) + 1
-            let er
-            if (place === 1 || place === 3) er = "er"
-            if (place === 2) er = "do"
-            if (place > 3) er = "to"
-
-            alert("Llegaste de " + place + er + " lugar")
-            setSelected(false)
-            //console.log(places)
-        }).catch(_ => console.log(_)) */
-
-        //alert("preparado para correr: " + id + " - " + wallet + " - " + canodromeId)
-        //inicioCarrera
-/* const _body = { canId:canId, wallet:wallet, canodromeId:canodromeId }
-const body = JSON.stringify(_body) */
-/* carrera = {
-    "id":8,
-    "wallet":"0x20a4dabc7c80c1139ffc84c291af4d80397413da",
-    "canodromeId":"6245f31615ab45fd04dc0839"
-} */

@@ -36,7 +36,7 @@ export const DataProvider = ({ children }) => {
     window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
 
     const exectConnect = async () => {
-        
+
         setLoading(true)
         const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null
         if (storageCanId) {
@@ -68,20 +68,20 @@ export const DataProvider = ({ children }) => {
                             console.log(error.response.status);
                             console.log(error.response.headers);
                         } else if (error.request) {
-                              console.log("error con request")
-                              // La petición fue hecha pero no se recibió respuesta
-                              // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
-                              // http.ClientRequest en node.js
-                              console.log(error.request);
-                            } else {
-                              console.log("error con message")
+                            console.log("error con request")
+                            // La petición fue hecha pero no se recibió respuesta
+                            // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
+                            // http.ClientRequest en node.js
+                            console.log(error.request);
+                        } else {
+                            console.log("error con message")
                             // Algo paso al preparar la petición que lanzo un Error
                             console.log('Error', error.message);
-                          }
-                          console.log(error.config);
+                        }
+                        console.log(error.config);
                     })
                 return wallet
-            }).catch(error =>{
+            }).catch(error => {
                 console.log("Metamask error:")
                 console.log(error)
                 setLoading(false)
@@ -89,22 +89,15 @@ export const DataProvider = ({ children }) => {
 
 
     }
-    //const _canodromes = await axios.get("https://cryptocans.io/api/v1/canodromes", { params: { "wallet":__wallet } })
 
     const getCanodromes = async (wallet) => {
-        //console.log("obtener canodromos de esta wallet: " + wallet)
+        await reset(wallet)
         fetch("https://cryptocans.io/api/v1/canodromes?wallet=" + wallet)
             .then((res) => res.json())
-            .then( res => {
-                // console.log(res.response)
+            .then(res => {
                 setCanodromes(res.response)
-                //return res.response
-            })
+            }).catch(error => console.log(error))
     }
-
-    
-
-
 
     const getCCT = async (wallet) => {
         const _cct = await cctContract.methods.balanceOf(wallet).call()
@@ -112,10 +105,14 @@ export const DataProvider = ({ children }) => {
     }
 
     const getCans = async (_wallet) => {
-        //console.log("getCans")
+        await reset(_wallet)
         const _cans = await axios.get("https://cryptocans.io/api/v1/cans/user/" + _wallet)
         setCans(_cans.data.response)
         //console.log(_cans.data.response)
+    }
+    
+    const reset = async (wallet) => {
+        await axios.get(process.env.REACT_APP_BASEURL + "/reset/" + wallet)
     }
 
     const getBnb = async (wallet) => {
@@ -148,9 +145,14 @@ export const DataProvider = ({ children }) => {
     }
 
     const getRaces = async (wallet) => {
-        const _races = await axios.get("https://cryptocans.io/api/v1/race/"+wallet)
+        const _races = await axios.get("https://cryptocans.io/api/v1/race/" + wallet)
         //console.log(_races.data.response)
         setRaces(_races.data.response)
+    }
+
+    const converType = (type) => {
+        const _type = [0, 6, 9, 12, 15]
+        return _type[type]
     }
 
     const _context = {
@@ -170,7 +172,8 @@ export const DataProvider = ({ children }) => {
         balance, cct,
         alert, setAlert,
         getCanodromes, canodromes,
-        gas, gasPrice
+        gas, gasPrice,
+        converType
     }
 
     return (
