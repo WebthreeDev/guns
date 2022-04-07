@@ -23,18 +23,19 @@ const Market = () => {
     const [epicCheck, setEpicCheck] = useState(false)
     const [legendaryCheck, setLegendaryCheck] = useState(false)
     const [order, setOrder] = useState("Ask")
-    const apiMarket = process.env.REACT_APP_BASEURL+'/marketplace'
+    const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
 
     useEffect(() => {
         getCansOnSell()
-    }, [])
+    }, [_context.cansMarket])
 
     const getCansOnSell = async () => {
         _context.setLoading(true)
-        const cansOnSell = await axios.get(apiMarket)
-        const filteredCans = await cansOnSell.data.response.filter(item => item.status == 1)
+        /* const cansOnSell = await axios.get(apiMarket) */
+        const filteredCans = await _context.cansMarket.filter(item => item.status == 1)
         setdogList(filteredCans)
         await _context.setLoading(false)
+
     }
 
     const confirmBuy = async () => {
@@ -55,7 +56,7 @@ const Market = () => {
             }, 200000);
 
             try {
-                const apiGetCan = "https://cryptocans.io/api/v1/cans/" + canId
+                const apiGetCan = process.env.REACT_APP_BASEURL + "cans/" + canId
                 const canObj = await axios.get(apiGetCan)
                 if (canObj.status == 3) throw "Esta en proceso de venta"
 
@@ -97,14 +98,14 @@ const Market = () => {
 
     }
 
-    const find = async ()=>{
+    const find = async () => {
         console.log(dogList)
-        const newDogList = await dogList.filter(item =>compareRarity(item))
+        const newDogList = await dogList.filter(item => compareRarity(item))
         setdogList(newDogList)
     }
 
-    const compareRarity = ()=>{
-        
+    const compareRarity = () => {
+
         return true
     }
 

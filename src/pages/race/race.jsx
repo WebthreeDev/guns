@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext,useEffect } from "react";
 import canodromeImg from '../../img/canodrome.png'
 import runDog from '../../img/rundog.gif'
 import { DataContext } from "../../context/DataContext";
@@ -13,6 +13,10 @@ const Race = () => {
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
 
+    useEffect(() => {
+        _context.getCanodromes(_context.wallet)
+    }, [_context.wallet, _context.canodromes])
+
     const clickRun = async () => {
         const canId = selectedCan.id
         const canodromeId = selectedCanodrome._id
@@ -24,7 +28,7 @@ const Race = () => {
             let place = _places.indexOf(1)
             let lugar = ["er", "do", "er", "to", "to", "to"]
             let er = lugar[place]
-            await _context.getCanodromes(_context.wallet)
+            await _context.exectConnect()
             alert("Llegaste de " + (place + 1) + er + " lugar")
             setModalRaceActive(false)
         } catch (error) { alert(error.response.data.error) }
@@ -56,7 +60,7 @@ const Race = () => {
                     <div className='tittle'> Single Race </div>
                     <button onClick={_ => setModalRace(false)}> X </button>
                 </div>
-                <div className="container py-4">
+                <div className="container py-4 overflow">
                     {_context.canodromes && _context.canodromes.map((canodrome, index) => {
                         return (
                             <div key={index} className="row raceCanodrome mb-2">

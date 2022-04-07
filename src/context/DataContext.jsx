@@ -7,6 +7,8 @@ import { cctContract } from '../tokens/cct/cct'
 import connect from './services/connectS'
 import axios from 'axios'
 import changeStateCanInMarket from './services/changeStateCanInMarket'
+import socket from '../socket';
+
 
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
@@ -25,27 +27,54 @@ export const DataProvider = ({ children }) => {
     const [cct, setCCT] = useState(false)
     const [canodromes, setCanodromes] = useState(false)
     const [claimPercent, setClaimPersent] = useState(false)
-
-    const getClaimPersent = async (wallet) => {
-        /* try {
-            const res = await axios.get(process.env.REACT_APP_BASEURL + "claim/" + wallet)
-            console.log(res.data.response)
-            setClaimPersent(res.data.response)
-        } catch (error) {
-            console.log(error.response)
-        } */
-    }
-
+    const [ cansMarket, setCansMarket ] = useState([]);
     const gas = web3.utils.toWei("0.0001", "gwei")
     const gasPrice = web3.utils.toWei("10", "gwei")
 
     useEffect(() => {
         exectConnect()
         getClaimPersent()
-    }, [])
+        verifyClaim()
+    }, [claimPercent])
+
+    useEffect(()=>{
+        //peticion para iniciar websocket
+        fetch(process.env.REACT_APP_BASEURL+'marketplace')
+    },[])
+
+    // from websocket
+    socket.on('data', async data => setCansMarket(data));
 
     window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
     window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
+
+    const getClaimPersent = async () => {
+        const account = await w3S.requestAccounts()
+        try {
+            const res = await axios.get(process.env.REACT_APP_BASEURL + "claim/" + account[0])
+            // console.log(res.data.response)
+            setClaimPersent(res.data.response.porcent)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const verifyClaim = async () => {
+        const account = await w3S.requestAccounts()
+        axios.post(process.env.REACT_APP_BASEURL + "claim/" + account[0])
+    }
+
+    /* const getUser = async () => {
+        const account = await w3S.requestAccounts()
+        try {
+            const user = await axios.post(process.env.REACT_APP_BASEURL + "login", { wallet: account[0] })
+            setBalance(user.data.response.balance)
+            console.log(user.data.response)
+            return user.data.response
+        } catch (error) {
+            console.log(error.response)
+        }
+    } */
 
     const exectConnect = async () => {
 
@@ -58,13 +87,14 @@ export const DataProvider = ({ children }) => {
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
                 const wallet = accounts[0]
-                console.log("antes de enviar")
-                axios.post("https://cryptocans.io/api/v1/login", { wallet })
+                // console.log("antes de enviar")
+                axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
                     .then(async (res) => {
-                        console.log("enviado desde el axios")
-                        setBalance(res.data.response.balance)
+                        const _data = res.data.response
+                        console.log(_data)
+                        setBalance(_data.getWallet.balance)
                         setWallet(wallet)
-                        await getCans(wallet)
+                        setCans(_data.cansUser)
                         await getCanodromes(wallet)
                         await getBnb(wallet)
                         await getCCT(wallet)
@@ -105,8 +135,10 @@ export const DataProvider = ({ children }) => {
     const getCanodromes = async (wallet) => {
         //await reset(wallet)
         let canes = await getCans(wallet)
+        /* let canes = cans */
+        console.log("obteniendo canes: "+canes)
         let newCanodromes = []
-        fetch("https://cryptocans.io/api/v1/canodromes?wallet=" + wallet)
+        fetch(process.env.REACT_APP_BASEURL + "canodromes?wallet=" + wallet)
             .then((res) => res.json())
             .then(res => {
                 res.response.map(canodrome => {
@@ -133,7 +165,7 @@ export const DataProvider = ({ children }) => {
 
     const getCans = async (_wallet) => {
         await reset(_wallet)
-        const _cans = await axios.get("https://cryptocans.io/api/v1/cans/user/" + _wallet)
+        const _cans = await axios.get(process.env.REACT_APP_BASEURL + "cans/user/" + _wallet)
         setCans(_cans.data.response)
         return (_cans.data.response)
     }
@@ -172,15 +204,18 @@ export const DataProvider = ({ children }) => {
     }
 
     const getRaces = async (wallet) => {
-        const _races = await axios.get("https://cryptocans.io/api/v1/race/" + wallet)
+        if (wallet) {
+            const _races = await axios.get(process.env.REACT_APP_BASEURL + "race/" + wallet)
+            setRaces(_races.data.response)
+        }
         //console.log(_races.data.response)
-        setRaces(_races.data.response)
     }
 
     const converType = (type) => {
         const _type = [0, 6, 9, 12, 15]
         return _type[type]
     }
+    const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
 
     const _context = {
         wallet, connect,
@@ -200,7 +235,8 @@ export const DataProvider = ({ children }) => {
         alert, setAlert,
         getCanodromes, canodromes,
         gas, gasPrice,
-        converType, claimPercent
+        converType, claimPercent, getBnb,
+        getCCT, ownerWallet,cansMarket
     }
 
     return (

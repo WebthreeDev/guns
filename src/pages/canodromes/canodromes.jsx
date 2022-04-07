@@ -16,6 +16,7 @@ const Canodromes = () => {
 
     useEffect(() => {
         getTakedCans()
+        _context.getCanodromes(_context.wallet)
     }, [_context.wallet, _context.canodromes])
 
     const addCan = async (canodromeId) => {
@@ -42,7 +43,7 @@ const Canodromes = () => {
         _context.setLoading(true)
         const body = { can }
         try {
-            await axios.patch("https://cryptocans.io/api/v1/canodromes/" + selectedCanodrome, body)
+            await axios.patch(process.env.REACT_APP_BASEURL+"canodromes/" + selectedCanodrome, body)
             //console.log(res.data.response)
         } catch (error) {
             console.log(error)

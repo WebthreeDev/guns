@@ -9,7 +9,7 @@ import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const { cctContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, exectConnect, wallet } = useContext(DataContext)
+    const { ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -25,18 +25,20 @@ const Dashboard = () => {
     const [approved, setApproved] = useState(false)
 
     useEffect(() => {
-        getRaces(wallet)
+        //getRaces(wallet)
         getApproved()
-    }, [])
+    }, [wallet])
 
     const getApproved = async () => {
         const sender = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
-        const recipient = "0x7daF5a75C7B3f6d8c5c2b53117850a5d09006168"
-        const x = await cctContract.methods.allowance(sender, recipient).call()
-        const _x = web3.utils.fromWei(x, "ether")
-        setApproved(_x)
+        if (wallet) {
+            const recipient = wallet
+            const approved = await cctContract.methods.allowance(sender, recipient).call()
+            const _approved = web3.utils.fromWei(approved, "ether")
+            setApproved(_approved)
+        }
     }
- 
+
     const setCan = (can) => {
         setSelectedCan(can)
         setId(can.id)
@@ -49,7 +51,7 @@ const Dashboard = () => {
         let body = { can: { onSale: { sale: true, price: price }, } }
         const value = web3.utils.toWei((price / 100).toString(), "ether")
         nftContract.methods.onSale().send({ from: wallet, value }).then(async (res) => {
-            await sendTransaction(_id, body)
+            await sendCanOnSellToDB(_id, body)
             setLoading(false)
         }).catch(error => {
             console.log(error)
@@ -61,18 +63,18 @@ const Dashboard = () => {
         setLoading(true)
         setRemove(false)
         let body = { can: { onSale: { sale: false, price: 0 }, } }
-        await sendTransaction(_id, body)
+        await sendCanOnSellToDB(_id, body)
         setLoading(false)
         setRenderModal(false)
     }
 
-    const sendTransaction = async (_id, body) => {
+    const sendCanOnSellToDB = async (_id, body) => {
         try {
-            await axios.patch("https://cryptocans.io/api/v1/cans/" + _id, body)
+            await axios.patch(process.env.REACT_APP_BASEURL + "cans/" + _id, body)
             setSelling(false)
             setRemove(false)
             setPrice(0)
-            exectConnect()
+            await getCans(wallet)
         } catch (error) {
             if (error.response) {
                 console.log(error.response)
@@ -96,18 +98,26 @@ const Dashboard = () => {
             "amount": ammountToClaim
         }
         try {
-            axios.patch(process.env.REACT_APP_BASEURL+"claim", body).then((res) => {
+            axios.patch(process.env.REACT_APP_BASEURL + "claim", body).then((res) => {
+                console.log("claime")
                 console.log(res.data.response)
                 setTimeout(() => {
-                    console.log(cctContract.methods)
-                    const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
+                    console.log("transfiriendo fondos")
+
                     const claiming = web3.utils.toWei(ammountToClaim, "ether")
-                    cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet })
-                        .then(res => {
+
+                    cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
+                        .then(async res => {
                             console.log(res)
-                            exectConnect()
+                            await getBnb(wallet)
+                            await getCCT(wallet)
+                            setLoading(false)
+                        }).catch(error => {
+                            console.log(error)
+                            setLoading(false)
                         })
-                }, 20000)
+                }, 25000)
+
             })
 
         } catch (error) {
@@ -115,6 +125,21 @@ const Dashboard = () => {
         }
     }
 
+    const claimExcect = async () => {
+        setLoading(true)
+        const claiming = web3.utils.toWei(approved, "ether")
+        cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
+            .then(async res => {
+                console.log(res)
+                await getBnb(wallet)
+                await getCCT(wallet)
+                getApproved()
+                setLoading(false)
+            }).catch(error => {
+                console.log(error)
+                setLoading(false)
+            })
+    }
     return (
         <div className="unikeRouter">
             <Alert text="Alert Text" />
@@ -139,14 +164,14 @@ const Dashboard = () => {
                                 {selectedCan.onSale.sale &&
                                     <div className='d-flex align-items-center justify-content-between'>
                                         <div className='text-warning'> Price: {selectedCan.onSale.price} BNB </div>
-                                        <button onClick={()=>_remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
+                                        <button onClick={() => _remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
                                     </div>
                                 }
                                 <div className='d-flex align-items-center justify-content-between'>
                                     <div>
                                         Selling canId: #{selectedCan && selectedCan.id}
                                     </div>
-                                    
+
                                 </div>
                                 name: {selectedCan && selectedCan.name} <hr />
                                 Rarity: {selectedCan && selectedCan.rarity} <hr />
@@ -187,9 +212,7 @@ const Dashboard = () => {
                                         <div>
                                             <h5>{cct ? cct : 0} CCT</h5>
                                         </div>
-                                        <div>
-                                            {approved && approved} approved
-                                        </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -208,8 +231,15 @@ const Dashboard = () => {
                             <div className="col-md-12 col-3 menuSectionDshboard separator">
                                 <div className="d-flex justify-content-center align-items-center  h-100">
                                     <div className="">
-                                        <h5>Current fee 75%</h5>
-                                        <button onClick={() => setClaiming(true)} className="form-control btn btn-primary"> Claim </button>
+                                        <div>
+                                            {approved && approved} approved
+                                        </div>
+                                        <h5>Current fee {claimPercent && claimPercent}%</h5>
+                                        {approved == 0 ? <>
+                                            <button onClick={() => setClaiming(true)} className="form-control btn btn-primary"> Approve </button>
+                                        </> : <>
+                                            <button onClick={() => claimExcect()} className="form-control btn btn-danger"> Claim </button>
+                                        </>}
                                     </div>
                                 </div>
                             </div>
