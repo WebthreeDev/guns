@@ -50,7 +50,7 @@ const Dashboard = () => {
         setRenderModal(false)
         let body = { can: { onSale: { sale: true, price: price }, } }
         const value = web3.utils.toWei((price / 100).toString(), "ether")
-        nftContract.methods.onSale().send({ from: wallet, value }).then(async (res) => {
+        nftContract.methods.onSale().send({ from: wallet, value,gas,gasPrice }).then(async (res) => {
             await sendCanOnSellToDB(_id, body)
             setLoading(false)
         }).catch(error => {

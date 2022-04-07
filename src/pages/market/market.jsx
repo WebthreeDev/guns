@@ -32,6 +32,7 @@ const Market = () => {
     const getCansOnSell = async () => {
         _context.setLoading(true)
         /* const cansOnSell = await axios.get(apiMarket) */
+        //console.log(_context.cansMarket)
         const filteredCans = await _context.cansMarket.filter(item => item.status == 1)
         setdogList(filteredCans)
         await _context.setLoading(false)
@@ -56,6 +57,8 @@ const Market = () => {
             }, 200000);
 
             try {
+
+                console.log("comprando bien aki")
                 const apiGetCan = process.env.REACT_APP_BASEURL + "cans/" + canId
                 const canObj = await axios.get(apiGetCan)
                 if (canObj.status == 3) throw "Esta en proceso de venta"
@@ -74,11 +77,16 @@ const Market = () => {
                     localStorage.removeItem('windowsData');
                     console.log(blockchainRes);
                     //envio el hash de la compra al back
-                    await axios.post(apiMarket, {
-                        canId: _can.id,
-                        walletBuyer: _context.wallet,
-                        hash: blockchainRes.transactionHash
-                    })
+                    try {
+                        await axios.post(apiMarket, {
+                            canId: _can.id,
+                            walletBuyer: _context.wallet,
+                            hash: blockchainRes.transactionHash
+                        })
+                    } catch (error) {
+                        console.log("error: "+error)
+                        console.log(error)
+                    }
                     await getCansOnSell()
                     await _context.getCans(_context.wallet)
                     //console.log(envio.data.response)

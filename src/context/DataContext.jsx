@@ -30,20 +30,16 @@ export const DataProvider = ({ children }) => {
     const [ cansMarket, setCansMarket ] = useState([]);
     const gas = web3.utils.toWei("0.0001", "gwei")
     const gasPrice = web3.utils.toWei("10", "gwei")
-
+    
     useEffect(() => {
+        fetch(process.env.REACT_APP_BASEURL+'marketplace')
         exectConnect()
         getClaimPersent()
         verifyClaim()
     }, [claimPercent])
 
-    useEffect(()=>{
-        //peticion para iniciar websocket
-        fetch(process.env.REACT_APP_BASEURL+'marketplace')
-    },[])
-
     // from websocket
-    socket.on('data', async data => setCansMarket(data));
+    socket.on('data', async data =>setCansMarket(data))
 
     window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
     window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
