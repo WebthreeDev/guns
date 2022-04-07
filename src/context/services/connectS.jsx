@@ -9,7 +9,7 @@ const connect = (wallet) => {/*
             if (chainId === bsc) {
                 // const account = await w3S.requestAccounts()
                 //console.log(account[0]) 
-                axios.post("https://cryptocans.io/api/v1/login", { wallet })
+                axios.post(process.env.REACT_APP_BASEURL+"login", { wallet })
                     .then((res) => {
                         //console.log(res.data)
                         resolve(res.data.response)

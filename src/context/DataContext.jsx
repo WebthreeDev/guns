@@ -7,6 +7,8 @@ import { cctContract } from '../tokens/cct/cct'
 import connect from './services/connectS'
 import axios from 'axios'
 import changeStateCanInMarket from './services/changeStateCanInMarket'
+import socket from '../socket';
+
 
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
@@ -24,19 +26,54 @@ export const DataProvider = ({ children }) => {
     const [balance, setBalance] = useState(false)
     const [cct, setCCT] = useState(false)
     const [canodromes, setCanodromes] = useState(false)
-
+    const [claimPercent, setClaimPersent] = useState(false)
+    const [ cansMarket, setCansMarket ] = useState([]);
     const gas = web3.utils.toWei("0.0001", "gwei")
     const gasPrice = web3.utils.toWei("10", "gwei")
-
+    
     useEffect(() => {
+        fetch(process.env.REACT_APP_BASEURL+'marketplace')
         exectConnect()
-    }, [])
+        getClaimPersent()
+        verifyClaim()
+    }, [claimPercent])
+
+    // from websocket
+    socket.on('data', async data =>setCansMarket(data))
 
     window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
     window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
 
+    const getClaimPersent = async () => {
+        const account = await w3S.requestAccounts()
+        try {
+            const res = await axios.get(process.env.REACT_APP_BASEURL + "claim/" + account[0])
+            // console.log(res.data.response)
+            setClaimPersent(res.data.response.porcent)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const verifyClaim = async () => {
+        const account = await w3S.requestAccounts()
+        axios.post(process.env.REACT_APP_BASEURL + "claim/" + account[0])
+    }
+
+    /* const getUser = async () => {
+        const account = await w3S.requestAccounts()
+        try {
+            const user = await axios.post(process.env.REACT_APP_BASEURL + "login", { wallet: account[0] })
+            setBalance(user.data.response.balance)
+            console.log(user.data.response)
+            return user.data.response
+        } catch (error) {
+            console.log(error.response)
+        }
+    } */
+
     const exectConnect = async () => {
-        
+
         setLoading(true)
         const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null
         if (storageCanId) {
@@ -46,16 +83,17 @@ export const DataProvider = ({ children }) => {
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
                 const wallet = accounts[0]
-                console.log("antes de enviar")
-                axios.post("https://cryptocans.io/api/v1/login", { wallet })
+                // console.log("antes de enviar")
+                axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
                     .then(async (res) => {
-                        console.log("enviado desde el axios")
-                        setBalance(res.data.response.balance)
+                        const _data = res.data.response
+                        console.log(_data)
+                        setBalance(_data.getWallet.balance)
                         setWallet(wallet)
+                        setCans(_data.cansUser)
                         await getCanodromes(wallet)
                         await getBnb(wallet)
                         await getCCT(wallet)
-                        await getCans(wallet)
                         setLoading(false)
                         return res.data.response
                     }).catch(error => {
@@ -68,20 +106,20 @@ export const DataProvider = ({ children }) => {
                             console.log(error.response.status);
                             console.log(error.response.headers);
                         } else if (error.request) {
-                              console.log("error con request")
-                              // La petición fue hecha pero no se recibió respuesta
-                              // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
-                              // http.ClientRequest en node.js
-                              console.log(error.request);
-                            } else {
-                              console.log("error con message")
+                            console.log("error con request")
+                            // La petición fue hecha pero no se recibió respuesta
+                            // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
+                            // http.ClientRequest en node.js
+                            console.log(error.request);
+                        } else {
+                            console.log("error con message")
                             // Algo paso al preparar la petición que lanzo un Error
                             console.log('Error', error.message);
-                          }
-                          console.log(error.config);
+                        }
+                        console.log(error.config);
                     })
                 return wallet
-            }).catch(error =>{
+            }).catch(error => {
                 console.log("Metamask error:")
                 console.log(error)
                 setLoading(false)
@@ -89,22 +127,32 @@ export const DataProvider = ({ children }) => {
 
 
     }
-    //const _canodromes = await axios.get("https://cryptocans.io/api/v1/canodromes", { params: { "wallet":__wallet } })
 
     const getCanodromes = async (wallet) => {
-        //console.log("obtener canodromos de esta wallet: " + wallet)
-        fetch("https://cryptocans.io/api/v1/canodromes?wallet=" + wallet)
+        //await reset(wallet)
+        let canes = await getCans(wallet)
+        /* let canes = cans */
+        console.log("obteniendo canes: "+canes)
+        let newCanodromes = []
+        fetch(process.env.REACT_APP_BASEURL + "canodromes?wallet=" + wallet)
             .then((res) => res.json())
-            .then( res => {
-                // console.log(res.response)
-                setCanodromes(res.response)
-                //return res.response
-            })
+            .then(res => {
+                res.response.map(canodrome => {
+                    let aux = canodrome
+                    let newCansList = []
+                    canodrome.cans.map((can, index) => {
+                        canes.map(allCans => {
+                            if (can.can.id == allCans.id) {
+                                newCansList.push(allCans)
+                            }
+                        })
+                        aux.cans[index].can = newCansList[index]
+                    })
+                    newCanodromes.push(aux)
+                })
+                setCanodromes(newCanodromes)
+            }).catch(error => console.log(error))
     }
-
-    
-
-
 
     const getCCT = async (wallet) => {
         const _cct = await cctContract.methods.balanceOf(wallet).call()
@@ -112,10 +160,14 @@ export const DataProvider = ({ children }) => {
     }
 
     const getCans = async (_wallet) => {
-        //console.log("getCans")
-        const _cans = await axios.get("https://cryptocans.io/api/v1/cans/user/" + _wallet)
+        await reset(_wallet)
+        const _cans = await axios.get(process.env.REACT_APP_BASEURL + "cans/user/" + _wallet)
         setCans(_cans.data.response)
-        //console.log(_cans.data.response)
+        return (_cans.data.response)
+    }
+
+    const reset = async (_wallet) => {
+        if (_wallet) await axios.get(process.env.REACT_APP_BASEURL + "reset/" + _wallet)
     }
 
     const getBnb = async (wallet) => {
@@ -148,10 +200,18 @@ export const DataProvider = ({ children }) => {
     }
 
     const getRaces = async (wallet) => {
-        const _races = await axios.get("https://cryptocans.io/api/v1/race/"+wallet)
+        if (wallet) {
+            const _races = await axios.get(process.env.REACT_APP_BASEURL + "race/" + wallet)
+            setRaces(_races.data.response)
+        }
         //console.log(_races.data.response)
-        setRaces(_races.data.response)
     }
+
+    const converType = (type) => {
+        const _type = [0, 6, 9, 12, 15]
+        return _type[type]
+    }
+    const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
 
     const _context = {
         wallet, connect,
@@ -170,7 +230,9 @@ export const DataProvider = ({ children }) => {
         balance, cct,
         alert, setAlert,
         getCanodromes, canodromes,
-        gas, gasPrice
+        gas, gasPrice,
+        converType, claimPercent, getBnb,
+        getCCT, ownerWallet,cansMarket
     }
 
     return (

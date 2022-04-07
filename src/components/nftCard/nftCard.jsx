@@ -5,17 +5,20 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
     const _context = useContext(DataContext)
     return (
         <div onClick={_ => { setCan(item); setRenderModal(true); setModalText("Confirm!") }} className="nftCard">
-            {item.onSale.sale && 
+            {item.onSale.sale &&
                 <div className='onSale'>
                     On sale
                 </div>
             }
-            <div className="d-flex justify-content-between">
+            <div className="d-flex justify-content-between h40">
                 {btnPrice != 0 && (
                     <div className='button-market px-1'>
                         <img src="" alt="" /> {item.onSale.price} BNB
                     </div>
+<<<<<<< HEAD
 
+=======
+>>>>>>> cc33113837511a14168a96683deddbd545bcf1d8
                 )}
                 <div className="px-2 lb-color item-id"> #{item.id} </div>
             </div>
@@ -25,12 +28,23 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
             <div className="text-center">
                 <img height="100px" src={perro} alt="" />
             </div>
-            <div className="mt-2">
+            <div className="">
                 <div className="p-2 ">
                     <div className="">
                         <div className="lb-color nft-name"> {item.name} </div>
                     </div>
                     <div>
+                        <div className='d-flex justify-content-between  align-items-center'>
+                            <div className='lb-color'>
+                                <div>
+                                    Energy
+                                </div>
+                                <div>
+                                    <progress className='' min={"0"} value={item.energy} max={"2"} name="" id="" />
+                                </div>
+                            </div>
+                            <div className='totalStats lb-color'> {item.energy}/2 </div>
+                        </div>
                         <div className='d-flex justify-content-between  align-items-center'>
                             <div className='lb-color'>
                                 <div>
