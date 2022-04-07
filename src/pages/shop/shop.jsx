@@ -30,7 +30,7 @@ const Shop = () => {
             const contractResponse = await nftContract.methods.mint(packageId).send({ from: wallet, value, gas, gasPrice })
             const canId = await contractResponse.events.Transfer.returnValues.tokenId
             const body = { wallet, packageId, canId }
-            const mintedCan = await axios.post("https://cryptocans.io/api/v1/cans/", body)
+            const mintedCan = await axios.post(process.env.REACT_APP_BASEURL+"cans/", body)
             console.log(mintedCan.data.response)
             setCanMinted(mintedCan.data.response)
             setMinted(true)

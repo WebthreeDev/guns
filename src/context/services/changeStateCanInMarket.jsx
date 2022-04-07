@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl = "https://cryptocans.io/api/v1/"
+const baseUrl = process.env.REACT_APP_BASEURL+""
 const changeStateCanInMarket = async (canId)=>{
     console.log(canId)
     const body = {
