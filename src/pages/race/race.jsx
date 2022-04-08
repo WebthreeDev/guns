@@ -14,8 +14,8 @@ const Race = () => {
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
 
     useEffect(() => {
-        _context.getCanodromes(_context.wallet)
-    }, [_context.wallet, _context.canodromes])
+        /* _context.getCanodromes(_context.wallet) */
+    }, [])
 
     const clickRun = async () => {
         const canId = selectedCan.id

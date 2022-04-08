@@ -8,30 +8,21 @@ import Loader from '../../components/loader/loader'
 import perro from '../../img/perro.png'
 
 const Canodromes = () => {
+    const baseUrl = process.env.REACT_APP_BASEURL
     const _context = useContext(DataContext)
     const [selectCans, setSelectCans] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
     const [takedCans, setTakedCans] = useState(false)
     const [filteredCans, setFilteredCans] = useState(false)
 
-    useEffect(() => {
-        getTakedCans()
-        _context.getCanodromes(_context.wallet)
-    }, [_context.wallet, _context.canodromes])
-
     const addCan = async (canodromeId) => {
         let _filteredCans = []
-
+        const taked = await getTakedCans()
         _context.cans.map(item => {
             let suma = 0
-            takedCans.map(_item => {
-                if (item.id == _item.can.id) {
-                    suma++
-                }
-            })
-            if (suma == 0) {
-                _filteredCans.push(item)
-            }
+            console.log(takedCans)
+            taked.map(_item => { if (item.id == _item.can.id) suma++ })
+            if (suma == 0) _filteredCans.push(item)
         })
 
         setFilteredCans(_filteredCans)
@@ -39,39 +30,44 @@ const Canodromes = () => {
         setSelectCans(true)
         _context.setLoading(false)
     }
+    
     const setCan = async (can) => {
         _context.setLoading(true)
         const body = { can }
         try {
-            await axios.patch(process.env.REACT_APP_BASEURL+"canodromes/" + selectedCanodrome, body)
-            //console.log(res.data.response)
+            console.log("poner un can en el canodrompo")
+            const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/" + selectedCanodrome, body)
+            console.log(res.data.response)
+            await _context.getCanodromes(_context.wallet)
+            setSelectCans(false)
+            getTakedCans()
+            _context.setLoading(false)
         } catch (error) {
             console.log(error)
         }
-        setSelectCans(false)
-        await _context.getCanodromes(_context.wallet)
-        getTakedCans()
-        _context.setLoading(false)
     }
+
     const getTakedCans = async _ => {
-        if (_context.wallet) {
-            if (_context.canodromes) {
-                let _takedCans = []
-                _context.canodromes.map((canodrome) => {
-                    _takedCans = [...canodrome.cans]
-                })
-                setTakedCans(_takedCans)
-            }
+        let _takedCans = []
+        if (_context.wallet != false && _context.canodromes != false) {
+            console.log("obteniendo taked Cans:")
+            console.log(_context.wallet)
+            console.log(_context.canodromes)
+            _context.canodromes.map((canodrome) => {
+                _takedCans = [...canodrome.cans]
+            })
+            setTakedCans(_takedCans)
         }
+        return _takedCans
     }
+
 
     const setRenderModal = _ => { }
     const setModalText = _ => { }
 
     const deleteCan = async (canodromeId, canId) => {
         _context.setLoading(true)
-        const baseUrl = process.env.REACT_APP_BASEURL
-        await axios.delete(baseUrl + "canodromes/" + canodromeId + "/" + canId)
+        await axios.delete(baseUrl + "canodrome/" + canodromeId + "/" + canId)
         await _context.getCanodromes(_context.wallet)
         getTakedCans()
         _context.setLoading(false)
