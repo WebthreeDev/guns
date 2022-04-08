@@ -27,33 +27,33 @@ export const DataProvider = ({ children }) => {
     const [cct, setCCT] = useState(false)
     const [canodromes, setCanodromes] = useState(false)
     const [claimPercent, setClaimPersent] = useState(false)
-    const [ cansMarket, setCansMarket ] = useState([]);
+    const [cansMarket, setCansMarket] = useState([]);
     const gas = web3.utils.toWei("0.0001", "gwei")
     const gasPrice = web3.utils.toWei("10", "gwei")
-    
+    const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
+
     useEffect(() => {
-        fetch(process.env.REACT_APP_BASEURL+'marketplace')
+        fetch(process.env.REACT_APP_BASEURL + 'marketplace')
         exectConnect()
-        getClaimPersent()
         verifyClaim()
     }, [claimPercent])
 
     // from websocket
-    socket.on('data', async data =>setCansMarket(data))
+    socket.on('data', async data => setCansMarket(data))
 
     window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
     window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
 
-    const getClaimPersent = async () => {
-        const account = await w3S.requestAccounts()
-        try {
-            const res = await axios.get(process.env.REACT_APP_BASEURL + "claim/" + account[0])
-            // console.log(res.data.response)
-            setClaimPersent(res.data.response.porcent)
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    /*  const getClaimPersent = async () => {
+         const account = await w3S.requestAccounts()
+         try {
+             const res = await axios.get(process.env.REACT_APP_BASEURL + "claim/" + account[0])
+             // console.log(res.data.response)
+             setClaimPersent(res.data.response.porcent)
+         } catch (error) {
+             console.log(error)
+         }
+     } */
 
     const verifyClaim = async () => {
         const account = await w3S.requestAccounts()
@@ -89,31 +89,28 @@ export const DataProvider = ({ children }) => {
                         const _data = res.data.response
                         console.log(_data)
                         setBalance(_data.getWallet.balance)
+                        setClaimPersent(_data.claim.porcent)
                         setWallet(wallet)
                         setCans(_data.cansUser)
-                        await getCanodromes(wallet)
+                        setCanodromes(_data.canodromes)
+
                         await getBnb(wallet)
                         await getCCT(wallet)
+                        await getCanodromes(wallet, _data.canodromes)
                         setLoading(false)
                         return res.data.response
                     }).catch(error => {
                         setLoading(false)
                         if (error.response) {
-                            // La respuesta fue hecha y el servidor respondió con un código de estado
-                            // que esta fuera del rango de 2xx
                             console.log("error con response")
                             console.log(error.response.data);
                             console.log(error.response.status);
                             console.log(error.response.headers);
                         } else if (error.request) {
                             console.log("error con request")
-                            // La petición fue hecha pero no se recibió respuesta
-                            // `error.request` es una instancia de XMLHttpRequest en el navegador y una instancia de
-                            // http.ClientRequest en node.js
                             console.log(error.request);
                         } else {
                             console.log("error con message")
-                            // Algo paso al preparar la petición que lanzo un Error
                             console.log('Error', error.message);
                         }
                         console.log(error.config);
@@ -128,30 +125,39 @@ export const DataProvider = ({ children }) => {
 
     }
 
+    const getCanodromeState = async () => {
+        const accounts = await w3S.requestAccounts()
+        const wallet = accounts[0]
+        try {
+            const query = await fetch(process.env.REACT_APP_BASEURL + "canodrome?wallet=" + wallet)
+            const _canodromos = await query.json()
+            setCanodromes(_canodromos.response)
+            return _canodromos.response
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const getCanodromes = async (wallet) => {
         //await reset(wallet)
-        let canes = await getCans(wallet)
-        /* let canes = cans */
-        console.log("obteniendo canes: "+canes)
+        const canes = await getCans(wallet)
+        const _canodromes = await getCanodromeState(wallet)
+        console.log(_canodromes)
         let newCanodromes = []
-        fetch(process.env.REACT_APP_BASEURL + "canodromes?wallet=" + wallet)
-            .then((res) => res.json())
-            .then(res => {
-                res.response.map(canodrome => {
-                    let aux = canodrome
-                    let newCansList = []
-                    canodrome.cans.map((can, index) => {
-                        canes.map(allCans => {
-                            if (can.can.id == allCans.id) {
-                                newCansList.push(allCans)
-                            }
-                        })
-                        aux.cans[index].can = newCansList[index]
-                    })
-                    newCanodromes.push(aux)
+        _canodromes.map(canodrome => {
+            let aux = canodrome
+            let newCansList = []
+            canodrome.cans.map((can, index) => {
+                canes.map(allCans => {
+                    if (can.can.id == allCans.id) {
+                        newCansList.push(allCans)
+                    }
                 })
-                setCanodromes(newCanodromes)
-            }).catch(error => console.log(error))
+                aux.cans[index].can = newCansList[index]
+            })
+            newCanodromes.push(aux)
+        })
+        setCanodromes(newCanodromes)
     }
 
     const getCCT = async (wallet) => {
@@ -160,7 +166,6 @@ export const DataProvider = ({ children }) => {
     }
 
     const getCans = async (_wallet) => {
-        await reset(_wallet)
         const _cans = await axios.get(process.env.REACT_APP_BASEURL + "cans/user/" + _wallet)
         setCans(_cans.data.response)
         return (_cans.data.response)
@@ -211,7 +216,6 @@ export const DataProvider = ({ children }) => {
         const _type = [0, 6, 9, 12, 15]
         return _type[type]
     }
-    const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
 
     const _context = {
         wallet, connect,
@@ -232,7 +236,8 @@ export const DataProvider = ({ children }) => {
         getCanodromes, canodromes,
         gas, gasPrice,
         converType, claimPercent, getBnb,
-        getCCT, ownerWallet,cansMarket
+        getCCT, ownerWallet, cansMarket,
+        getCanodromeState
     }
 
     return (
