@@ -5,6 +5,7 @@ import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios";
 import NftCard from "../../components/nftCard/nftCard";
+
 const Race = () => {
     const _context = useContext(DataContext)
 
@@ -159,17 +160,17 @@ const Race = () => {
             <div className="row racebg">
                 <div className="col-md-4 col-12">
                     <div onClick={() => race(0)} className="raceButton">
-                        Single Race
+                        SINGLE RACE
                     </div>
                 </div>
                 <div className="col-md-4 col-12">
                     <div onClick={() => race(1)} className="raceButton">
-                        Rank Mode
+                        RANK MODE
                     </div>
                 </div>
                 <div className="col-md-4 col-12">
                     <div onClick={() => race(2)} className="raceButton">
-                        Beats
+                        RACE BEATS
                     </div>
                 </div>
             </div>
