@@ -260,11 +260,14 @@ progress{
     padding: 10px;
     border-radius: 15px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 40px;
+    justify-content:end;
+    align-items: end;
+    font-size: 35px;
+    font-weight: 700;
     box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
-    background-color: $gradient1;
+    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/single.jpg);
+    background-position: center;
+    background-size: cover;
     transition: 0.5s;
     &:hover{
         box-shadow: inset -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
