@@ -37,8 +37,8 @@ const Shop = () => {
             await setLoading(false)
             getCans(wallet)
         } catch (error) {
-            console.log(error)
             setLoading(false)
+            console.log(error)
         }
     }
 
