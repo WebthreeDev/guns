@@ -9,8 +9,8 @@ import changeStateCanInMarket from "../../context/services/changeStateCanInMarke
 
 const Market = () => {
     const _context = useContext(DataContext)
-    const [rango, setRango] = useState(200)
-    const [rango2, setRango2] = useState(360)
+    const [rangoMin, setRangoMin] = useState(200)
+    const [rangoMax, setRangoMax] = useState(360)
     const [dogList, setdogList] = useState(false)
 
     const [renderModal, setRenderModal] = useState(false)
@@ -22,7 +22,7 @@ const Market = () => {
     const [rareCheck, setRareCheck] = useState(false)
     const [epicCheck, setEpicCheck] = useState(false)
     const [legendaryCheck, setLegendaryCheck] = useState(false)
-    const [order, setOrder] = useState("Ask")
+    const [order, setOrder] = useState(1)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
 
     useEffect(() => {
@@ -31,9 +31,10 @@ const Market = () => {
 
     const getCansOnSell = async () => {
         _context.setLoading(true)
-        /* const cansOnSell = await axios.get(apiMarket) */
-        //console.log(_context.cansMarket)
         const filteredCans = await _context.cansMarket.filter(item => item.status == 1)
+                                           .sort((price1, price2) => orderFunction(price1, price2))
+                                           .filter(dog => filterCheckbox(dog))
+                                           .filter(dog => filterRank(dog));
         setdogList(filteredCans)
         await _context.setLoading(false)
 
@@ -106,15 +107,35 @@ const Market = () => {
 
     }
 
-    const find = async () => {
-        console.log(dogList)
-        const newDogList = await dogList.filter(item => compareRarity(item))
-        setdogList(newDogList)
+    //order form filter
+    const orderFunction = (price1, price2, orderAux) => {
+        (order == 1) ? orderAux = -1 : orderAux = 1;
+        if(price1.onSale.price > price2.onSale.price) return order;
+        if(price1.onSale.price < price2.onSale.price) return orderAux;
+        return 0;
     }
 
-    const compareRarity = () => {
+    //filter checkbox
+    const filterCheckbox = (dog) => {
+        if(commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
+        if(commonCheck == true && dog.rarity == 1) return dog;
+        if(rareCheck == true && dog.rarity == 2) return dog;
+        if(epicCheck == true && dog.rarity == 3) return dog;
+        if(legendaryCheck == true && dog.rarity == 4) return dog;
+    }
 
-        return true
+    //filter range
+    const filterRank = (dog) => {
+        let totalStats = dog.aerodinamica + dog.aceleracion + dog.resistencia;
+        if(totalStats >= rangoMin && totalStats <= rangoMax) return dog;
+    }
+
+    const find = async () => {
+        const newList = dogList.sort((price1, price2) => orderFunction(price1, price2))
+                                .filter(dog => filterCheckbox(dog))
+                                .filter(dog => filterRank(dog));
+        setdogList(newList);
+        getCansOnSell();
     }
 
     return (
@@ -153,11 +174,11 @@ const Market = () => {
                             </div>
                             <div className="mt-3">
                                 <div className="sidebarText mb-1">
-                                    Order by price: {order}
+                                    Order by price: {order == 1 ? "Ask" : "Desc"}
                                 </div>
                                 <select onChange={e => setOrder(e.target.value)} className="select" name="" id="">
-                                    <option className="optionFilter" value="Asc">Price Ask</option>
-                                    <option className="optionFilter" value="Desc">Price Desk</option>
+                                    <option className="optionFilter" value={1}>Price Ask</option>
+                                    <option className="optionFilter" value={-1}>Price Desk</option>
                                 </select>
                             </div>
                             <div className="mt-3">
@@ -191,14 +212,14 @@ const Market = () => {
                                         Stats
                                     </div>
                                     <div>
-                                        <h3 className="breedCount"> min {rango} max {rango2}</h3>
+                                        <h3 className="breedCount"> min {rangoMin} max {rangoMax}</h3>
                                     </div>
                                 </div>
                                 <div>
-                                    <input onChange={e => setRango(e.target.value)} min="200" max={rango2} className="w-100" type="range" value={rango} name="" id="" />
+                                    <input onChange={e => setRangoMin(e.target.value)} min="200" max={rangoMax} className="w-100" type="range" value={rangoMin} name="" id="" />
                                 </div>
                                 <div>
-                                    <input onChange={e => setRango2(e.target.value)} min={rango} max="360" className="w-100" type="range" value={rango2} name="" id="" />
+                                    <input onChange={e => setRangoMax(e.target.value)} min={rangoMin} max="360" className="w-100" type="range" value={rangoMax} name="" id="" />
                                 </div>
                             </div>
                             <div className="mt-3">

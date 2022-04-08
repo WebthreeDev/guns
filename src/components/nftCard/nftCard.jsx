@@ -15,10 +15,6 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                     <div className='button-market px-1'>
                         <img src="" alt="" /> {item.onSale.price} BNB
                     </div>
-<<<<<<< HEAD
-
-=======
->>>>>>> cc33113837511a14168a96683deddbd545bcf1d8
                 )}
                 <div className="px-2 lb-color item-id"> #{item.id} </div>
             </div>
