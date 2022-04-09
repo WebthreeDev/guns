@@ -9,7 +9,7 @@ import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const { ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const { ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract,poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -30,10 +30,9 @@ const Dashboard = () => {
     }, [wallet])
 
     const getApproved = async () => {
-        const sender = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
         if (wallet) {
             const recipient = wallet
-            const approved = await cctContract.methods.allowance(sender, recipient).call()
+            const approved = await cctContract.methods.allowance(ownerWallet, recipient).call()
             const _approved = web3.utils.fromWei(approved, "ether")
             setApproved(_approved)
         }
@@ -116,7 +115,7 @@ const Dashboard = () => {
                             console.log(error)
                             setLoading(false)
                         })
-                }, 25000)
+                }, 20000)
 
             })
 

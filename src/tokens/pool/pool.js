@@ -1,8 +1,37 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
-const _cctContract = {
-    address:"0xB78d281f72C6F0D51FCde89f3736Dc1293093146",
+const _poolContract = {
+    address:"0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397",
     abi:[
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "owner",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "spender",
+                    "type": "address"
+                }
+            ],
+            "name": "allowanceCaller",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
         {
             "inputs": [
                 {
@@ -92,14 +121,9 @@ const _cctContract = {
             ],
             "stateMutability": "nonpayable",
             "type": "function"
-        },
-        {
-            "inputs": [],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
         }
     ]
 }
 
-export const cctContract = new web3.eth.Contract(_cctContract.abi, _cctContract.address)
+export const poolContract = new web3.eth.Contract(_poolContract.abi, _poolContract.address)
 export default web3

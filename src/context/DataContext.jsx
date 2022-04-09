@@ -4,6 +4,7 @@ import lastForWallet from './services/lastForWallet'
 import w3S, { web3 } from '../services/w3S'
 import { nftContract } from '../tokens/canes/canes'
 import { cctContract } from '../tokens/cct/cct'
+import { poolContract } from '../tokens/pool/pool'
 import connect from './services/connectS'
 import axios from 'axios'
 import changeStateCanInMarket from './services/changeStateCanInMarket'
@@ -28,15 +29,15 @@ export const DataProvider = ({ children }) => {
     const [canodromes, setCanodromes] = useState(false)
     const [claimPercent, setClaimPersent] = useState(false)
     const [cansMarket, setCansMarket] = useState([]);
-    const gas = web3.utils.toWei("0.0001", "gwei")
-    const gasPrice = web3.utils.toWei("10", "gwei")
-    const ownerWallet = "0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da"
+    const gas = web3.utils.toWei("0.00015", "gwei")
+    const gasPrice = web3.utils.toWei("15", "gwei")
+    const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
 
     useEffect(() => {
         fetch(process.env.REACT_APP_BASEURL + 'marketplace')
         exectConnect()
-        verifyClaim()
-    }, [claimPercent])
+        //verifyClaim()
+    }, [])
 
     // from websocket
     socket.on('data', async data => setCansMarket(data))
@@ -55,10 +56,10 @@ export const DataProvider = ({ children }) => {
          }
      } */
 
-    const verifyClaim = async () => {
-        const account = await w3S.requestAccounts()
-        axios.post(process.env.REACT_APP_BASEURL + "claim/" + account[0])
-    }
+    /*  const verifyClaim = async () => {
+         const account = await w3S.requestAccounts()
+         axios.post(process.env.REACT_APP_BASEURL + "claim/" + account[0])
+     } */
 
     /* const getUser = async () => {
         const account = await w3S.requestAccounts()
@@ -83,11 +84,11 @@ export const DataProvider = ({ children }) => {
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
                 const wallet = accounts[0]
-                // console.log("antes de enviar")
+                 //console.log("antes de enviar")
                 axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
                     .then(async (res) => {
                         const _data = res.data.response
-                        console.log(_data)
+                        //console.log("_data")
                         setBalance(_data.getWallet.balance)
                         setClaimPersent(_data.claim.porcent)
                         setWallet(wallet)
@@ -137,10 +138,11 @@ export const DataProvider = ({ children }) => {
             console.log(error)
         }
     }
-
+    
     const getCanodromes = async (wallet) => {
         //await reset(wallet)
         const canes = await getCans(wallet)
+        console.log(canes)
         const _canodromes = await getCanodromeState(wallet)
         console.log(_canodromes)
         let newCanodromes = []
@@ -158,6 +160,7 @@ export const DataProvider = ({ children }) => {
             newCanodromes.push(aux)
         })
         setCanodromes(newCanodromes)
+
     }
 
     const getCCT = async (wallet) => {
@@ -237,7 +240,7 @@ export const DataProvider = ({ children }) => {
         gas, gasPrice,
         converType, claimPercent, getBnb,
         getCCT, ownerWallet, cansMarket,
-        getCanodromeState
+        getCanodromeState, poolContract
     }
 
     return (

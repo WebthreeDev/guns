@@ -1,7 +1,7 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
 const _cctContract = {
-    address:"0x6B396D7841426EDd2a1aD72d60E94C6F7beA573d",
+    address:"0xDC2721071a636bE7fAC3790971AeD5739B737AEb",
     abi:[
         {
             "inputs": [],
@@ -34,67 +34,6 @@ const _cctContract = {
             "type": "event"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "spender",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "approve",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "burn",
-            "outputs": [],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "recipient",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "transfer",
-            "outputs": [
-                {
-                    "internalType": "bool",
-                    "name": "",
-                    "type": "bool"
-                }
-            ],
-            "stateMutability": "nonpayable",
-            "type": "function"
-        },
-        {
             "anonymous": false,
             "inputs": [
                 {
@@ -120,32 +59,16 @@ const _cctContract = {
             "type": "event"
         },
         {
-            "inputs": [
-                {
-                    "internalType": "address",
-                    "name": "sender",
-                    "type": "address"
-                },
-                {
-                    "internalType": "address",
-                    "name": "recipient",
-                    "type": "address"
-                },
-                {
-                    "internalType": "uint256",
-                    "name": "amount",
-                    "type": "uint256"
-                }
-            ],
-            "name": "transferFrom",
+            "inputs": [],
+            "name": "Owner",
             "outputs": [
                 {
-                    "internalType": "bool",
+                    "internalType": "address",
                     "name": "",
-                    "type": "bool"
+                    "type": "address"
                 }
             ],
-            "stateMutability": "nonpayable",
+            "stateMutability": "view",
             "type": "function"
         },
         {
@@ -176,6 +99,30 @@ const _cctContract = {
             "inputs": [
                 {
                     "internalType": "address",
+                    "name": "spender",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                }
+            ],
+            "name": "approve",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
                     "name": "",
                     "type": "address"
                 }
@@ -189,6 +136,19 @@ const _cctContract = {
                 }
             ],
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                }
+            ],
+            "name": "burn",
+            "outputs": [],
+            "stateMutability": "nonpayable",
             "type": "function"
         },
         {
@@ -206,12 +166,12 @@ const _cctContract = {
         },
         {
             "inputs": [],
-            "name": "name",
+            "name": "getOwner",
             "outputs": [
                 {
-                    "internalType": "string",
+                    "internalType": "address",
                     "name": "",
-                    "type": "string"
+                    "type": "address"
                 }
             ],
             "stateMutability": "view",
@@ -219,12 +179,12 @@ const _cctContract = {
         },
         {
             "inputs": [],
-            "name": "Owner",
+            "name": "name",
             "outputs": [
                 {
-                    "internalType": "address",
+                    "internalType": "string",
                     "name": "",
-                    "type": "address"
+                    "type": "string"
                 }
             ],
             "stateMutability": "view",
@@ -254,6 +214,59 @@ const _cctContract = {
                 }
             ],
             "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "recipient",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transfer",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "sender",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "recipient",
+                    "type": "address"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "amount",
+                    "type": "uint256"
+                }
+            ],
+            "name": "transferFrom",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
+                }
+            ],
+            "stateMutability": "nonpayable",
             "type": "function"
         }
     ]
