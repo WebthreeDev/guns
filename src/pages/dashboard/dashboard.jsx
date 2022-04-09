@@ -9,7 +9,7 @@ import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const { ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract,poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const { exectConnect,ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract,poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -92,10 +92,7 @@ const Dashboard = () => {
     const claim = async () => {
         setLoading(true)
         setClaiming(false)
-        const body = {
-            "wallet": wallet,
-            "amount": ammountToClaim
-        }
+        const body = {wallet,amount: ammountToClaim}
         try {
             axios.patch(process.env.REACT_APP_BASEURL + "claim", body).then((res) => {
                 console.log("claime")
@@ -108,11 +105,13 @@ const Dashboard = () => {
                     cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
                         .then(async res => {
                             console.log(res)
-                            await getBnb(wallet)
-                            await getCCT(wallet)
+                            await getApproved()
+                            await exectConnect()
                             setLoading(false)
-                        }).catch(error => {
+                        }).catch(async error => {
                             console.log(error)
+                            await getApproved()
+                            await exectConnect()
                             setLoading(false)
                         })
                 }, 20000)
