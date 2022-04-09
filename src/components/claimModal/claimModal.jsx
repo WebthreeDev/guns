@@ -3,14 +3,6 @@ const ClaimModal = ({ claim, ammountToClaim, setAmmountToClaim,setClaiming }) =>
     return (
         <div className="modalX">
             <div className="modalIn">
-                <div>
-                    <div>
-                        lorem
-                    </div>
-                    <div >
-                        <button onClick={()=>{setClaiming(false)}}> X </button>
-                    </div>
-                </div>
                 <div className="loaderWrap">
                     <h1> Claim </h1>
                     <h4> {change} Credits = 1 CCT </h4>
@@ -22,6 +14,7 @@ const ClaimModal = ({ claim, ammountToClaim, setAmmountToClaim,setClaiming }) =>
                     }
 
                     <input onChange={(e) => setAmmountToClaim(e.target.value)} className="form-control mt-2" type="number" />
+                    <button className="btn btn-danger" onClick={()=>{setClaiming(false)}}> X </button>
                     <button onClick={claim} className="btn btn-primary w-100 mt-2"> Claim </button>
                 </div>
             </div>
