@@ -10,7 +10,7 @@ const Alert = ({ text }) => {
                 <div className="loaderWrap text-center">
                     img alert
                     <div className="loaderText my-2">{text}</div>
-                    <button className='btn btn-primary'> Continue </button>
+                    <button className=''> Continue </button>
                 </div>
             </div>
         </div>

@@ -84,7 +84,7 @@ export const DataProvider = ({ children }) => {
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
                 const wallet = accounts[0]
-                 //console.log("antes de enviar")
+                //console.log("antes de enviar")
                 axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
                     .then(async (res) => {
                         const _data = res.data.response
@@ -138,7 +138,7 @@ export const DataProvider = ({ children }) => {
             console.log(error)
         }
     }
-    
+
     const getCanodromes = async (wallet) => {
         //await reset(wallet)
         const canes = await getCans(wallet)
@@ -207,12 +207,12 @@ export const DataProvider = ({ children }) => {
         if (rarity === "4") return "legendary"
     }
 
-    const getRaces = async (wallet) => {
-        if (wallet) {
-            const _races = await axios.get(process.env.REACT_APP_BASEURL + "race/" + wallet)
-            setRaces(_races.data.response)
-        }
-        //console.log(_races.data.response)
+    const getRaces = async () => {
+        const accounts = await w3S.requestAccounts()
+        const wallet = await accounts[0]
+        const _races = await axios.get(process.env.REACT_APP_BASEURL + "race/" + wallet)
+        setRaces(_races.data.response)
+        console.log(_races.data.response)
     }
 
     const converType = (type) => {

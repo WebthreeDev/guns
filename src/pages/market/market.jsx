@@ -27,14 +27,15 @@ const Market = () => {
 
     useEffect(() => {
         getCansOnSell()
+        fetch(process.env.REACT_APP_BASEURL + 'marketplace')
     }, [_context.cansMarket])
 
     const getCansOnSell = async () => {
         _context.setLoading(true)
         const filteredCans = await _context.cansMarket.filter(item => item.status == 1)
-                                           .sort((price1, price2) => orderFunction(price1, price2))
-                                           .filter(dog => filterCheckbox(dog))
-                                           .filter(dog => filterRank(dog));
+            .sort((price1, price2) => orderFunction(price1, price2))
+            .filter(dog => filterCheckbox(dog))
+            .filter(dog => filterRank(dog));
         setdogList(filteredCans)
         await _context.setLoading(false)
 
@@ -85,7 +86,7 @@ const Market = () => {
                             hash: blockchainRes.transactionHash
                         })
                     } catch (error) {
-                        console.log("error: "+error)
+                        console.log("error: " + error)
                         console.log(error)
                     }
                     await getCansOnSell()
@@ -110,30 +111,32 @@ const Market = () => {
     //order form filter
     const orderFunction = (price1, price2, orderAux) => {
         (order == 1) ? orderAux = -1 : orderAux = 1;
-        if(price1.onSale.price > price2.onSale.price) return order;
-        if(price1.onSale.price < price2.onSale.price) return orderAux;
+        if (price1.onSale.price > price2.onSale.price) return order;
+        if (price1.onSale.price < price2.onSale.price) return orderAux;
         return 0;
     }
 
     //filter checkbox
     const filterCheckbox = (dog) => {
-        if(commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
-        if(commonCheck == true && dog.rarity == 1) return dog;
-        if(rareCheck == true && dog.rarity == 2) return dog;
-        if(epicCheck == true && dog.rarity == 3) return dog;
-        if(legendaryCheck == true && dog.rarity == 4) return dog;
+        if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
+        if (commonCheck == true && dog.rarity == 1) return dog;
+        if (rareCheck == true && dog.rarity == 2) return dog;
+        if (epicCheck == true && dog.rarity == 3) return dog;
+        if (legendaryCheck == true && dog.rarity == 4) return dog;
     }
 
     //filter range
     const filterRank = (dog) => {
         let totalStats = dog.aerodinamica + dog.aceleracion + dog.resistencia;
-        if(totalStats >= rangoMin && totalStats <= rangoMax) return dog;
+        if (totalStats >= rangoMin && totalStats <= rangoMax) return dog;
     }
 
     const find = async () => {
-        const newList = dogList.sort((price1, price2) => orderFunction(price1, price2))
-                                .filter(dog => filterCheckbox(dog))
-                                .filter(dog => filterRank(dog));
+        const newList = dogList.sort((price1, price2) => {
+            orderFunction(price1, price2)
+        })
+            .filter(dog => filterCheckbox(dog))
+            .filter(dog => filterRank(dog));
         setdogList(newList);
         getCansOnSell();
     }

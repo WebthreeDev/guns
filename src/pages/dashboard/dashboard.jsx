@@ -9,7 +9,7 @@ import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const { exectConnect,ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract,poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const { exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -21,11 +21,12 @@ const Dashboard = () => {
 
     const [renderModal, setRenderModal] = useState(false)//viene true
     const [modalText, setModalText] = useState(false)////viene texto confirm
+    const [raceModal, setRaceModal] = useState(false)
 
     const [approved, setApproved] = useState(false)
 
     useEffect(() => {
-        //getRaces(wallet)
+        getRaces()
         getApproved()
     }, [wallet])
 
@@ -49,7 +50,7 @@ const Dashboard = () => {
         setRenderModal(false)
         let body = { can: { onSale: { sale: true, price: price }, } }
         const value = web3.utils.toWei((price / 100).toString(), "ether")
-        nftContract.methods.onSale().send({ from: wallet, value,gas,gasPrice }).then(async (res) => {
+        nftContract.methods.onSale().send({ from: wallet, value, gas, gasPrice }).then(async (res) => {
             await sendCanOnSellToDB(_id, body)
             setLoading(false)
         }).catch(error => {
@@ -92,7 +93,7 @@ const Dashboard = () => {
     const claim = async () => {
         setLoading(true)
         setClaiming(false)
-        const body = {wallet,amount: ammountToClaim}
+        const body = { wallet, amount: ammountToClaim }
         try {
             axios.patch(process.env.REACT_APP_BASEURL + "claim", body).then((res) => {
                 console.log("claime")
@@ -135,13 +136,49 @@ const Dashboard = () => {
                 setLoading(false)
             }).catch(error => {
                 console.log(error)
+                getApproved()
                 setLoading(false)
             })
     }
     return (
-        <div className="unikeRouter">
-            <Alert text="Alert Text" />
+        <div className="">
+            {raceModal && <>
+                <div className='cansSelection'>
+                    <div className='selectTittle'>
+                        <div className='tittle'> Races History </div>
+                        <button onClick={_ => setRaceModal(false)}> X </button>
+                    </div>
+                    <div className='container-fluid px-5 pt-2 containerSelectCans'>
+                        <div className="row">
+                            <table className='table table-dark'>
+                                <thead>
+                                    <tr>
+                                        <td> Race </td>
+                                        <td> Place </td>
+                                        <td> CanId </td>
+                                        <td> GainToken </td>
+                                        <td> Balance </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
 
+                                    {race && race.map((item, index) => {
+                                        return <tr key={item._id} >
+
+                                            <th scope="row">{index + 1}</th>
+                                            <td> {item.place} </td>
+                                            <td> {item.canId} </td>
+                                            <td> {item.gainToken == 0 ? <div className='text-danger'>Lose</div> : <div className='text-success' >Win: +{item.gainToken}</div>} </td>
+                                            <td> {item.balancePrev} | {item.balanceAfter} </td>
+                                        </tr>
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </>}
+            <Alert text="Alert Text" />
             {loading && <Loader />}
             {claiming && <ClaimModal setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
             {remove &&
@@ -165,14 +202,13 @@ const Dashboard = () => {
                                         <button onClick={() => _remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
                                     </div>
                                 }
-                                <div className='d-flex align-items-center justify-content-between'>
+                                
                                     <div>
                                         Selling canId: #{selectedCan && selectedCan.id}
                                     </div>
+                                        Rarity: {selectedCan && selectedCan.rarity} 
 
-                                </div>
-                                name: {selectedCan && selectedCan.name} <hr />
-                                Rarity: {selectedCan && selectedCan.rarity} <hr />
+
                                 <h3 className='text-warning'>{price} BNB</h3>
                                 <p className='text-warning'> Sales fee: {price / 100} BNB </p>
                                 <input className='form-control' type="number" onChange={e => setPrice(e.target.value)} />
@@ -190,7 +226,7 @@ const Dashboard = () => {
             }
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-2 min-h-100-50 p-3 w-dash">
+                    <div className="col-md-2 h100vh">
                         <div className='boxMenuDark'>
                             <div className="menuSectionDshboard separator">
                                 <div className="text-center h-100 d-flex align-items-center">
@@ -200,17 +236,6 @@ const Dashboard = () => {
                                             <h5>{bnb ? bnb : 0} BNB
                                             </h5>
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="col-md-12 col-3 menuSectionDshboard separator">
-                                <div className="text-center h-100 d-flex align-items-center">
-                                    <div className="w-100">
-                                        <img className="my-2" height="50px" src={ccan} alt="" />
-                                        <div>
-                                            <h5>{cct ? cct : 0} CCT</h5>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
@@ -227,16 +252,30 @@ const Dashboard = () => {
                             </div>
 
                             <div className="col-md-12 col-3 menuSectionDshboard separator">
-                                <div className="d-flex justify-content-center align-items-center  h-100">
-                                    <div className="">
+                                <div className="text-center h-100 d-flex align-items-center">
+                                    <div className="w-100">
+                                        <img className="my-2" height="50px" src={ccan} alt="" />
                                         <div>
-                                            {approved && approved} approved
+                                            <h5>{cct ? cct : 0} CCT</h5>
                                         </div>
-                                        <h5>Current fee {claimPercent && claimPercent}%</h5>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="col-md-12 col-3 menuSectionDshboard ">
+                                <div className="d-flex justify-content-center align-items-center  h-100">
+                                    <div className="text-center">
+                                        <div>
+                                            {approved && <>
+                                                {approved > 0 && <> {approved} CCT Approved</>}
+                                            </>}
+                                        </div>
+                                        <div>Current fee {claimPercent && claimPercent}%</div>
                                         {approved == 0 ? <>
-                                            <button onClick={() => setClaiming(true)} className="form-control btn btn-primary"> Approve </button>
+                                            <button onClick={() => setClaiming(true)} className="form-control btn btn-primary mt-2"> Approve </button>
                                         </> : <>
-                                            <button onClick={() => claimExcect()} className="form-control btn btn-danger"> Claim </button>
+                                            <button onClick={() => claimExcect()} className="form-control btn btn-danger mt-2"> Claim </button>
                                         </>}
                                     </div>
                                 </div>
@@ -261,6 +300,21 @@ const Dashboard = () => {
                                 </div>
                             </div> */}
                             <div className="row g-2 mb-2">
+                                <div className='col-12 dashboardOptions'>
+                                    <div>
+                                        {cans && <>
+                                            {cans.length > 0 ? <>
+                                                You Have {cans.length} cans
+                                            </> : <>
+                                                No cans in your dashboard
+                                            </>}
+                                        </>}
+                                    </div>
+                                    <div>
+                                        <button onClick={() => setRaceModal(true)} className='mx-2 btn btn-primary'> Races History </button>
+                                        <button className='btn btn-primary'> Activities </button>
+                                    </div>
+                                </div>
 
                                 {cans && cans.map((i) => {
                                     return (
@@ -279,11 +333,7 @@ const Dashboard = () => {
                             </div>
                         </div>
                         <div className='p-2 mt-2'>
-                            {race && race.map(({ gainToken, canId, _id }, index) => {
-                                return <div key={_id} className="border p-1">
-                                    Race {index + 1} - canId: {canId} - {gainToken == 0 ? <>Lose</> : <>Win: +{gainToken}</>}
-                                </div>
-                            })}
+
                         </div>
                     </div>
                 </div>

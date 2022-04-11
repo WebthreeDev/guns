@@ -1,4 +1,4 @@
-const ClaimModal = ({ claim, ammountToClaim, setAmmountToClaim,setClaiming }) => {
+const ClaimModal = ({ claim, ammountToClaim, setAmmountToClaim, setClaiming }) => {
     const change = 50
     return (
         <div className="modalX">
@@ -14,8 +14,10 @@ const ClaimModal = ({ claim, ammountToClaim, setAmmountToClaim,setClaiming }) =>
                     }
 
                     <input onChange={(e) => setAmmountToClaim(e.target.value)} className="form-control mt-2" type="number" />
-                    <button className="btn btn-danger" onClick={()=>{setClaiming(false)}}> X </button>
-                    <button onClick={claim} className="btn btn-primary w-100 mt-2"> Claim </button>
+                    <div className="d-flex justify-content-center mt-3">
+                        <button className="btn btn-danger w-50" onClick={() => { setClaiming(false) }}> Cancel </button>
+                        <button onClick={claim} className="btn btn-primary w-50"> Claim </button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -48,13 +48,6 @@ const Shop = () => {
             {loading && <Loader />}
             <div className="container py-4">
                 <div className="w-100">
-                    {/* <div className="container">
-                            <div className="row">
-                                <div className="col-12 col-md-4">
-                                    <NftPack />
-                                </div>
-                            </div>
-                        </div> */}
                     <div className="row">
                         <div className="col-12 col-sm-6 mb-3 col-md-4">
                             <div className="nftBorder animated">
@@ -73,7 +66,7 @@ const Shop = () => {
                                             </div>
                                         </div>
                                         <div className="">
-                                            {loading ? <button className="btn-ccan w-100">Loading</button> : <>
+                                            {commonPackagePrice == false ? <button className="btn-ccan w-100">Loading</button> : <>
                                                 {wallet ?
                                                     <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-ccan w-100"> MINT </button>
                                                     :
@@ -129,7 +122,7 @@ const Shop = () => {
                                             </div>
                                         </div>
                                         <div className="">
-                                            {loading ? <button className="btn-ccan w-100">Loading</button> : <>
+                                            {epicPackagePrice == false ? <button className="btn-ccan w-100">Loading</button> : <>
                                                 {wallet ?
                                                     <button onClick={() => buyPackage("2", wallet, epicPackagePrice)} className="btn-ccan w-100"> MINT </button>
                                                     :
@@ -184,7 +177,7 @@ const Shop = () => {
                                             </div>
                                         </div>
                                         <div className="">
-                                            {loading ? <button className="btn-ccan w-100">Loading</button> : <>
+                                            {legendaryPackagePrice == false ? <button className="btn-ccan w-100">Loading</button> : <>
                                                 {wallet ?
                                                     <button onClick={() => buyPackage("3", wallet, legendaryPackagePrice)} className="btn-ccan w-100"> MINT </button>
                                                     :
