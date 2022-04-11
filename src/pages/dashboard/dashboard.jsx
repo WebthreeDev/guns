@@ -9,7 +9,7 @@ import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const { exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const {oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -48,7 +48,10 @@ const Dashboard = () => {
         setLoading(true)
         setSelling(false)
         setRenderModal(false)
-        let body = { can: { onSale: { sale: true, price: price }, } }
+
+        const res = await axios.get(process.env.REACT_APP_BASEURL+"cans/validate/"+_id)
+        if(!res.data.response){
+             let body = { can: { onSale: { sale: true, price: price }, } }
         const value = web3.utils.toWei((price / 100).toString(), "ether")
         nftContract.methods.onSale().send({ from: wallet, value, gas, gasPrice }).then(async (res) => {
             await sendCanOnSellToDB(_id, body)
@@ -57,6 +60,11 @@ const Dashboard = () => {
             console.log(error)
             setLoading(false)
         })
+        }else{
+            alert("No puede vender un can agregado a un canodromo")
+            setLoading(false)
+        }
+        console.log(res.data.response)
     }
 
     const _remove = async (_id) => {
@@ -69,6 +77,7 @@ const Dashboard = () => {
     }
 
     const sendCanOnSellToDB = async (_id, body) => {
+        
         try {
             await axios.patch(process.env.REACT_APP_BASEURL + "cans/" + _id, body)
             setSelling(false)
@@ -88,20 +97,23 @@ const Dashboard = () => {
             setRemove(false)
             setPrice(0)
         }
+
     }
 
     const claim = async () => {
         setLoading(true)
         setClaiming(false)
-        const body = { wallet, amount: ammountToClaim }
+        const amount = ammountToClaim
+        const body = { wallet, amount }
         try {
+            console.log(body)
             axios.patch(process.env.REACT_APP_BASEURL + "claim", body).then((res) => {
                 console.log("claime")
                 console.log(res.data.response)
                 setTimeout(() => {
                     console.log("transfiriendo fondos")
-
-                    const claiming = web3.utils.toWei(ammountToClaim, "ether")
+                    const discountAmount = ((Math.floor(res.data.response.discountAmount*1000))/1000).toString()
+                    const claiming = web3.utils.toWei(discountAmount, "ether")
 
                     cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
                         .then(async res => {
@@ -117,10 +129,21 @@ const Dashboard = () => {
                         })
                 }, 20000)
 
+            }).catch(error =>{
+                setLoading(false)
+                if (error.response) {
+                    console.log(error.response.data.error);
+                    alert(error.response.data.error)
+                } else if (error.request) {
+                    console.log("Error request: ",error.request)
+                } else {
+                    console.log('Error message:', error.message);
+                }
             })
 
         } catch (error) {
             console.log(error)
+            setLoading(false)
         }
     }
 
@@ -180,7 +203,7 @@ const Dashboard = () => {
             </>}
             <Alert text="Alert Text" />
             {loading && <Loader />}
-            {claiming && <ClaimModal setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
+            {claiming && <ClaimModal claimPercent={claimPercent} oracule={oracule} setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
             {remove &&
                 <div className='modalX'>
                     <div className='modalIn'>
@@ -285,20 +308,7 @@ const Dashboard = () => {
                     </div>
                     <div className="col-md-10 dashBody">
                         <div className="dogFeatures">
-                            {/* <div className="d-flex justify-content-around">
-                                <div className="text-center">
-                                    Carreras
-                                    <h3>0</h3>
-                                </div>
-                                <div className="text-center">
-                                    Numero de NFT'S
-                                    <h3>{cans.length} </h3>
-                                </div>
-                                <div className="text-center">
-                                    Win Rate
-                                    <h3>{cans.length}/10 </h3>
-                                </div>
-                            </div> */}
+                    
                             <div className="row g-2 mb-2">
                                 <div className='col-12 dashboardOptions'>
                                     <div>

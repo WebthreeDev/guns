@@ -1,10 +1,11 @@
-import React, { useState, useContext,useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import canodromeImg from '../../img/canodrome.png'
 import runDog from '../../img/rundog.gif'
 import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios";
 import NftCard from "../../components/nftCard/nftCard";
+import { Link } from "react-router-dom"
 
 const Race = () => {
     const _context = useContext(DataContext)
@@ -13,10 +14,6 @@ const Race = () => {
     const [modalRaceActive, setModalRaceActive] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
-
-    useEffect(() => {
-        /* _context.getCanodromes(_context.wallet) */
-    }, [])
 
     const clickRun = async () => {
         const canId = selectedCan.id
@@ -56,12 +53,12 @@ const Race = () => {
     return (
         <div className="container">
             {_context.loading && <Loader />}
-            {modalRace && <div className="cansSelection">
+            {modalRace && <div className="cansSelection overflow">
                 <div className='selectTittle'>
                     <div className='tittle'> Single Race </div>
                     <button onClick={_ => setModalRace(false)}> X </button>
                 </div>
-                <div className="container py-4 overflow">
+                <div className="container py-4 ">
                     {_context.canodromes && _context.canodromes.map((canodrome, index) => {
                         return (
                             <div key={index} className="row raceCanodrome mb-2">
@@ -72,6 +69,12 @@ const Race = () => {
                                 <div className="col-md-10 col-12">
                                     <div className="container-fluid">
                                         <div className="row">
+                                            {canodrome.cans.length == 0 && <div className="h-100 text-center pt-3">
+                                                <h1 className="text-center"> Add cans in canodrome section</h1>
+                                                <Link className="btn btn-primary" to="/canodromes">
+                                                    Go to Canodromes
+                                                </Link>
+                                            </div>}
                                             {canodrome.cans && canodrome.cans.map((can, index) => {
                                                 return (
                                                     <div key={index} className="col-4" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>

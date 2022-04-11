@@ -1,15 +1,14 @@
-const ClaimModal = ({ claim, ammountToClaim, setAmmountToClaim, setClaiming }) => {
-    const change = 50
+const ClaimModal = ({ claimPercent,claim, ammountToClaim, setAmmountToClaim, setClaiming,oracule }) => {
     return (
         <div className="modalX">
             <div className="modalIn">
                 <div className="loaderWrap">
                     <h1> Claim </h1>
-                    <h4> {change} Credits = 1 CCT </h4>
+                    <h4> {oracule} Credits = 1 CCT </h4>
                     <i className="text-danger">minimun ammount to claim: 100 Credits </i>
                     {ammountToClaim &&
                         <div className="py-2">
-                            {ammountToClaim / change} CCT
+                            {ammountToClaim / oracule} CCT - {claimPercent}% fee = {(Math.round(((ammountToClaim / oracule)-(((ammountToClaim / oracule)*claimPercent)/100))*10000))/10000} CCT
                         </div>
                     }
 

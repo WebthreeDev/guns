@@ -136,7 +136,7 @@ const Canodromes = () => {
                                                         </div>
                                                     </div>
                                                     :
-                                                    <button className='btnaddcan' onClick={_ => addCan(canodromeItem._id)}>+</button>
+                                                    <button className='btnaddcan' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
                                                 }
                                             </div>
                                         })}

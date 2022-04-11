@@ -29,6 +29,8 @@ export const DataProvider = ({ children }) => {
     const [canodromes, setCanodromes] = useState(false)
     const [claimPercent, setClaimPersent] = useState(false)
     const [cansMarket, setCansMarket] = useState([]);
+    const [oracule,setOracule] = useState(false)
+    const [oraculeMin,setOraculeMin] = useState(false)
     const gas = web3.utils.toWei("0.00015", "gwei")
     const gasPrice = web3.utils.toWei("15", "gwei")
     const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
@@ -84,16 +86,18 @@ export const DataProvider = ({ children }) => {
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
                 const wallet = accounts[0]
-                //console.log("antes de enviar")
                 axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
                     .then(async (res) => {
                         const _data = res.data.response
-                        //console.log("_data")
+                       /*  console.log("_data")*/
+                        console.log(_data) 
                         setBalance(_data.getWallet.balance)
                         setClaimPersent(_data.claim.porcent)
                         setWallet(wallet)
                         setCans(_data.cansUser)
                         setCanodromes(_data.canodromes)
+                        setOracule(_data.oracule.value)
+                        setOraculeMin(_data.oracule.min)
 
                         await getBnb(wallet)
                         await getCCT(wallet)
@@ -142,9 +146,9 @@ export const DataProvider = ({ children }) => {
     const getCanodromes = async (wallet) => {
         //await reset(wallet)
         const canes = await getCans(wallet)
-        console.log(canes)
+        //console.log(canes)
         const _canodromes = await getCanodromeState(wallet)
-        console.log(_canodromes)
+        //console.log(_canodromes)
         let newCanodromes = []
         _canodromes.map(canodrome => {
             let aux = canodrome
@@ -212,7 +216,7 @@ export const DataProvider = ({ children }) => {
         const wallet = await accounts[0]
         const _races = await axios.get(process.env.REACT_APP_BASEURL + "race/" + wallet)
         setRaces(_races.data.response)
-        console.log(_races.data.response)
+       // console.log(_races.data.response)
     }
 
     const converType = (type) => {
@@ -240,7 +244,8 @@ export const DataProvider = ({ children }) => {
         gas, gasPrice,
         converType, claimPercent, getBnb,
         getCCT, ownerWallet, cansMarket,
-        getCanodromeState, poolContract
+        getCanodromeState, poolContract,
+        oracule,oraculeMin
     }
 
     return (
