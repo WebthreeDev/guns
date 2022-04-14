@@ -13,7 +13,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
             <div className="d-flex justify-content-between h40">
                 {btnPrice != 0 && (
                     <div className='button-market px-1'>
-                        <img src="" alt="" /> {item.onSale.price} BNB
+                        <img src="" alt="" /> {Number.parseFloat(item.onSale.price)} BNB
                     </div>
                 )}
                 <div className="px-2 lb-color item-id"> #{item.id} </div>

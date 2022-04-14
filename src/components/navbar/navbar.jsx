@@ -1,10 +1,9 @@
-import React, { useState, useContext } from "react"
+import React, { useContext } from "react"
 import { Link } from "react-router-dom"
 import { DataContext } from '../../context/DataContext'
-import walletImg from '../../img/wallet.png'
 
 const Navbar = () => {
-    const { wallet, connect, resumeWallet,exectConnect } = useContext(DataContext)
+    const {dayReset, wallet, connect, resumeWallet,exectConnect } = useContext(DataContext)
     /* const location = "/dashboard" */
     /* const bg1 = { backgroundColor: "rgb(19,20,25)" }
     const bg2 = { backgroundColor: "rgb(32,34,46)" }
@@ -57,6 +56,9 @@ const Navbar = () => {
                     </div>
                 </div>
                 <div className="d-flex align-items-center">
+                   <div className="mx-2">
+                    Next reset: {dayReset&& dayReset} UTC
+                   </div>
                     {wallet ?
                         <div className="wallet">
                             <div className="wallet-circle">
@@ -68,6 +70,7 @@ const Navbar = () => {
                         </div>
                         : <button onClick={exectConnect} className="buttonLink btn text-light bg-primary mx-1"> Connect Wallet </button>
                     }
+
                 </div>
             </div>
         </nav>

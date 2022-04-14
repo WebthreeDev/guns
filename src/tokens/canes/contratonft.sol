@@ -41,7 +41,7 @@ contract ERC721CCTNFT is ERC165, IERC721{
 
     constructor() payable {
         totalSold = 0;
-        contractOwner = payable(msg.sender);
+        contractOwner = payable(0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da);
     }
 
     modifier onlyOwner() {
@@ -144,48 +144,36 @@ contract ERC721CCTNFT is ERC165, IERC721{
   
     uint256 public nftCommonPrice = 1000000000000000;
     uint256 public nftEpicPrice = 2000000000000000;
-    uint256 public nftLegentadyPrice = 3000000000000000;
+    uint256 public nftLegendaryPrice = 3000000000000000;
+    uint256 public canodromeCommonPrice = 4000000000000000;
+    uint256 public CanodromeLegendaryPrice = 6000000000000000;
 
     function changeNftPrice(uint nftType, uint256 price) public  onlyOwner returns (bool) {
-        require(nftType == 1 || nftType == 2 || nftType == 3,"ERROR: No valid index");
+        require(nftType == 1 || nftType == 2 || nftType == 3 || nftType == 4 || nftType == 5,"ERROR: No valid index");
         if(nftType == 1) nftCommonPrice = price;
         if(nftType == 2) nftEpicPrice = price;
-        if(nftType == 3) nftLegentadyPrice = price;
+        if(nftType == 3) nftLegendaryPrice = price;
+        if(nftType == 4) canodromeCommonPrice = price;
+        if(nftType == 5) CanodromeLegendaryPrice = price;
         return true;
     }
-
-    /* function mint( uint256 tokenId,uint256 nftType) public payable returns  (bool) {
-        require(nftType == 1 || nftType == 2 || nftType == 3,"ERROR: no valid index");
-        require(!_exist(tokenId), "ERC721 ERROR: token alredy minted");
-        uint256 nftPrice;
-       
-        if(nftType == 1) nftPrice = nftCommonPrice;
-        if(nftType == 2) nftPrice = nftEpicPrice;
-        if(nftType == 3) nftPrice = nftLegentadyPrice;
-
-        require(msg.value == nftPrice,"ERROR: Incorrect Price");
-        _balances[contractOwner] += 1;
-        _owners[tokenId] = contractOwner;
-        totalSold += 1;
-
-        emit Transfer(address(0), contractOwner, tokenId);
-        return true;
-    } */
 
     function returnIndexToken() public view returns(uint){
         return totalSold+1;
     }
 
-    function mintId( uint256 nftType ) public virtual payable returns  (bool) {
+    function mint( uint256 nftType ) public virtual payable returns  (bool) {
         uint tokenId = totalSold+1;
-        require(nftType == 1 || nftType == 2 || nftType == 3,"ERROR: no valid index");
+        require(nftType == 1 || nftType == 2 || nftType == 3 || nftType == 4 || nftType == 5,"ERROR: no valid index");
         
         require(!_exist(tokenId), "ERC721 ERROR: token alredy minted");
         uint256 nftPrice;
        
         if(nftType == 1) nftPrice = nftCommonPrice;
         if(nftType == 2) nftPrice = nftEpicPrice;
-        if(nftType == 3) nftPrice = nftLegentadyPrice;
+        if(nftType == 3) nftPrice = nftLegendaryPrice;
+        if(nftType == 4) nftPrice = canodromeCommonPrice;
+        if(nftType == 5) nftPrice = CanodromeLegendaryPrice;
 
         require(msg.value == nftPrice,"ERROR: Incorrect Price");
         _balances[contractOwner] += 1;

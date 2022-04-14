@@ -9,26 +9,33 @@ import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const {oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const { minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
     const [remove, setRemove] = useState(false)
-    const [selling, setSelling] = useState(false)
     const [claiming, setClaiming] = useState(false)
     const [ammountToClaim, setAmmountToClaim] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
-
     const [renderModal, setRenderModal] = useState(false)//viene true
     const [modalText, setModalText] = useState(false)////viene texto confirm
     const [raceModal, setRaceModal] = useState(false)
-
     const [approved, setApproved] = useState(false)
 
     useEffect(() => {
         getRaces()
         getApproved()
     }, [wallet])
+
+    const _setPrice = (ammount) => {
+        const _ammount = Number.parseFloat(ammount).toFixed(6);
+        setPrice(_ammount)
+    }
+
+    const _setAmmountToClaim = (ammount) => {
+        const _ammount = Number.parseFloat(ammount).toFixed(6);
+        setAmmountToClaim(_ammount)
+    }
 
     const getApproved = async () => {
         if (wallet) {
@@ -46,21 +53,21 @@ const Dashboard = () => {
 
     const sell = async (_id) => {
         setLoading(true)
-        setSelling(false)
         setRenderModal(false)
 
-        const res = await axios.get(process.env.REACT_APP_BASEURL+"cans/validate/"+_id)
-        if(!res.data.response){
-             let body = { can: { onSale: { sale: true, price: price }, } }
-        const value = web3.utils.toWei((price / 100).toString(), "ether")
-        nftContract.methods.onSale().send({ from: wallet, value, gas, gasPrice }).then(async (res) => {
-            await sendCanOnSellToDB(_id, body)
-            setLoading(false)
-        }).catch(error => {
-            console.log(error)
-            setLoading(false)
-        })
-        }else{
+        const res = await axios.get(process.env.REACT_APP_BASEURL + "cans/validate/" + _id)
+        if (!res.data.response) {
+            let body = { can: { onSale: { sale: true, price: price }, } }
+            const _value = Number.parseFloat(price / 100).toFixed(6)
+            const value = web3.utils.toWei(_value.toString(), "ether")
+            nftContract.methods.onSale().send({ from: wallet, value, gas, gasPrice }).then(async (res) => {
+                await sendCanOnSellToDB(_id, body)
+                setLoading(false)
+            }).catch(error => {
+                console.log(error)
+                setLoading(false)
+            })
+        } else {
             alert("No puede vender un can agregado a un canodromo")
             setLoading(false)
         }
@@ -77,10 +84,9 @@ const Dashboard = () => {
     }
 
     const sendCanOnSellToDB = async (_id, body) => {
-        
+
         try {
             await axios.patch(process.env.REACT_APP_BASEURL + "cans/" + _id, body)
-            setSelling(false)
             setRemove(false)
             setPrice(0)
             await getCans(wallet)
@@ -93,7 +99,6 @@ const Dashboard = () => {
                 console.log(error.message)
             }
             console.log(error)
-            setSelling(false)
             setRemove(false)
             setPrice(0)
         }
@@ -112,7 +117,7 @@ const Dashboard = () => {
                 console.log(res.data.response)
                 setTimeout(() => {
                     console.log("transfiriendo fondos")
-                    const discountAmount = ((Math.floor(res.data.response.discountAmount*1000))/1000).toString()
+                    const discountAmount = ((Math.floor(res.data.response.discountAmount * 1000)) / 1000).toString()
                     const claiming = web3.utils.toWei(discountAmount, "ether")
 
                     cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
@@ -129,13 +134,13 @@ const Dashboard = () => {
                         })
                 }, 20000)
 
-            }).catch(error =>{
+            }).catch(error => {
                 setLoading(false)
                 if (error.response) {
                     console.log(error.response.data.error);
                     alert(error.response.data.error)
                 } else if (error.request) {
-                    console.log("Error request: ",error.request)
+                    console.log("Error request: ", error.request)
                 } else {
                     console.log('Error message:', error.message);
                 }
@@ -203,7 +208,7 @@ const Dashboard = () => {
             </>}
             <Alert text="Alert Text" />
             {loading && <Loader />}
-            {claiming && <ClaimModal claimPercent={claimPercent} oracule={oracule} setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} setAmmountToClaim={setAmmountToClaim} />}
+            {claiming && <ClaimModal minimunToClaim={minimunToClaim} claimPercent={claimPercent} oracule={oracule} setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} _setAmmountToClaim={_setAmmountToClaim} />}
             {remove &&
                 <div className='modalX'>
                     <div className='modalIn'>
@@ -221,20 +226,24 @@ const Dashboard = () => {
                             <div className=''>
                                 {selectedCan.onSale.sale &&
                                     <div className='d-flex align-items-center justify-content-between'>
-                                        <div className='text-warning'> Price: {selectedCan.onSale.price} BNB </div>
+                                        <div className='text-warning'> Price: {Number.parseFloat(selectedCan.onSale.price)} BNB </div>
                                         <button onClick={() => _remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
                                     </div>
                                 }
+                                <div>
+                                    Selling canId: #{selectedCan && selectedCan.id}
+                                </div>
+                                Rarity: 
                                 
-                                    <div>
-                                        Selling canId: #{selectedCan && selectedCan.id}
-                                    </div>
-                                        Rarity: {selectedCan && selectedCan.rarity} 
-
-
+                                {selectedCan && <>
+                                    {selectedCan.rarity == 1 && <i className="rarity common px-2">Common </i>}
+                                    {selectedCan.rarity == 2 && <i className="rarity rare px-2">Rare </i>}
+                                    {selectedCan.rarity == 3 && <i className="rarity epic px-2">Epic </i>}
+                                    {selectedCan.rarity == 4 && <i className="rarity legendary px-2">Legendary </i>}
+                                </>}
                                 <h3 className='text-warning'>{price} BNB</h3>
-                                <p className='text-warning'> Sales fee: {price / 100} BNB </p>
-                                <input className='form-control' type="number" onChange={e => setPrice(e.target.value)} />
+                                <p className='text-warning'> Sales fee: {Number.parseFloat(price / 100).toFixed(6)} BNB </p>
+                                <input className='form-control' type="number" onChange={e => _setPrice(e.target.value)} />
                             </div>
                             <div className='mt-3'>
                                 <div className="row gx-2">
@@ -308,7 +317,7 @@ const Dashboard = () => {
                     </div>
                     <div className="col-md-10 dashBody">
                         <div className="dogFeatures">
-                    
+
                             <div className="row g-2 mb-2">
                                 <div className='col-12 dashboardOptions'>
                                     <div>

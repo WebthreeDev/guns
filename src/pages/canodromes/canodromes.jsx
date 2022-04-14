@@ -6,6 +6,7 @@ import NftCard from '../../components/nftCard/nftCard'
 import axios from 'axios'
 import Loader from '../../components/loader/loader'
 import perro from '../../img/perro.png'
+import { Link } from 'react-router-dom'
 
 const Canodromes = () => {
     const baseUrl = process.env.REACT_APP_BASEURL
@@ -73,7 +74,10 @@ const Canodromes = () => {
         _context.setLoading(false)
     }
 
-    const canodromeItems = [0, 1, 2]
+    const canodromeItemsCommon = [0, 1, 2]
+    const canodromeItemsRare = [0, 1, 2, 3, 4, 5]
+    const canodromeItemsEpic = [0, 1, 2, 3, 4, 5, 6, 7, 8]
+    const canodromeItemsLegendary = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
     return <div className='container pt-50'>
         {_context.loading && <Loader />}
@@ -85,6 +89,12 @@ const Canodromes = () => {
                 </div>
                 <div className='container-fluid px-5 containerSelectCans'>
                     <div className="row gx-4 px-5">
+                        {filteredCans.length == 0 && <div className='p-5'> 
+                            <h1>
+                            No cans in your dashboard 
+                            </h1>
+                            <Link to='/shop' className='btn btn-primary'> Buy Cans </Link>
+                            </div>}
                         {filteredCans && filteredCans.map((canItem) => {
                             return !canItem.onSale.sale &&
                                 <div key={canItem.id} className="col-lg-3 col-md-4 col-sm-6 col-12 p-2">
@@ -97,7 +107,7 @@ const Canodromes = () => {
         {_context.canodromes && _context.canodromes.map((canodromeItem) => {
             return (
                 <div key={canodromeItem._id} className='row canodromeCard mt-4'>
-                    
+
                     <div className='col-md-4 col-12 text-center p-3 imgCanodromeBg'>
                         <div className='text-center mb-2'>
                             {canodromeItem._id}
@@ -107,39 +117,132 @@ const Canodromes = () => {
                             <img height={"20px"} src={energyLogo} className="mx-2" alt="" />
                             <div className='energy'> {canodromeItem.energy} / {_context.converType(canodromeItem.type)} </div>
                         </div>
+                        <div>
+                            {canodromeItem.type === 1 && <div className="rarity common w-100">Common </div>}
+                            {canodromeItem.type === 2 && <div className="rarity rare w-100">Rare </div>}
+                            {canodromeItem.type === 3 && <div className="rarity epic w-100">Epic </div>}
+                            {canodromeItem.type === 4 && <div className="rarity legendary w-100">Legendary </div>}
+                        </div>
                     </div>
                     <div className="col-8 p-1">
                         <div className='row'>
                             <div className='col-12'>
                                 <div className="container-fluid">
                                     <div className='row'>
-                                        {canodromeItems.map((index) => {
-                                            return <div key={index} className="col-4">
-                                                {canodromeItem.cans[index] ?
-                                                    <div className='cardCanodrome'>
-                                                        <div className='d-flex justify-content-between'>
-                                                            <div>
-                                                            
-                                                                # {canodromeItem.cans[index].can.id}
+                                        {canodromeItem.type == 1 && <>
+                                            {canodromeItemsCommon.map((index) => {
+                                                return <div key={index} className="col-4">
+                                                    {canodromeItem.cans[index] ?
+                                                        <div className='cardCanodrome mb-3'>
+                                                            <div className='d-flex justify-content-between'>
+                                                                <div>
+
+                                                                    # {canodromeItem.cans[index].can.id}
+                                                                </div>
+                                                                <div>
+                                                                    {canodromeItem.cans[index].can.energy} / 2
+                                                                </div>
+                                                            </div>
+                                                            <div className='text-center'>
+                                                                <img height={"60px"} src={perro} alt="" />
                                                             </div>
                                                             <div>
-                                                                {canodromeItem.cans[index].can.energy} / 2
+                                                                <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
+                                                                    Remove Can
+                                                                </button>
                                                             </div>
                                                         </div>
-                                                        <div className='text-center'>
-                                                            <img height={"60px"} src={perro} alt="" />
+                                                        :
+                                                        <button className='btnaddcan mb-3' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
+                                                    }
+                                                </div>
+                                            })}</>}
+
+                                        {canodromeItem.type == 2 && <>
+                                            {canodromeItemsRare.map((index) => {
+                                                return <div key={index} className="col-4">
+                                                    {canodromeItem.cans[index] ?
+                                                        <div className='cardCanodrome mb-3'>
+                                                            <div className='d-flex justify-content-between'>
+                                                                <div>
+                                                                    # {canodromeItem.cans[index].can.id}
+                                                                </div>
+                                                                <div>
+                                                                    {canodromeItem.cans[index].can.energy} / 2
+                                                                </div>
+                                                            </div>
+                                                            <div className='text-center'>
+                                                                <img height={"60px"} src={perro} alt="" />
+                                                            </div>
+                                                            <div>
+                                                                <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
+                                                                    Remove Can
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                        <div>
-                                                            <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
-                                                                Remove Can
-                                                            </button>
+                                                        :
+                                                        <button className='btnaddcan mb-3' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
+                                                    }
+                                                </div>
+                                            })}</>}
+
+                                        {canodromeItem.type == 3 && <>
+                                            {canodromeItemsEpic.map((index) => {
+                                                return <div key={index} className="col-4">
+                                                    {canodromeItem.cans[index] ?
+                                                        <div className='cardCanodrome mb-3'>
+                                                            <div className='d-flex justify-content-between'>
+                                                                <div>
+
+                                                                    # {canodromeItem.cans[index].can.id}
+                                                                </div>
+                                                                <div>
+                                                                    {canodromeItem.cans[index].can.energy} / 2
+                                                                </div>
+                                                            </div>
+                                                            <div className='text-center'>
+                                                                <img height={"60px"} src={perro} alt="" />
+                                                            </div>
+                                                            <div>
+                                                                <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
+                                                                    Remove Can
+                                                                </button>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    :
-                                                    <button className='btnaddcan' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
-                                                }
-                                            </div>
-                                        })}
+                                                        :
+                                                        <button className='btnaddcan mb-3' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
+                                                    }
+                                                </div>
+                                            })}</>}
+
+                                        {canodromeItem.type == 4 && <>
+                                            {canodromeItemsLegendary.map((index) => {
+                                                return <div key={index} className="col-4">
+                                                    {canodromeItem.cans[index] ?
+                                                        <div className='cardCanodrome mb-3'>
+                                                            <div className='d-flex justify-content-between'>
+                                                                <div>
+
+                                                                    # {canodromeItem.cans[index].can.id}
+                                                                </div>
+                                                                <div>
+                                                                    {canodromeItem.cans[index].can.energy} / 2
+                                                                </div>
+                                                            </div>
+                                                            <div className='text-center'>
+                                                                <img height={"60px"} src={perro} alt="" />
+                                                            </div>
+                                                            <div>
+                                                                <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
+                                                                    Remove Can
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        :
+                                                        <button className='btnaddcan mb-3' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
+                                                    }
+                                                </div>
+                                            })}</>}
                                     </div>
                                 </div>
                             </div>

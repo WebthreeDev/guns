@@ -18,6 +18,8 @@ export const DataProvider = ({ children }) => {
     const [commonPackagePrice, setCommonPackagePrice] = useState(false)
     const [epicPackagePrice, setEpicPackagePrice] = useState(false)
     const [legendaryPackagePrice, setLegendaryPackagePrice] = useState(false)
+    const [canodromeCommonPrice,setCanodromeCommonPrice] = useState(false)
+    const [canodromeLegendaryPrice,setCanodromeLegendaryPrice] = useState(false)
     const [newPackagePrice, setNewPackagePrice] = useState(false)
     const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState(false)
@@ -30,7 +32,8 @@ export const DataProvider = ({ children }) => {
     const [claimPercent, setClaimPersent] = useState(false)
     const [cansMarket, setCansMarket] = useState([]);
     const [oracule,setOracule] = useState(false)
-    const [oraculeMin,setOraculeMin] = useState(false)
+    const [minimunToClaim,setMinimunToClaim] = useState(false)
+    const [dayReset,setDayReset] = useState(false)
     const gas = web3.utils.toWei("0.00015", "gwei")
     const gasPrice = web3.utils.toWei("15", "gwei")
     const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
@@ -38,14 +41,12 @@ export const DataProvider = ({ children }) => {
     useEffect(() => {
         fetch(process.env.REACT_APP_BASEURL + 'marketplace')
         exectConnect()
+        getERC721Contract()
         //verifyClaim()
     }, [])
 
     // from websocket
     socket.on('data', async data => setCansMarket(data))
-
-    window.ethereum.on('accountsChanged', async _ => setWallet(await exectConnect()))
-    window.ethereum.on('chainChanged', async _ => setWallet(await exectConnect()))
 
     /*  const getClaimPersent = async () => {
          const account = await w3S.requestAccounts()
@@ -97,7 +98,8 @@ export const DataProvider = ({ children }) => {
                         setCans(_data.cansUser)
                         setCanodromes(_data.canodromes)
                         setOracule(_data.oracule.value)
-                        setOraculeMin(_data.oracule.min)
+                        setMinimunToClaim(_data.oracule.min)
+                        setDayReset(_data.dayReset)
 
                         await getBnb(wallet)
                         await getCCT(wallet)
@@ -107,15 +109,15 @@ export const DataProvider = ({ children }) => {
                     }).catch(error => {
                         setLoading(false)
                         if (error.response) {
-                            console.log("error con response")
+                            console.log("Error Response")
                             console.log(error.response.data);
                             console.log(error.response.status);
                             console.log(error.response.headers);
                         } else if (error.request) {
-                            console.log("error con request")
+                            console.log("Error Request")
                             console.log(error.request);
                         } else {
-                            console.log("error con message")
+                            console.log("Error Message")
                             console.log('Error', error.message);
                         }
                         console.log(error.config);
@@ -190,6 +192,7 @@ export const DataProvider = ({ children }) => {
     }
 
     const getERC721Contract = async () => {
+        console.log("agregando precios")
         nftContract.methods.nftCommonPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setCommonPackagePrice(_price)
@@ -198,9 +201,19 @@ export const DataProvider = ({ children }) => {
             const _price = web3.utils.fromWei(res, "ether")
             setEpicPackagePrice(_price)
         })
-        nftContract.methods.nftLegentadyPrice().call().then(res => {
+        nftContract.methods.nftLegendaryPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setLegendaryPackagePrice(_price)
+        })
+        nftContract.methods.canodromeCommonPrice().call().then(res => {
+            const _price = web3.utils.fromWei(res, "ether")
+            console.log("conodrome price : "+ _price)
+            setCanodromeCommonPrice(_price)
+        })
+        nftContract.methods.canodromeLegendaryPrice().call().then(res => {
+            const _price = web3.utils.fromWei(res, "ether")
+            console.log("conodrome legendary price : "+ _price)
+            setCanodromeLegendaryPrice(_price)
         })
     }
 
@@ -220,7 +233,7 @@ export const DataProvider = ({ children }) => {
     }
 
     const converType = (type) => {
-        const _type = [0, 6, 9, 12, 15]
+        const _type = [0, 6, 12, 18, 24]
         return _type[type]
     }
 
@@ -228,10 +241,12 @@ export const DataProvider = ({ children }) => {
         wallet, connect,
         resumeWallet, lastForWallet,
         w3S, nftContract, cctContract,
+        commonPackagePrice, setCommonPackagePrice,
         epicPackagePrice, setEpicPackagePrice,
         legendaryPackagePrice, setLegendaryPackagePrice,
+        canodromeCommonPrice,setCanodromeCommonPrice,
+        canodromeLegendaryPrice,setCanodromeLegendaryPrice,
         newPackagePrice, setNewPackagePrice,
-        commonPackagePrice, setCommonPackagePrice,
         loading, setLoading,
         getCans, cans, setCans,
         bnb, setBnb,
@@ -245,7 +260,7 @@ export const DataProvider = ({ children }) => {
         converType, claimPercent, getBnb,
         getCCT, ownerWallet, cansMarket,
         getCanodromeState, poolContract,
-        oracule,oraculeMin
+        oracule,minimunToClaim,dayReset
     }
 
     return (
