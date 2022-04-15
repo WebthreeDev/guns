@@ -48,7 +48,10 @@ export const DataProvider = ({ children }) => {
 
     // from websocket
     socket.on('data', async data => setCansMarket(data))
-    socket.on('canodromesMarket', async data => setCanodromesMarket(data))
+    socket.on('canodromesMarket', async data => {
+        console.log("inifinito")
+        console.log(data)
+        setCanodromesMarket(data)})
 
     /*  const getClaimPersent = async () => {
          const account = await w3S.requestAccounts()

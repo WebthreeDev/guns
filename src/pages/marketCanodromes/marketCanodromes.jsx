@@ -15,45 +15,45 @@ const MarketCanodromes = () => {
     const [epicCheck, setEpicCheck] = useState(false)
     const [legendaryCheck, setLegendaryCheck] = useState(false)
     const [order, setOrder] = useState(1)
-  /*   
+    /*   
+  
+      const [renderModal, setRenderModal] = useState(false)
+      const [modalText, setModalText] = useState(false)
+      const [can, setCan] = useState(false)
+      //filter checkbox
+      
+      const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace' */
 
-    const [renderModal, setRenderModal] = useState(false)
-    const [modalText, setModalText] = useState(false)
-    const [can, setCan] = useState(false)
-    //filter checkbox
-    
-    const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace' */
+    //useEffect(() => {
+    //getcanodromesOnSell()
+    //console.log(_context.canodromesMarket)
+    //fetch(process.env.REACT_APP_BASEURL + 'marketplace')
+    //}, [])
 
-    useEffect(() => {
-        getcanodromesOnSell()
-        console.log(_context.canodromesMarket)
-        fetch(process.env.REACT_APP_BASEURL + 'marketplace')
-    }, [_context.canodromesMarket])
-
-     const getcanodromesOnSell = async () => {
+    /* const getcanodromesOnSell = async () => {
         _context.setLoading(true)
         const filteredCanodromes = await _context.canodromesMarket.filter(item => item.status == 1)
             .sort((price1, price2) => orderFunction(price1, price2))
             .filter(dog => filterCheckbox(dog))
-            setcanodromesList(filteredCanodromes)
+        setcanodromesList(filteredCanodromes)
         await _context.setLoading(false)
-    }
+    } */
 
-    const filterCheckbox = (dog) => {
+    /* const filterCheckbox = (dog) => {
         if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
         if (commonCheck == true && dog.rarity == 1) return dog;
         if (rareCheck == true && dog.rarity == 2) return dog;
         if (epicCheck == true && dog.rarity == 3) return dog;
         if (legendaryCheck == true && dog.rarity == 4) return dog;
-    }
+    } */
 
     //order form filter
-    const orderFunction = (price1, price2, orderAux) => {
+    /* const orderFunction = (price1, price2, orderAux) => {
         (order == 1) ? orderAux = -1 : orderAux = 1;
         if (price1.onSale.price > price2.onSale.price) return order;
         if (price1.onSale.price < price2.onSale.price) return orderAux;
         return 0;
-    }
+    } */
 
     /*
 
@@ -227,15 +227,20 @@ const MarketCanodromes = () => {
                             
                         </div>
         </div>*/}
-                    <div className="col-9 listItems pt-5 border">
+            <div className="col-9 listItems pt-5 border">
 
-                        <div className="justify-content-between d-flex align-items-center">
-                            <h3> {canodromesList ? <> {canodromesList.length} Canodromes Listed </>:<> 0 Canodromes Listed</>} 
-                            
-                            </h3>
-                            
-                        </div>
-                        {/* <div className="row gx-2 gy-2 pb-5">
+                <div className="justify-content-between d-flex align-items-center">
+                    <h3> {canodromesList ? <> {canodromesList.length} Canodromes Listed </> : <> 0 Canodromes Listed</>}</h3> 
+
+                </div>
+                <div>
+                 {_context.canodromesMarket.lenght != 0 && <>
+                    {_context.canodromesMarket.map((item)=>{
+                        return <div key={item._id} className="bortder p-2 m-2"> {item._id} </div>
+                    })}
+                 </>}
+                </div>
+                {/* <div className="row gx-2 gy-2 pb-5">
                             {dogList &&
                                 dogList.map((item) => {
                                     return (
@@ -246,10 +251,10 @@ const MarketCanodromes = () => {
                                 })
                             }
                         </div> */}
-                    </div>
-                </div>
-            /* </div> 
-        </div> */
+            </div>
+        </div>
+        /* </div> 
+    </div> */
     )
 }
 export default MarketCanodromes

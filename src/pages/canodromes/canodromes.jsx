@@ -97,6 +97,7 @@ const Canodromes = () => {
             }
         }
         try {
+            console.log("sellin canodrome")
             const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/sell/" + canodromeOnSell._id, body)
             console.log(res.data.response)
             setSellingCanodrome(false)

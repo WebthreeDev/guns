@@ -25,19 +25,19 @@ const Market = () => {
     const [order, setOrder] = useState(1)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
 
-    useEffect(() => {
-        getCansOnSell()
-        fetch(process.env.REACT_APP_BASEURL + 'marketplace')
-    }, [_context.cansMarket])
+    useEffect(()=>{
+        setdogList(_context.cansMarket)     
+    },[_context.cansMarket])
 
-    const getCansOnSell = async () => {
-        _context.setLoading(true)
+
+    const filterCans = async () => {
+        
         const filteredCans = await _context.cansMarket.filter(item => item.status == 1)
             .sort((price1, price2) => orderFunction(price1, price2))
             .filter(dog => filterCheckbox(dog))
             .filter(dog => filterRank(dog));
         setdogList(filteredCans)
-        await _context.setLoading(false)
+       
 
     }
 
@@ -89,7 +89,7 @@ const Market = () => {
                         console.log("error: " + error)
                         console.log(error)
                     }
-                    await getCansOnSell()
+                    await filterCans()
                     await _context.getCans(_context.wallet)
                     //console.log(envio.data.response)
                 }).catch(async error => {
@@ -138,7 +138,7 @@ const Market = () => {
             .filter(dog => filterCheckbox(dog))
             .filter(dog => filterRank(dog));
         setdogList(newList);
-        getCansOnSell();
+        filterCans();
     }
 
     return (
@@ -246,14 +246,6 @@ const Market = () => {
                         <div className="justify-content-between d-flex align-items-center">
                             <h3> {dogList && dogList.length} Cans Listed  </h3>
                             <div className="">
-                                {/* pagination && <div className="d-flex">
-                                    <button className="btnPagination"> ◄ </button>
-                                    <div className="btnPagination">{pagination.page} </div>
-                                    <div className="btnPagination"> {pagination.nextPage}</div>
-                                    <div> ... </div>
-                                    <div className="btnPagination">{pagination.totalPages}</div>
-                                    <button className="btnPagination"> ► </button>
-                                </div> */}
                             </div>
                         </div>
                         <div className="row gx-2 gy-2 pb-5">
