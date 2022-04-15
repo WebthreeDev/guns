@@ -1,45 +1,61 @@
 import axios from "axios"
 import React, { useEffect, useState, useContext } from "react"
-import perro from '../../img/perro.png'
 import { DataContext } from "../../context/DataContext"
 import web3, { nftContract } from "../../tokens/canes/canes"
 import Loader from "../../components/loader/loader"
 import NftCard from "../../components/nftCard/nftCard"
 import changeStateCanInMarket from "../../context/services/changeStateCanInMarket"
 import { Link } from "react-router-dom"
-const Market = () => {
-    const _context = useContext(DataContext)
-    const [rangoMin, setRangoMin] = useState(200)
-    const [rangoMax, setRangoMax] = useState(360)
-    const [dogList, setdogList] = useState(false)
 
-    const [renderModal, setRenderModal] = useState(false)
-    const [modalText, setModalText] = useState(false)
-    const [pagination, setPagination] = useState(false)
-    const [can, setCan] = useState(false)
-    //filter checkbox
+const MarketCanodromes = () => {
+    const _context = useContext(DataContext)
+    const [canodromesList, setcanodromesList] = useState(false)
     const [commonCheck, setCommonCheck] = useState(false)
     const [rareCheck, setRareCheck] = useState(false)
     const [epicCheck, setEpicCheck] = useState(false)
     const [legendaryCheck, setLegendaryCheck] = useState(false)
     const [order, setOrder] = useState(1)
-    const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
+  /*   
+
+    const [renderModal, setRenderModal] = useState(false)
+    const [modalText, setModalText] = useState(false)
+    const [can, setCan] = useState(false)
+    //filter checkbox
+    
+    const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace' */
 
     useEffect(() => {
-        getCansOnSell()
+        getcanodromesOnSell()
+        console.log(_context.canodromesMarket)
         fetch(process.env.REACT_APP_BASEURL + 'marketplace')
-    }, [_context.cansMarket])
+    }, [_context.canodromesMarket])
 
-    const getCansOnSell = async () => {
+     const getcanodromesOnSell = async () => {
         _context.setLoading(true)
-        const filteredCans = await _context.cansMarket.filter(item => item.status == 1)
+        const filteredCanodromes = await _context.canodromesMarket.filter(item => item.status == 1)
             .sort((price1, price2) => orderFunction(price1, price2))
             .filter(dog => filterCheckbox(dog))
-            .filter(dog => filterRank(dog));
-        setdogList(filteredCans)
+            setcanodromesList(filteredCanodromes)
         await _context.setLoading(false)
-
     }
+
+    const filterCheckbox = (dog) => {
+        if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
+        if (commonCheck == true && dog.rarity == 1) return dog;
+        if (rareCheck == true && dog.rarity == 2) return dog;
+        if (epicCheck == true && dog.rarity == 3) return dog;
+        if (legendaryCheck == true && dog.rarity == 4) return dog;
+    }
+
+    //order form filter
+    const orderFunction = (price1, price2, orderAux) => {
+        (order == 1) ? orderAux = -1 : orderAux = 1;
+        if (price1.onSale.price > price2.onSale.price) return order;
+        if (price1.onSale.price < price2.onSale.price) return orderAux;
+        return 0;
+    }
+
+    /*
 
     const confirmBuy = async () => {
         const storage = JSON.parse(localStorage.getItem('windowsData'))
@@ -61,7 +77,7 @@ const Market = () => {
             try {
 
                 console.log("comprando bien aki")
-                const apiGetCan = process.env.REACT_APP_BASEURL + "cans/" + canId
+                const apiGetCan = process.env.REACT_APP_BASEURL + "Canodromes/" + canId
                 const canObj = await axios.get(apiGetCan)
                 if (canObj.status == 3) throw "Esta en proceso de venta"
 
@@ -89,8 +105,8 @@ const Market = () => {
                         console.log("error: " + error)
                         console.log(error)
                     }
-                    await getCansOnSell()
-                    await _context.getCans(_context.wallet)
+                    await getCanodromesOnSell()
+                    await _context.getCanodromes(_context.wallet)
                     //console.log(envio.data.response)
                 }).catch(async error => {
                     console.log("Rechazo la transaccion")
@@ -108,22 +124,10 @@ const Market = () => {
 
     }
 
-    //order form filter
-    const orderFunction = (price1, price2, orderAux) => {
-        (order == 1) ? orderAux = -1 : orderAux = 1;
-        if (price1.onSale.price > price2.onSale.price) return order;
-        if (price1.onSale.price < price2.onSale.price) return orderAux;
-        return 0;
-    }
+    
 
     //filter checkbox
-    const filterCheckbox = (dog) => {
-        if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
-        if (commonCheck == true && dog.rarity == 1) return dog;
-        if (rareCheck == true && dog.rarity == 2) return dog;
-        if (epicCheck == true && dog.rarity == 3) return dog;
-        if (legendaryCheck == true && dog.rarity == 4) return dog;
-    }
+    
 
     //filter range
     const filterRank = (dog) => {
@@ -138,13 +142,13 @@ const Market = () => {
             .filter(dog => filterCheckbox(dog))
             .filter(dog => filterRank(dog));
         setdogList(newList);
-        getCansOnSell();
-    }
+        getCanodromesOnSell();
+    } */
 
     return (
         <div>
             {_context.loading && <Loader />}
-            {renderModal &&
+            {/* {renderModal &&
                 <div className="modalX">
                     <div className="modalIn">
                         <div className="w-100">
@@ -220,63 +224,32 @@ const Market = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-3">
-                                <div className=" mb-1 d-flex align-items-center justify-content-between">
-                                    <div className="sidebarText">
-                                        Stats
-                                    </div>
-                                    <div>
-                                        <h3 className="breedCount"> min {rangoMin} max {rangoMax}</h3>
-                                    </div>
-                                </div>
-                                <div>
-                                    <input onChange={e => setRangoMin(e.target.value)} min="200" max={rangoMax} className="w-100" type="range" value={rangoMin} name="" id="" />
-                                </div>
-                                <div>
-                                    <input onChange={e => setRangoMax(e.target.value)} min={rangoMin} max="360" className="w-100" type="range" value={rangoMax} name="" id="" />
-                                </div>
-                            </div>
-                            <div className="mt-3">
-                                <button onClick={find} className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
-                            </div>
+                            
                         </div>
-                    </div>
-                    <div className="col-9 listItems">
+        </div>*/}
+                    <div className="col-9 listItems pt-5 border">
 
                         <div className="justify-content-between d-flex align-items-center">
-                            <h3> {dogList && dogList.length} Cans Listed  </h3>
-                            <div className="">
-                                {/* pagination && <div className="d-flex">
-                                    <button className="btnPagination"> ◄ </button>
-                                    <div className="btnPagination">{pagination.page} </div>
-                                    <div className="btnPagination"> {pagination.nextPage}</div>
-                                    <div> ... </div>
-                                    <div className="btnPagination">{pagination.totalPages}</div>
-                                    <button className="btnPagination"> ► </button>
-                                </div> */}
-                            </div>
+                            <h3> {canodromesList ? <> {canodromesList.length} Canodromes Listed </>:<> 0 Canodromes Listed</>} 
+                            
+                            </h3>
+                            
                         </div>
-                        <div className="row gx-2 gy-2 pb-5">
+                        {/* <div className="row gx-2 gy-2 pb-5">
                             {dogList &&
                                 dogList.map((item) => {
                                     return (
                                         <div key={item.id} className="col-4">
-                                            <NftCard
-                                                setRenderModal={setRenderModal}
-                                                setModalText={setModalText}
-                                                setCan={setCan}
-                                                item={item}
-                                                btnPrice={true}
-                                            />
+                                            {item.id}
                                         </div>
                                     )
                                 })
                             }
-                        </div>
+                        </div> */}
                     </div>
                 </div>
-            </div>
-        </div>
+            /* </div> 
+        </div> */
     )
 }
-export default Market
+export default MarketCanodromes

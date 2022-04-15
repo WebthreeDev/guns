@@ -52,7 +52,7 @@ const Shop = () => {
                 await setLoading(false)
             } else if (packageId >= 4) {
                 const canodromeId = await contractResponse.events.Transfer.returnValues.tokenId
-                const body = { wallet, packageId }
+                const body = { wallet, packageId,canodromeId }
                 const mintedCanodrome = await axios.post(process.env.REACT_APP_BASEURL + "canodrome/mint", body)
                 console.log(mintedCanodrome.data.response)
                 setCanodromeMintedData(mintedCanodrome.data.response)

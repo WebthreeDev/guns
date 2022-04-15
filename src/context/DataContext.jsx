@@ -34,6 +34,7 @@ export const DataProvider = ({ children }) => {
     const [oracule,setOracule] = useState(false)
     const [minimunToClaim,setMinimunToClaim] = useState(false)
     const [dayReset,setDayReset] = useState(false)
+    const [canodromesMarket,setCanodromesMarket] = useState([])
     const gas = web3.utils.toWei("0.00015", "gwei")
     const gasPrice = web3.utils.toWei("15", "gwei")
     const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
@@ -47,6 +48,7 @@ export const DataProvider = ({ children }) => {
 
     // from websocket
     socket.on('data', async data => setCansMarket(data))
+    socket.on('canodromesMarket', async data => setCanodromesMarket(data))
 
     /*  const getClaimPersent = async () => {
          const account = await w3S.requestAccounts()
@@ -260,7 +262,8 @@ export const DataProvider = ({ children }) => {
         converType, claimPercent, getBnb,
         getCCT, ownerWallet, cansMarket,
         getCanodromeState, poolContract,
-        oracule,minimunToClaim,dayReset
+        oracule,minimunToClaim,dayReset,
+        canodromesMarket
     }
 
     return (

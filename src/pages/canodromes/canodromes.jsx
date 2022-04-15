@@ -1,6 +1,6 @@
 import energyLogo from '../../img/energy.png'
 import canodrome from '../../img/canodrome.png'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useState } from 'react'
 import { DataContext } from '../../context/DataContext'
 import NftCard from '../../components/nftCard/nftCard'
 import axios from 'axios'
@@ -15,7 +15,9 @@ const Canodromes = () => {
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
     const [takedCans, setTakedCans] = useState(false)
     const [filteredCans, setFilteredCans] = useState(false)
-
+    const [sellingCanodrome, setSellingCanodrome] = useState(false)
+    const [canodromeOnSell, setCanodromeOnSell] = useState(false)
+    const [canodromePrice, setCanodromePrice] = useState(false)
     const addCan = async (canodromeId) => {
         let _filteredCans = []
         const taked = await getTakedCans()
@@ -79,8 +81,70 @@ const Canodromes = () => {
     const canodromeItemsEpic = [0, 1, 2, 3, 4, 5, 6, 7, 8]
     const canodromeItemsLegendary = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 
+    const sellCanodrome = (canodrome) => {
+        setCanodromeOnSell(canodrome)
+        setSellingCanodrome(true)
+        console.log(canodrome)
+    }
+
+    const sendSell = async () => {
+        const body = {
+            "canodrome": {
+                "onSale": {
+                    "sale": true,
+                    "price": canodromePrice
+                }
+            }
+        }
+        try {
+            const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/sell/" + canodromeOnSell._id, body)
+            console.log(res.data.response)
+            setSellingCanodrome(false)
+            _context.getCanodromes(_context.wallet)
+        } catch (error) {
+            if (error.response) {
+                console.log("Error Response")
+                console.log(error.response.data);
+                console.log(error.response.status);
+                console.log(error.response.headers);
+            } else if (error.request) {
+                console.log("Error Request")
+                console.log(error.request);
+            } else {
+                console.log("Error Message")
+                console.log('Error', error.message);
+            }
+            console.log(error.config);
+        }
+    }
+
+    const removeCanodrome = async (_id) => {
+        try {
+            const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/remove/" + _id)
+            console.log(res.data.response)
+            _context.getCanodromes(_context.wallet)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     return <div className='container pt-50'>
         {_context.loading && <Loader />}
+        {sellingCanodrome && <div className='modalX'>
+            <div className='modalIn'>
+                <div>
+                    <h1>Selling Canodrome</h1>
+                    ID: {canodromeOnSell && canodromeOnSell._id}
+                    <div className='text-warning'>
+                        {canodromePrice && <>{canodromePrice}BNB</>}
+                    </div>
+                    <input onChange={(e) => setCanodromePrice(e.target.value)} className='form-control mt-3' type="text" />
+                    <button onClick={sendSell} className='btn btn-primary form-control mt-3'>Sell</button>
+                    <button className='btn btn-danger mt-3'> Cancel </button>
+                </div>
+            </div>
+        </div>}
+
         {selectCans &&
             <div className='cansSelection'>
                 <div className='selectTittle'>
@@ -89,12 +153,12 @@ const Canodromes = () => {
                 </div>
                 <div className='container-fluid px-5 containerSelectCans'>
                     <div className="row gx-4 px-5">
-                        {filteredCans.length == 0 && <div className='p-5'> 
+                        {filteredCans.length == 0 && <div className='p-5'>
                             <h1>
-                            No cans in your dashboard 
+                                No cans in your dashboard
                             </h1>
                             <Link to='/shop' className='btn btn-primary'> Buy Cans </Link>
-                            </div>}
+                        </div>}
                         {filteredCans && filteredCans.map((canItem) => {
                             return !canItem.onSale.sale &&
                                 <div key={canItem.id} className="col-lg-3 col-md-4 col-sm-6 col-12 p-2">
@@ -107,10 +171,19 @@ const Canodromes = () => {
         {_context.canodromes && _context.canodromes.map((canodromeItem) => {
             return (
                 <div key={canodromeItem._id} className='row canodromeCard mt-4'>
-
                     <div className='col-md-4 col-12 text-center p-3 imgCanodromeBg'>
                         <div className='text-center mb-2'>
                             {canodromeItem._id}
+                        </div>
+                        <div>
+                            {canodromeItem.onSale.sale && <>
+                                <div className='justify-content-between align-items-center d-flex p-2 w-100 text-center bg-warning text-dark '>
+                                    <div className='text-dark'>
+                                        On sale
+                                    </div>
+                                    <button onClick={() => removeCanodrome(canodromeItem._id)} className='btn btn-danger'> Remove </button>
+                                </div>
+                            </>}
                         </div>
                         <img className='img-fluid' src={canodrome} alt="" />
                         <div className='d-flex justify-content-center align-items-center'>
@@ -123,6 +196,7 @@ const Canodromes = () => {
                             {canodromeItem.type === 3 && <div className="rarity epic w-100">Epic </div>}
                             {canodromeItem.type === 4 && <div className="rarity legendary w-100">Legendary </div>}
                         </div>
+                        <div> <button onClick={() => sellCanodrome(canodromeItem)} className='btn btn-danger form-control mt-2'> Sell </button> </div>
                     </div>
                     <div className="col-8 p-1">
                         <div className='row'>
@@ -136,7 +210,6 @@ const Canodromes = () => {
                                                         <div className='cardCanodrome mb-3'>
                                                             <div className='d-flex justify-content-between'>
                                                                 <div>
-
                                                                     # {canodromeItem.cans[index].can.id}
                                                                 </div>
                                                                 <div>
