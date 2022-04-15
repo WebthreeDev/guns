@@ -141,7 +141,7 @@ const Canodromes = () => {
                     </div>
                     <input onChange={(e) => setCanodromePrice(e.target.value)} className='form-control mt-3' type="text" />
                     <button onClick={sendSell} className='btn btn-primary form-control mt-3'>Sell</button>
-                    <button className='btn btn-danger mt-3'> Cancel </button>
+                    <button onClick={()=>setSellingCanodrome(false)} className='btn btn-danger mt-3'> Cancel </button>
                 </div>
             </div>
         </div>}

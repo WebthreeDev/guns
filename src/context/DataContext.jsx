@@ -10,7 +10,6 @@ import axios from 'axios'
 import changeStateCanInMarket from './services/changeStateCanInMarket'
 import socket from '../socket';
 
-
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
 
@@ -18,8 +17,8 @@ export const DataProvider = ({ children }) => {
     const [commonPackagePrice, setCommonPackagePrice] = useState(false)
     const [epicPackagePrice, setEpicPackagePrice] = useState(false)
     const [legendaryPackagePrice, setLegendaryPackagePrice] = useState(false)
-    const [canodromeCommonPrice,setCanodromeCommonPrice] = useState(false)
-    const [canodromeLegendaryPrice,setCanodromeLegendaryPrice] = useState(false)
+    const [canodromeCommonPrice, setCanodromeCommonPrice] = useState(false)
+    const [canodromeLegendaryPrice, setCanodromeLegendaryPrice] = useState(false)
     const [newPackagePrice, setNewPackagePrice] = useState(false)
     const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState(false)
@@ -30,28 +29,92 @@ export const DataProvider = ({ children }) => {
     const [cct, setCCT] = useState(false)
     const [canodromes, setCanodromes] = useState(false)
     const [claimPercent, setClaimPersent] = useState(false)
-    const [cansMarket, setCansMarket] = useState([]);
-    const [oracule,setOracule] = useState(false)
-    const [minimunToClaim,setMinimunToClaim] = useState(false)
-    const [dayReset,setDayReset] = useState(false)
-    const [canodromesMarket,setCanodromesMarket] = useState([])
+    const [oracule, setOracule] = useState(false)
+    const [minimunToClaim, setMinimunToClaim] = useState(false)
+    const [dayReset, setDayReset] = useState(false)
     const gas = web3.utils.toWei("0.00015", "gwei")
     const gasPrice = web3.utils.toWei("15", "gwei")
     const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
 
+    //market cans
+    const [order, setOrder] = useState(1)
+    const [cansMarket, setCansMarket] = useState([]);
+    const [commonCheck, setCommonCheck] = useState(true)
+    const [rareCheck, setRareCheck] = useState(true)
+    const [epicCheck, setEpicCheck] = useState(true)
+    const [legendaryCheck, setLegendaryCheck] = useState(true)
+
+    const [rangoMin, setRangoMin] = useState(200)
+    const [rangoMax, setRangoMax] = useState(360)
+
+    //market canodromes
+    const [canodromesMarket, setCanodromesMarket] = useState([])
+    const [orderCanodromes, setOrderCanodromes] = useState(1)
+    const [commonCheckCanodromes, setCommonCheckCanodromes] = useState(true)
+    const [rareCheckCanodromes, setRareCheckCanodromes] = useState(true)
+    const [epicCheckCanodromes, setEpicCheckCanodromes] = useState(true)
+    const [legendaryCheckCanodromes, setLegendaryCheckCanodromes] = useState(true)
     useEffect(() => {
-        fetch(process.env.REACT_APP_BASEURL + 'marketplace')
+       /*  fetch(process.env.REACT_APP_BASEURL + 'marketplace') */
         exectConnect()
         getERC721Contract()
         //verifyClaim()
     }, [])
 
     // from websocket
-    socket.on('data', async data => setCansMarket(data))
-    socket.on('canodromesMarket', async data => {
-        console.log("inifinito")
-        console.log(data)
-        setCanodromesMarket(data)})
+    socket.on('canodromesMarket', async canodromesData => {
+        filterCanodromes(canodromesData)
+        console.log("socket del market Canodromed")
+    })
+    socket.on('data', async cansData => {
+        filterCans(cansData)
+        console.log("socket del market")
+    })
+
+    const filterCans = async (cansData) => {
+        const filteredCans = await cansData.filter(item => item.status == 1)
+            .sort((price1, price2) => orderFunction(price1, price2))
+            .filter(dog => filterCheckbox(dog))
+            .filter(dog => filterRank(dog));
+        setCansMarket(filteredCans)
+    }
+
+    const filterCanodromes = async (canodromesData) => {
+        const filteredCanodromes = await canodromesData.filter(item => item.status == 1)
+            .sort((price1, price2) => orderFunction(price1, price2))
+            .filter(canodrmeX => filterCheckboxCanodrome(canodrmeX))
+        setCanodromesMarket(filteredCanodromes)
+    }
+
+    //order form filter
+    const orderFunction = (price1, price2, orderAux) => {
+        (order == 1) ? orderAux = -1 : orderAux = 1;
+        if (price1.onSale.price > price2.onSale.price) return order;
+        if (price1.onSale.price < price2.onSale.price) return orderAux;
+        return 0;
+    }
+
+    //filter checkbox
+    const filterCheckbox = (dog) => {
+        /* if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog; */
+        if (commonCheck == true && dog.rarity == 1) return dog;
+        if (rareCheck == true && dog.rarity == 2) return dog;
+        if (epicCheck == true && dog.rarity == 3) return dog;
+        if (legendaryCheck == true && dog.rarity == 4) return dog;
+    }
+    const filterCheckboxCanodrome = (canodrmeX) => {
+        /* if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog; */
+        if (commonCheck == true && canodrmeX.type == 1) return canodrmeX;
+        if (rareCheck == true && canodrmeX.type == 2) return canodrmeX;
+        if (epicCheck == true && canodrmeX.type == 3) return canodrmeX;
+        if (legendaryCheck == true && canodrmeX.type == 4) return canodrmeX;
+    }
+
+    //filter range
+    const filterRank = (dog) => {
+        let totalStats = dog.aerodinamica + dog.aceleracion + dog.resistencia;
+        if (totalStats >= rangoMin && totalStats <= rangoMax) return dog;
+    }
 
     /*  const getClaimPersent = async () => {
          const account = await w3S.requestAccounts()
@@ -95,8 +158,8 @@ export const DataProvider = ({ children }) => {
                 axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
                     .then(async (res) => {
                         const _data = res.data.response
-                       /*  console.log("_data")*/
-                        console.log(_data) 
+                        /*  console.log("_data")*/
+                        console.log(_data)
                         setBalance(_data.getWallet.balance)
                         setClaimPersent(_data.claim.porcent)
                         setWallet(wallet)
@@ -234,13 +297,15 @@ export const DataProvider = ({ children }) => {
         const wallet = await accounts[0]
         const _races = await axios.get(process.env.REACT_APP_BASEURL + "race/" + wallet)
         setRaces(_races.data.response)
-       // console.log(_races.data.response)
+        // console.log(_races.data.response)
     }
 
     const converType = (type) => {
         const _type = [0, 6, 12, 18, 24]
         return _type[type]
     }
+
+
 
     const _context = {
         wallet, connect,
@@ -249,8 +314,8 @@ export const DataProvider = ({ children }) => {
         commonPackagePrice, setCommonPackagePrice,
         epicPackagePrice, setEpicPackagePrice,
         legendaryPackagePrice, setLegendaryPackagePrice,
-        canodromeCommonPrice,setCanodromeCommonPrice,
-        canodromeLegendaryPrice,setCanodromeLegendaryPrice,
+        canodromeCommonPrice, setCanodromeCommonPrice,
+        canodromeLegendaryPrice, setCanodromeLegendaryPrice,
         newPackagePrice, setNewPackagePrice,
         loading, setLoading,
         getCans, cans, setCans,
@@ -265,8 +330,18 @@ export const DataProvider = ({ children }) => {
         converType, claimPercent, getBnb,
         getCCT, ownerWallet, cansMarket,
         getCanodromeState, poolContract,
-        oracule,minimunToClaim,dayReset,
-        canodromesMarket
+        oracule, minimunToClaim, dayReset,
+        canodromesMarket, setCansMarket,
+        order, setOrder, commonCheck, setCommonCheck,
+        rareCheck, setRareCheck, epicCheck, setEpicCheck,
+        legendaryCheck, setLegendaryCheck,
+        rangoMin, setRangoMin,
+        rangoMax, setRangoMax,
+        orderCanodromes, setOrderCanodromes,
+        commonCheckCanodromes, setCommonCheckCanodromes,
+        rareCheckCanodromes, setRareCheckCanodromes,
+        epicCheckCanodromes, setEpicCheckCanodromes,
+        legendaryCheckCanodromes, setLegendaryCheckCanodromes,
     }
 
     return (

@@ -1,24 +1,27 @@
 import axios from "axios"
-import React, { useEffect, useState, useContext } from "react"
+import React, { useState, useContext } from "react"
 import { DataContext } from "../../context/DataContext"
 import web3, { nftContract } from "../../tokens/canes/canes"
 import Loader from "../../components/loader/loader"
-import NftCard from "../../components/nftCard/nftCard"
 import changeStateCanInMarket from "../../context/services/changeStateCanInMarket"
 import { Link } from "react-router-dom"
 
 const MarketCanodromes = () => {
     const _context = useContext(DataContext)
-    const [canodromesList, setCanodromesList] = useState(false)
-    const [commonCheck, setCommonCheck] = useState(false)
-    const [rareCheck, setRareCheck] = useState(false)
-    const [epicCheck, setEpicCheck] = useState(false)
-    const [legendaryCheck, setLegendaryCheck] = useState(false)
-    const [order, setOrder] = useState(1)
+    const {orderCanodromes, setOrderCanodromes,
+        commonCheckCanodromes, setCommonCheckCanodromes,
+        rareCheckCanodromes, setRareCheckCanodromes,
+        epicCheckCanodromes, setEpicCheckCanodromes,
+        legendaryCheckCanodromes, setLegendaryCheckCanodromes
+    } = useContext(DataContext)
+
     const [canodrome, setCanodrome] = useState(false)
     const [renderModal, setRenderModal] = useState(false)
-    const [modalText, setModalText] = useState(false)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
+
+    const refresh = async () => {
+        await fetch(process.env.REACT_APP_BASEURL + 'marketplace')
+    }
 
     const confirmBuy = async () => {
         const storage = JSON.parse(localStorage.getItem('windowsData'))
@@ -68,8 +71,8 @@ const MarketCanodromes = () => {
                         console.log("error: " + error)
                         console.log(error)
                     }
-                    await getCanodromesOnSell()
-                    await _context.getCanodromes(_context.wallet)
+                    await refresh()
+                    //await _context.getCanodromes(_context.wallet)
                     //console.log(envio.data.response)
                 }).catch(async error => {
                     console.log("Rechazo la transaccion")
@@ -85,51 +88,6 @@ const MarketCanodromes = () => {
             alert("Usted tiene una transaccion pendiente por favor espere 3 minutos")
         }
 
-    }
-
-
-    //filter checkbox
-
-
-    //useEffect(() => {
-    //getcanodromesOnSell()
-    //console.log(_context.canodromesMarket)
-    //fetch(process.env.REACT_APP_BASEURL + 'marketplace')
-    //}, [])
-
-    const getCanodromesOnSell = async () => {
-        _context.setLoading(true)
-        const filteredCanodromes = await _context.canodromesMarket.filter(item => item.status == 1)
-            .sort((price1, price2) => orderFunction(price1, price2))
-            .filter(dog => filterCheckbox(dog))
-        setCanodromesList(filteredCanodromes)
-        await _context.setLoading(false)
-    }
-
-    const filterCheckbox = (dog) => {
-        if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
-        if (commonCheck == true && dog.rarity == 1) return dog;
-        if (rareCheck == true && dog.rarity == 2) return dog;
-        if (epicCheck == true && dog.rarity == 3) return dog;
-        if (legendaryCheck == true && dog.rarity == 4) return dog;
-    }
-
-    //order form filter
-    const orderFunction = (price1, price2, orderAux) => {
-        (order == 1) ? orderAux = -1 : orderAux = 1;
-        if (price1.onSale.price > price2.onSale.price) return order;
-        if (price1.onSale.price < price2.onSale.price) return orderAux;
-        return 0;
-    }
-
-
-    const find = async () => {
-        const newList = canodromesList.sort((price1, price2) => {
-            orderFunction(price1, price2)
-        })
-            .filter(dog => filterCheckbox(dog))
-        setCanodromesList(newList);
-        getCanodromesOnSell();
     }
 
     return (
@@ -179,9 +137,9 @@ const MarketCanodromes = () => {
                             </div>
                             <div className="mt-3">
                                 <div className="sidebarText mb-1">
-                                    Order by price: {order == 1 ? "Ask" : "Desc"}
+                                    Order by price: {orderCanodromes == 1 ? "Ask" : "Desc"}
                                 </div>
-                                <select onChange={e => setOrder(e.target.value)} className="select" name="" id="">
+                                <select onChange={e => setOrderCanodromes(e.target.value)} className="select" name="" id="">
                                     <option className="optionFilter" value={1}>Price Ask</option>
                                     <option className="optionFilter" value={-1}>Price Desk</option>
                                 </select>
@@ -194,41 +152,56 @@ const MarketCanodromes = () => {
                                     <div className="row">
                                         <div className="col-6 textRaza">
                                             <div>
-                                                <input onChange={e => setCommonCheck(e.target.checked)} type="checkbox" name="commonCheck" id="1" checked={commonCheck} /> Common
+                                                <input onChange={e => setCommonCheckCanodromes(e.target.checked)} type="checkbox" name="commonCheck" id="1" checked={commonCheckCanodromes} /> Common
                                             </div>
                                             <div>
-                                                <input onChange={e => setRareCheck(e.target.checked)} type="checkbox" name="" id="" checked={rareCheck} /> Rare
+                                                <input onChange={e => setRareCheckCanodromes(e.target.checked)} type="checkbox" name="" id="" checked={rareCheckCanodromes} /> Rare
                                             </div>
                                         </div>
                                         <div className="col-6 textRaza">
                                             <div>
-                                                <input onChange={e => setEpicCheck(e.target.checked)} type="checkbox" name="" id="" checked={epicCheck} /> Épic
+                                                <input onChange={e => setEpicCheckCanodromes(e.target.checked)} type="checkbox" name="" id="" checked={epicCheckCanodromes} /> Épic
                                             </div>
                                             <div>
-                                                <input onChange={e => setLegendaryCheck(e.target.checked)} type="checkbox" name="" id="" checked={legendaryCheck} /> Legendary
+                                                <input onChange={e => setLegendaryCheckCanodromes(e.target.checked)} type="checkbox" name="" id="" checked={legendaryCheckCanodromes} /> Legendary
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <button onClick={() => alert()} className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
+                                <button onClick={refresh} className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
                             </div>
                         </div>
                     </div>
-                    <div className="col-9 listItems">
-                        <div className="">
-                            <h3> {canodromesList ? <> {canodromesList.length} Canodromes Listed </> : <> 0 Canodromes Listed</>}</h3>
-                        </div>
-                        <div className="container-fluid">
-                            <div className="row">
-                                {_context.canodromesMarket.lenght != 0 && <>
-                                    {_context.canodromesMarket.map((item) => {
-                                        return <div key={item._id} className="border p-2 col-4"> {item._id} </div>
-                                    })}
-                                </>}
+                    <div className="col-9 ">
+                    <div className="col-9">
+                        {_context.canodromesMarket.length == 0 ? <>
+                            <div className="text-center mt-5">
+                                <button onClick={refresh} className="btn btn-primary"> Refresh Market </button>
                             </div>
-                        </div>
+                        </> : <>
+
+                            <div className="mb-2">
+                                <div>{_context.canodromesMarket.length} Canodromes Listed  </div>
+                            </div>
+                             <div className="row">
+                             {_context.canodromesMarket.length != 0 && _context.canodromesMarket.map((item) => {
+                                    return (
+                                        <div key={item._id} className="col-4 border">
+                                          <div>id: {item.id}</div>  
+                                          <div>price: {item.onSale.price}</div>  
+                                          <div>type: {item.type}</div>  
+                                          <div> <button className="btn btn-primary"> Buy </button> </div>
+                                          
+                                        </div>
+                                    )
+                                })
+                                }
+                            </div> 
+                        </>}
+                    </div>
+                        
                     </div>
                 </div>
             </div>

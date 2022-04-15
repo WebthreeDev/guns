@@ -9,51 +9,24 @@ import changeStateCanInMarket from "../../context/services/changeStateCanInMarke
 import { Link } from "react-router-dom"
 const Market = () => {
     const _context = useContext(DataContext)
-    const [rangoMin, setRangoMin] = useState(200)
-    const [rangoMax, setRangoMax] = useState(360)
-    const [dogList, setdogList] = useState(false)
-
-    const [renderModal, setRenderModal] = useState(false)
-    const [modalText, setModalText] = useState(false)
-    const [pagination, setPagination] = useState(false)
-    const [can, setCan] = useState(false)
-    //filter checkbox
-    const [commonCheck, setCommonCheck] = useState(false)
-    const [rareCheck, setRareCheck] = useState(false)
-    const [epicCheck, setEpicCheck] = useState(false)
-    const [legendaryCheck, setLegendaryCheck] = useState(false)
-    const [order, setOrder] = useState(1)
+    const {order, setOrder,commonCheck, setCommonCheck,
+        rareCheck, setRareCheck,epicCheck, setEpicCheck,
+        legendaryCheck, setLegendaryCheck,rangoMin, setRangoMin,
+        rangoMax, setRangoMax
+    } = useContext(DataContext)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
 
-    /* useEffect(()=>{
-        if(_context.cansMarket){
-            setdogList(_context.cansMarket)
-            console.log(_context.cansMarket)
-            socketEx()
-        }
-    },[_context.cansMarket])
-
-    const socketEx = async () =>{
-        setTimeout(async()=>{
-              await fetch(process.env.REACT_APP_BASEURL + 'marketplace') 
-            },60000)
-    } */
-
-    const refresh = async ()=>{
-        
-        await fetch(process.env.REACT_APP_BASEURL + 'marketplace')
-        setdogList(_context.cansMarket)
-    }
+    const [renderModal, setRenderModal] = useState(false)
+    const [can, setCan] = useState(false)
     
-    const filterCans = async () => {
-        
-        const filteredCans = await _context.cansMarket.filter(item => item.status == 1)
-            .sort((price1, price2) => orderFunction(price1, price2))
-            .filter(dog => filterCheckbox(dog))
-            .filter(dog => filterRank(dog));
-        setdogList(filteredCans)
-       
+    const setModalText =()=>{}
 
+    const refresh = async () => {
+        await fetch(process.env.REACT_APP_BASEURL + 'marketplace')
+    }
+
+    const filterCans = async () => {
+       await fetch(process.env.REACT_APP_BASEURL + 'marketplace')  
     }
 
     const confirmBuy = async () => {
@@ -123,44 +96,6 @@ const Market = () => {
 
     }
 
-    //order form filter
-    const orderFunction = (price1, price2, orderAux) => {
-        (order == 1) ? orderAux = -1 : orderAux = 1;
-        if (price1.onSale.price > price2.onSale.price) return order;
-        if (price1.onSale.price < price2.onSale.price) return orderAux;
-        return 0;
-    }
-
-    //filter checkbox
-    const filterCheckbox = (dog) => {
-        if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
-        if (commonCheck == true && dog.rarity == 1) return dog;
-        if (rareCheck == true && dog.rarity == 2) return dog;
-        if (epicCheck == true && dog.rarity == 3) return dog;
-        if (legendaryCheck == true && dog.rarity == 4) return dog;
-    }
-
-    //filter range
-    const filterRank = (dog) => {
-        let totalStats = dog.aerodinamica + dog.aceleracion + dog.resistencia;
-        if (totalStats >= rangoMin && totalStats <= rangoMax) return dog;
-    }
-
-    const find = async () => {
-        const newList = dogList.sort((price1, price2) => {
-            orderFunction(price1, price2)
-        })
-            .filter(dog => filterCheckbox(dog))
-            .filter(dog => filterRank(dog));
-        setdogList(newList);
-        filterCans();
-    }
-
-    const getOrder = (e)=>{
-        setOrder(e)
-        filterCans()
-    }
-
     return (
         <div>
             {_context.loading && <Loader />}
@@ -189,10 +124,10 @@ const Market = () => {
             <div className="container-fluid">
                 <div className="secondNav mt-50px mb-3">
                     <Link to="/market" className="secondNavButton active">
-                       <div>
-                        Cans
+                        <div>
+                            Cans
 
-                       </div>
+                        </div>
                     </Link>
                     <Link to="/marketcanodromes" className="secondNavButton">
                         Canodromes
@@ -212,7 +147,7 @@ const Market = () => {
                                 <div className="sidebarText mb-1">
                                     Order by price: {order == 1 ? "Ask" : "Desc"}
                                 </div>
-                                <select onChange={e => getOrder(e.target.value)} className="select" name="" id="">
+                                <select onChange={e => setOrder(e.target.value)} className="select" name="" id="">
                                     <option className="optionFilter" value={1}>Price Ask</option>
                                     <option className="optionFilter" value={-1}>Price Desk</option>
                                 </select>
@@ -225,7 +160,7 @@ const Market = () => {
                                     <div className="row">
                                         <div className="col-6 textRaza">
                                             <div>
-                                                <input onChange={e =>setCommonCheck(e.target.checked)} type="checkbox" name="commonCheck" id="1" checked={commonCheck} /> Common
+                                                <input onChange={e => setCommonCheck(e.target.checked)} type="checkbox" name="commonCheck" id="1" checked={commonCheck} /> Common
                                             </div>
                                             <div>
                                                 <input onChange={e => setRareCheck(e.target.checked)} type="checkbox" name="" id="" checked={rareCheck} /> Rare
@@ -259,24 +194,22 @@ const Market = () => {
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <button onClick={find} className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
+                                <button onClick={filterCans} className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
                             </div>
                         </div>
                     </div>
-                    <div className="col-9 listItems">
-                        {dogList == false ? <>
+                    <div className="col-9">
+                        {_context.cansMarket.length == 0 ? <>
                             <div className="text-center mt-5">
                                 <button onClick={refresh} className="btn btn-primary"> Refresh Market </button>
                             </div>
-                        </>:<></> }
-                        <div className="justify-content-between d-flex align-items-center">
-                             {dogList && <h3>{dogList.length} Cans Listed  </h3>} 
-                            <div className="">
+                        </> : <>
+
+                            <div className="mb-2">
+                                <div>{_context.cansMarket.length} Cans Listed  </div>
                             </div>
-                        </div>
-                        <div className="row gx-2 gy-2 pb-5">
-                            {dogList &&
-                                dogList.map((item) => {
+                            <div className="row gx-2 gy-2 pb-5">
+                                {_context.cansMarket.map((item) => {
                                     return (
                                         <div key={item.id} className="col-4">
                                             <NftCard
@@ -289,8 +222,9 @@ const Market = () => {
                                         </div>
                                     )
                                 })
-                            }
-                        </div>
+                                }
+                            </div>
+                        </>}
                     </div>
                 </div>
             </div>
