@@ -140,14 +140,15 @@ $text:#6e7191;
     padding-top: 60px;
     position: relative;
 }
+Link{
+    text-decoration: none;
+}
 .sidebar-bg{
-    border-radius: 30px;
     padding: 20px;
-    min-height: 500px;
-    background: linear-gradient($gradient2, $gradient1);
     position: sticky;
-    top:60px;
+    top: 50px;
     width: 100%;
+    border-right: 1px solid rgb(65,60,80);
 }
 progress{
     max-width: 140px;

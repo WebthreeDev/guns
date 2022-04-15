@@ -212,12 +212,12 @@ export const DataProvider = ({ children }) => {
         })
         nftContract.methods.canodromeCommonPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
-            console.log("conodrome price : "+ _price)
+            //console.log("conodrome price : "+ _price)
             setCanodromeCommonPrice(_price)
         })
         nftContract.methods.canodromeLegendaryPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
-            console.log("conodrome legendary price : "+ _price)
+            //console.log("conodrome legendary price : "+ _price)
             setCanodromeLegendaryPrice(_price)
         })
     }

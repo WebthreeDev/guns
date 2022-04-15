@@ -25,11 +25,26 @@ const Market = () => {
     const [order, setOrder] = useState(1)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
 
-    useEffect(()=>{
-        setdogList(_context.cansMarket)     
+    /* useEffect(()=>{
+        if(_context.cansMarket){
+            setdogList(_context.cansMarket)
+            console.log(_context.cansMarket)
+            socketEx()
+        }
     },[_context.cansMarket])
 
+    const socketEx = async () =>{
+        setTimeout(async()=>{
+              await fetch(process.env.REACT_APP_BASEURL + 'marketplace') 
+            },60000)
+    } */
 
+    const refresh = async ()=>{
+        
+        await fetch(process.env.REACT_APP_BASEURL + 'marketplace')
+        setdogList(_context.cansMarket)
+    }
+    
     const filterCans = async () => {
         
         const filteredCans = await _context.cansMarket.filter(item => item.status == 1)
@@ -141,6 +156,11 @@ const Market = () => {
         filterCans();
     }
 
+    const getOrder = (e)=>{
+        setOrder(e)
+        filterCans()
+    }
+
     return (
         <div>
             {_context.loading && <Loader />}
@@ -166,11 +186,13 @@ const Market = () => {
                     </div>
                 </div>
             }
-
             <div className="container-fluid">
-                <div className="secondNav mt-50px mb-3 ">
+                <div className="secondNav mt-50px mb-3">
                     <Link to="/market" className="secondNavButton active">
+                       <div>
                         Cans
+
+                       </div>
                     </Link>
                     <Link to="/marketcanodromes" className="secondNavButton">
                         Canodromes
@@ -180,7 +202,7 @@ const Market = () => {
                     </button>
                 </div>
                 <div className="row">
-                    <div className="col-3 sidebar">
+                    <div className="col-3 sidebarx">
                         <div className="sidebar-bg">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
@@ -190,7 +212,7 @@ const Market = () => {
                                 <div className="sidebarText mb-1">
                                     Order by price: {order == 1 ? "Ask" : "Desc"}
                                 </div>
-                                <select onChange={e => setOrder(e.target.value)} className="select" name="" id="">
+                                <select onChange={e => getOrder(e.target.value)} className="select" name="" id="">
                                     <option className="optionFilter" value={1}>Price Ask</option>
                                     <option className="optionFilter" value={-1}>Price Desk</option>
                                 </select>
@@ -203,7 +225,7 @@ const Market = () => {
                                     <div className="row">
                                         <div className="col-6 textRaza">
                                             <div>
-                                                <input onChange={e => setCommonCheck(e.target.checked)} type="checkbox" name="commonCheck" id="1" checked={commonCheck} /> Common
+                                                <input onChange={e =>setCommonCheck(e.target.checked)} type="checkbox" name="commonCheck" id="1" checked={commonCheck} /> Common
                                             </div>
                                             <div>
                                                 <input onChange={e => setRareCheck(e.target.checked)} type="checkbox" name="" id="" checked={rareCheck} /> Rare
@@ -242,9 +264,13 @@ const Market = () => {
                         </div>
                     </div>
                     <div className="col-9 listItems">
-
+                        {dogList == false ? <>
+                            <div className="text-center mt-5">
+                                <button onClick={refresh} className="btn btn-primary"> Refresh Market </button>
+                            </div>
+                        </>:<></> }
                         <div className="justify-content-between d-flex align-items-center">
-                            <h3> {dogList && dogList.length} Cans Listed  </h3>
+                             {dogList && <h3>{dogList.length} Cans Listed  </h3>} 
                             <div className="">
                             </div>
                         </div>
