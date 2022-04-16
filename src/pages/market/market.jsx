@@ -27,17 +27,13 @@ const Market = () => {
     const [rangoMin, setRangoMin] = useState(200)
     const [rangoMax, setRangoMax] = useState(360)
 
-    const setModalText =()=>{}
-
-    // const refresh = async () => {
-    //     await fetch(process.env.REACT_APP_BASEURL + 'marketplace')
-    // }
+    const setModalText = () => { }
 
     useEffect(() => {
-        if(cans.length == 0)fetch(apiMarket);
+        if (cans.length == 0) fetch(apiMarket)
         filterCans()
     }, [cans]);
-    
+
     socket.on('data', async cansData => {
         setCans(cansData)
         console.log("socket del market")
@@ -48,7 +44,7 @@ const Market = () => {
             .sort((price1, price2) => orderFunction(price1, price2))
             .filter(dog => filterCheckbox(dog))
             .filter(dog => filterRank(dog));
-            setCanMarket(filteredCans)
+        setCanMarket(filteredCans)
     }
 
     const confirmBuy = async () => {
@@ -117,10 +113,6 @@ const Market = () => {
         }
     }
 
-    const filterForm = () => {
-        
-    }
-
     //order form filter
     const orderFunction = (price1, price2) => {
         let orderAux;
@@ -151,7 +143,7 @@ const Market = () => {
         if (rarity === "3") return "epic"
         if (rarity === "4") return "legendary"
     }
-
+    
     return (
         <div>
             {loading && <Loader />}
@@ -182,7 +174,6 @@ const Market = () => {
                     <Link to="/market" className="secondNavButton active">
                         <div>
                             Cans
-
                         </div>
                     </Link>
                     <Link to="/marketcanodromes" className="secondNavButton">
@@ -203,7 +194,7 @@ const Market = () => {
                                 <div className="sidebarText mb-1">
                                     Order by price: {order == 1 ? "Ask" : "Desc"}
                                 </div>
-                                <select onChange={ e => setOrder(e.target.value)} className="select" name="" id="">
+                                <select onChange={e => setOrder(e.target.value)} className="select" name="" id="">
                                     <option className="optionFilter" value={1}>Price Ask</option>
                                     <option className="optionFilter" value={-1}>Price Desk</option>
                                 </select>

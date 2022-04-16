@@ -67,11 +67,12 @@ a{
     height: 50px;
 }
 .secondNavButton{
-    margin-bottom: -2px;
+    margin-bottom: -1px;
     padding: 5px 10px;
     background-color: transparent;
     border: none;
     color:var(--light1);
+    text-decoration: none;
 }
 .active{
     border-bottom: 3px solid var(--blue);
