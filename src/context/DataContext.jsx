@@ -8,7 +8,6 @@ import { poolContract } from '../tokens/pool/pool'
 import connect from './services/connectS'
 import axios from 'axios'
 import changeStateCanInMarket from './services/changeStateCanInMarket'
-import socket from '../socket';
 
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
@@ -32,89 +31,16 @@ export const DataProvider = ({ children }) => {
     const [oracule, setOracule] = useState(false)
     const [minimunToClaim, setMinimunToClaim] = useState(false)
     const [dayReset, setDayReset] = useState(false)
+    const [canodromeMarket, setCanodromeMarket] = useState([]);
     const gas = web3.utils.toWei("0.00015", "gwei")
     const gasPrice = web3.utils.toWei("15", "gwei")
     const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
 
-    //market cans
-    const [order, setOrder] = useState(1)
-    const [cansMarket, setCansMarket] = useState([]);
-    const [commonCheck, setCommonCheck] = useState(true)
-    const [rareCheck, setRareCheck] = useState(true)
-    const [epicCheck, setEpicCheck] = useState(true)
-    const [legendaryCheck, setLegendaryCheck] = useState(true)
-
-    const [rangoMin, setRangoMin] = useState(200)
-    const [rangoMax, setRangoMax] = useState(360)
-
-    //market canodromes
-    const [canodromesMarket, setCanodromesMarket] = useState([])
-    const [orderCanodromes, setOrderCanodromes] = useState(1)
-    const [commonCheckCanodromes, setCommonCheckCanodromes] = useState(true)
-    const [rareCheckCanodromes, setRareCheckCanodromes] = useState(true)
-    const [epicCheckCanodromes, setEpicCheckCanodromes] = useState(true)
-    const [legendaryCheckCanodromes, setLegendaryCheckCanodromes] = useState(true)
     useEffect(() => {
-       /*  fetch(process.env.REACT_APP_BASEURL + 'marketplace') */
         exectConnect()
         getERC721Contract()
         //verifyClaim()
     }, [])
-
-    // from websocket
-    socket.on('canodromesMarket', async canodromesData => {
-        filterCanodromes(canodromesData)
-        console.log("socket del market Canodromed")
-    })
-    socket.on('data', async cansData => {
-        filterCans(cansData)
-        console.log("socket del market")
-    })
-
-    const filterCans = async (cansData) => {
-        const filteredCans = await cansData.filter(item => item.status == 1)
-            .sort((price1, price2) => orderFunction(price1, price2))
-            .filter(dog => filterCheckbox(dog))
-            .filter(dog => filterRank(dog));
-        setCansMarket(filteredCans)
-    }
-
-    const filterCanodromes = async (canodromesData) => {
-        const filteredCanodromes = await canodromesData.filter(item => item.status == 1)
-            .sort((price1, price2) => orderFunction(price1, price2))
-            .filter(canodrmeX => filterCheckboxCanodrome(canodrmeX))
-        setCanodromesMarket(filteredCanodromes)
-    }
-
-    //order form filter
-    const orderFunction = (price1, price2, orderAux) => {
-        (order == 1) ? orderAux = -1 : orderAux = 1;
-        if (price1.onSale.price > price2.onSale.price) return order;
-        if (price1.onSale.price < price2.onSale.price) return orderAux;
-        return 0;
-    }
-
-    //filter checkbox
-    const filterCheckbox = (dog) => {
-        /* if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog; */
-        if (commonCheck == true && dog.rarity == 1) return dog;
-        if (rareCheck == true && dog.rarity == 2) return dog;
-        if (epicCheck == true && dog.rarity == 3) return dog;
-        if (legendaryCheck == true && dog.rarity == 4) return dog;
-    }
-    const filterCheckboxCanodrome = (canodrmeX) => {
-        /* if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog; */
-        if (commonCheck == true && canodrmeX.type == 1) return canodrmeX;
-        if (rareCheck == true && canodrmeX.type == 2) return canodrmeX;
-        if (epicCheck == true && canodrmeX.type == 3) return canodrmeX;
-        if (legendaryCheck == true && canodrmeX.type == 4) return canodrmeX;
-    }
-
-    //filter range
-    const filterRank = (dog) => {
-        let totalStats = dog.aerodinamica + dog.aceleracion + dog.resistencia;
-        if (totalStats >= rangoMin && totalStats <= rangoMax) return dog;
-    }
 
     /*  const getClaimPersent = async () => {
          const account = await w3S.requestAccounts()
@@ -285,13 +211,6 @@ export const DataProvider = ({ children }) => {
         })
     }
 
-    const setRarity = (rarity) => {
-        if (rarity === "1") { return "common" }
-        if (rarity === "2") return "rare"
-        if (rarity === "3") return "epic"
-        if (rarity === "4") return "legendary"
-    }
-
     const getRaces = async () => {
         const accounts = await w3S.requestAccounts()
         const wallet = await accounts[0]
@@ -304,8 +223,6 @@ export const DataProvider = ({ children }) => {
         const _type = [0, 6, 12, 18, 24]
         return _type[type]
     }
-
-
 
     const _context = {
         wallet, connect,
@@ -320,7 +237,7 @@ export const DataProvider = ({ children }) => {
         loading, setLoading,
         getCans, cans, setCans,
         bnb, setBnb,
-        exectConnect, setRarity,
+        exectConnect,
         getERC721Contract,
         race, setRaces, getRaces,
         balance, cct,
@@ -328,20 +245,10 @@ export const DataProvider = ({ children }) => {
         getCanodromes, canodromes,
         gas, gasPrice,
         converType, claimPercent, getBnb,
-        getCCT, ownerWallet, cansMarket,
+        getCCT, ownerWallet,
         getCanodromeState, poolContract,
         oracule, minimunToClaim, dayReset,
-        canodromesMarket, setCansMarket,
-        order, setOrder, commonCheck, setCommonCheck,
-        rareCheck, setRareCheck, epicCheck, setEpicCheck,
-        legendaryCheck, setLegendaryCheck,
-        rangoMin, setRangoMin,
-        rangoMax, setRangoMax,
-        orderCanodromes, setOrderCanodromes,
-        commonCheckCanodromes, setCommonCheckCanodromes,
-        rareCheckCanodromes, setRareCheckCanodromes,
-        epicCheckCanodromes, setEpicCheckCanodromes,
-        legendaryCheckCanodromes, setLegendaryCheckCanodromes,
+        canodromeMarket
     }
 
     return (

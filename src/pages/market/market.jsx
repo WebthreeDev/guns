@@ -1,5 +1,5 @@
 import axios from "axios"
-import React, { useEffect, useState, useContext } from "react"
+import React, { useEffect, useState, useContext, useLayoutEffect } from "react"
 import perro from '../../img/perro.png'
 import { DataContext } from "../../context/DataContext"
 import web3, { nftContract } from "../../tokens/canes/canes"
@@ -7,33 +7,55 @@ import Loader from "../../components/loader/loader"
 import NftCard from "../../components/nftCard/nftCard"
 import changeStateCanInMarket from "../../context/services/changeStateCanInMarket"
 import { Link } from "react-router-dom"
+import socket from '../../socket';
 const Market = () => {
-    const _context = useContext(DataContext)
-    const {order, setOrder,commonCheck, setCommonCheck,
-        rareCheck, setRareCheck,epicCheck, setEpicCheck,
-        legendaryCheck, setLegendaryCheck,rangoMin, setRangoMin,
-        rangoMax, setRangoMax
-    } = useContext(DataContext)
+
+    const { _context, setLoading, loading } = useContext(DataContext)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
 
     const [renderModal, setRenderModal] = useState(false)
     const [can, setCan] = useState(false)
-    
+
+    //market cans
+    const [order, setOrder] = useState(1)
+    const [canMarket, setCanMarket] = useState([])
+    const [cans, setCans] = useState([]);
+    const [commonCheck, setCommonCheck] = useState(true)
+    const [rareCheck, setRareCheck] = useState(true)
+    const [epicCheck, setEpicCheck] = useState(true)
+    const [legendaryCheck, setLegendaryCheck] = useState(true)
+    const [rangoMin, setRangoMin] = useState(200)
+    const [rangoMax, setRangoMax] = useState(360)
+
     const setModalText =()=>{}
 
-    const refresh = async () => {
-        await fetch(process.env.REACT_APP_BASEURL + 'marketplace')
-    }
+    // const refresh = async () => {
+    //     await fetch(process.env.REACT_APP_BASEURL + 'marketplace')
+    // }
+
+    useEffect(() => {
+        if(cans.length == 0)fetch(apiMarket);
+        filterCans()
+    }, [cans]);
+    
+    socket.on('data', async cansData => {
+        setCans(cansData)
+        console.log("socket del market")
+    })
 
     const filterCans = async () => {
-       await fetch(process.env.REACT_APP_BASEURL + 'marketplace')  
+        const filteredCans = cans.filter(item => item.status == 1)
+            .sort((price1, price2) => orderFunction(price1, price2))
+            .filter(dog => filterCheckbox(dog))
+            .filter(dog => filterRank(dog));
+            setCanMarket(filteredCans)
     }
 
     const confirmBuy = async () => {
         const storage = JSON.parse(localStorage.getItem('windowsData'))
         if (!storage) {
             localStorage.setItem('windowsData', JSON.stringify({ id: can.id }));
-            _context.setLoading(true)
+            setLoading(true)
             setRenderModal(false)
             const canId = can.id
 
@@ -77,15 +99,15 @@ const Market = () => {
                         console.log("error: " + error)
                         console.log(error)
                     }
-                    await filterCans()
-                    await _context.getCans(_context.wallet)
+                    filterCans()
+                    _context.getCans(_context.wallet)
                     //console.log(envio.data.response)
                 }).catch(async error => {
                     console.log("Rechazo la transaccion")
                     console.log(error)
                     const trans = await axios.post(apiMarket, { "blockchainStatus": false, canId })
                     console.log(trans)
-                    await _context.setLoading(false)
+                    await setLoading(false)
                 })
             } catch (error) {
                 console.log(error)
@@ -93,12 +115,46 @@ const Market = () => {
         } else {
             alert("Usted tiene una transaccion pendiente por favor espere 3 minutos")
         }
+    }
 
+    const filterForm = () => {
+        
+    }
+
+    //order form filter
+    const orderFunction = (price1, price2) => {
+        let orderAux;
+        (order == 1) ? orderAux = -1 : orderAux = 1;
+        if (price1.onSale.price > price2.onSale.price) return order;
+        if (price1.onSale.price < price2.onSale.price) return orderAux;
+        return 0;
+    }
+
+    //filter checkbox
+    const filterCheckbox = (dog) => {
+        if (commonCheck == false && rareCheck == false && epicCheck == false && legendaryCheck == false) return dog;
+        if (commonCheck == true && dog.rarity == 1) return dog;
+        if (rareCheck == true && dog.rarity == 2) return dog;
+        if (epicCheck == true && dog.rarity == 3) return dog;
+        if (legendaryCheck == true && dog.rarity == 4) return dog;
+    }
+
+    //filter range
+    const filterRank = (dog) => {
+        let totalStats = dog.aerodinamica + dog.aceleracion + dog.resistencia;
+        if (totalStats >= rangoMin && totalStats <= rangoMax) return dog;
+    }
+
+    const setRarity = (rarity) => {
+        if (rarity === "1") { return "common" }
+        if (rarity === "2") return "rare"
+        if (rarity === "3") return "epic"
+        if (rarity === "4") return "legendary"
     }
 
     return (
         <div>
-            {_context.loading && <Loader />}
+            {loading && <Loader />}
             {renderModal &&
                 <div className="modalX">
                     <div className="modalIn">
@@ -108,7 +164,7 @@ const Market = () => {
                                     Estas comprando:
                                 </h3>
                                 {can.name}
-                                <div>Rarity: {_context.setRarity(can.rarity)}</div>
+                                <div>Rarity: {setRarity(can.rarity)}</div>
                                 <div>
                                     precio <b className="text-warning">{can.onSale.price} BNB</b>
                                 </div>
@@ -147,7 +203,7 @@ const Market = () => {
                                 <div className="sidebarText mb-1">
                                     Order by price: {order == 1 ? "Ask" : "Desc"}
                                 </div>
-                                <select onChange={e => setOrder(e.target.value)} className="select" name="" id="">
+                                <select onChange={ e => setOrder(e.target.value)} className="select" name="" id="">
                                     <option className="optionFilter" value={1}>Price Ask</option>
                                     <option className="optionFilter" value={-1}>Price Desk</option>
                                 </select>
@@ -199,17 +255,17 @@ const Market = () => {
                         </div>
                     </div>
                     <div className="col-9">
-                        {_context.cansMarket.length == 0 ? <>
+                        {canMarket.length == 0 ? <>
                             <div className="text-center mt-5">
-                                <button onClick={refresh} className="btn btn-primary"> Refresh Market </button>
+                                {/* <button onClick={refresh} className="btn btn-primary"> Refresh Market </button> */}
                             </div>
                         </> : <>
 
                             <div className="mb-2">
-                                <div>{_context.cansMarket.length} Cans Listed  </div>
+                                <div>{canMarket.length} Cans Listed  </div>
                             </div>
                             <div className="row gx-2 gy-2 pb-5">
-                                {_context.cansMarket.map((item) => {
+                                {canMarket.map((item) => {
                                     return (
                                         <div key={item.id} className="col-4">
                                             <NftCard
