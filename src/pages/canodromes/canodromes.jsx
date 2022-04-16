@@ -38,7 +38,7 @@ const Canodromes = () => {
         _context.setLoading(true)
         const body = { can }
         try {
-            console.log("poner un can en el canodrompo")
+            console.log("poner un can en el canodromo")
             const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/" + selectedCanodrome, body)
             //console.log(res.data.response)
             await _context.getCanodromes(_context.wallet)
@@ -46,7 +46,18 @@ const Canodromes = () => {
             getTakedCans()
             _context.setLoading(false)
         } catch (error) {
-            console.log(error)
+            _context.setLoading(false)
+            if (error.response) {
+                console.log("Error Response")
+                console.log(error.response.data)
+                alert(error.response.data.error)
+            } else if (error.request) {
+                console.log("Error Request")
+                console.log(error.request);
+            } else {
+                console.log("Error Message")
+                console.log('Error', error.message);
+            }
         }
     }
 
