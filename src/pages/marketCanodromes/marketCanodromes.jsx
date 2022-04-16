@@ -6,10 +6,11 @@ import Loader from "../../components/loader/loader"
 import changeStateCanInMarket from "../../context/services/changeStateCanInMarket"
 import { Link } from "react-router-dom"
 import socket from '../../socket';
+import canodromo from '../../img/canodrome.png'
 
 const MarketCanodromes = () => {
 
-    const { _context, canodromeMarket, setLoading, loading } = useContext(DataContext)
+    const { gas, gasPrice, wallet, setLoading, loading, getCanodromes } = useContext(DataContext)
 
     const [canodrome, setCanodrome] = useState(false)
     const [renderModal, setRenderModal] = useState(false)
@@ -19,17 +20,13 @@ const MarketCanodromes = () => {
     const [order, setOrder] = useState(1)
     const [canodromesMarket, setCanodromesMarket] = useState([])
     const [canodromes, setCanodromes] = useState([])
-    const [orderCanodromes, setOrderCanodromes] = useState(1)
     const [commonCheck, setCommonCheck] = useState(true)
     const [rareCheck, setRareCheck] = useState(true)
     const [epicCheck, setEpicCheck] = useState(true)
     const [legendaryCheck, setLegendaryCheck] = useState(true)
 
-    // const refresh = async () => {
-    //     await fetch(process.env.REACT_APP_BASEURL + 'marketplace')
-    // }
     useEffect(() => {
-        if(canodromes.length == 0)fetch(apiMarket);
+        if (canodromes.length == 0) fetch(apiMarket)
         filterCanodromes()
     }, [canodromes]);
 
@@ -43,65 +40,66 @@ const MarketCanodromes = () => {
         const filteredCanodromes = canodromes.filter(item => item.status == 1)
             .sort((price1, price2) => orderFunction(price1, price2))
             .filter(canodrmeX => filterCheckboxCanodrome(canodrmeX))
-            setCanodromesMarket(filteredCanodromes)
+        setCanodromesMarket(filteredCanodromes)
     }
 
     const confirmBuy = async () => {
-        const storage = JSON.parse(localStorage.getItem('windowsData'))
-        if (!storage) {
-            localStorage.setItem('windowsData', JSON.stringify({ id: canodrome.id }));
-            setLoading(true)
-            setRenderModal(false)
-            const canId = canodrome.id
-
-            setTimeout(() => {
-                const _storage = JSON.parse(localStorage.getItem('windowsData')) || null
-                console.log(_storage)
-                if (_storage) {
-                    console.log("este es el timeout")
-                    changeStateCanInMarket(_storage)
-                }
-            }, 200000);
+        setLoading(true)
+        setRenderModal(false)
+        if (true) {
+            /* const storage = JSON.parse(localStorage.getItem('windowsData'))
+            if (!storage) {
+                localStorage.setItem('windowsData', JSON.stringify({ id: canodrome.id }));
+                setLoading(true)
+                setRenderModal(false)
+                const canId = canodrome.id
+    
+                setTimeout(() => {
+                    const _storage = JSON.parse(localStorage.getItem('windowsData')) || null
+                    console.log(_storage)
+                    if (_storage) {
+                        console.log("este es el timeout")
+                        changeStateCanInMarket(_storage)
+                    }
+                }, 200000); */
 
             try {
 
                 console.log("comprando bien aki")
-                const apiGetCan = process.env.REACT_APP_BASEURL + "Canodromes/" + canId
-                const canObj = await axios.get(apiGetCan)
-                if (canObj.status == 3) throw "Esta en proceso de venta"
+                /*  const apiGetCan = process.env.REACT_APP_BASEURL + "Canodromes/" + canId
+                 const canObj = await axios.get(apiGetCan)
+                 if (canObj.status == 3) throw "Esta en proceso de venta" */
 
-                const res = await axios.patch(apiMarket, { canId })//cambia a estado 3 de espera
-                const _can = res.data.response
-                console.log(res.data.response)
                 //cobro y envio a el contrato
-                const from = _context.wallet
-                const price = _can.onSale.price.toString()
+                const from = wallet
+                const price = canodrome.onSale.price.toString()
                 console.log(price)
-                const value = web3.utils.toWei(_can.onSale.price.toString(), "ether")
-                const address = _can.wallet
+                const value = web3.utils.toWei(canodrome.onSale.price.toString(), "ether")
+                const address = canodrome.wallet
 
-                nftContract.methods.buyNft(address).send({ from: _context.wallet, value, gas: _context.gas, gassPrice: _context.gassPrice }).then(async blockchainRes => {
-                    localStorage.removeItem('windowsData');
+                nftContract.methods.buyNft(address).send({ from, value, gas, gasPrice }).then(async blockchainRes => {
+                    /* localStorage.removeItem('windowsData'); */
                     console.log(blockchainRes);
                     //envio el hash de la compra al back
                     try {
-                        await axios.post(apiMarket, {
-                            canId: _can.id,
-                            walletBuyer: _context.wallet,
-                            hash: blockchainRes.transactionHash
-                        })
+                        const body = { canodrome: { onSale: { sale: false, price: 0 }, wallet } }
+                        const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/sell/" + canodrome._id, body)//cambia a estado 3 de espera
+                        const _can = res.data.response
+                        console.log(_can)
+                        await getCanodromes(wallet)
+                        setLoading(false)
+                        alert("Congratulation!! you have a new canodrome, go to canodrome section")
                     } catch (error) {
                         console.log("error: " + error)
                         console.log(error)
+                        setLoading(false)
                     }
-                    // await refresh()
-                    //await _context.getCanodromes(_context.wallet)
                     //console.log(envio.data.response)
                 }).catch(async error => {
                     console.log("Rechazo la transaccion")
                     console.log(error)
-                    const trans = await axios.post(apiMarket, { "blockchainStatus": false, canId })
-                    console.log(trans)
+                    /* const trans = await axios.post(apiMarket, { "blockchainStatus": false, canId })
+                    console.log(trans) */
                     await setLoading(false)
                 })
             } catch (error) {
@@ -147,10 +145,15 @@ const MarketCanodromes = () => {
                                 <h3>
                                     Estas comprando:
                                 </h3>
-                                {canodrome.name}
-                                <div>Rarity: {setRarity(canodrome.rarity)}</div>
+                                {console.log(canodrome)}
+                                <div> Canodrome
+                                    {canodrome.type == 1 && <div className="rarity common px-3"> Common </div>}
+                                    {canodrome.type == 2 && <div className="rarity rare px-3"> Rare </div>}
+                                    {canodrome.type == 3 && <div className="rarity epic px-3"> Epic </div>}
+                                    {canodrome.type == 4 && <div className="rarity legendary px-3"> Legendary </div>}
+                                </div>
                                 <div>
-                                    precio <b className="text-warning">{canodrome.onSale.price} BNB</b>
+                                    precio <b className="text-warning">{canodrome && canodrome.onSale.price} BNB</b>
                                 </div>
                             </div>
                             <div className="w-50 d-flex justify-content-around">
@@ -163,10 +166,10 @@ const MarketCanodromes = () => {
             }
             <div className="container-fluid">
                 <div className="secondNav mt-50px mb-3 ">
-                    <Link to="/market" className="secondNavButton active">
+                    <Link to="/market" className="secondNavButton">
                         Cans
                     </Link>
-                    <Link to="/marketcanodromes" className="secondNavButton">
+                    <Link to="/marketcanodromes" className="secondNavButton active">
                         Canodromes
                     </Link>
                     <button className="secondNavButton">
@@ -183,7 +186,7 @@ const MarketCanodromes = () => {
                             </div>
                             <div className="mt-3">
                                 <div className="sidebarText mb-1">
-                                    Order by price: {orderCanodromes == 1 ? "Ask" : "Desc"}
+                                    Order by price: {order == 1 ? "Ask" : "Desc"}
                                 </div>
                                 <select onChange={e => setOrder(e.target.value)} className="select" name="" id="">
                                     <option className="optionFilter" value={1}>Price Ask</option>
@@ -221,7 +224,7 @@ const MarketCanodromes = () => {
                         </div>
                     </div>
                     <div className="col-9 ">
-                    <div className="col-9">
+
                         {canodromesMarket.length == 0 ? <>
                             <div className="text-center mt-5">
                                 {/* <button onClick={refresh} className="btn btn-primary"> Refresh Market </button> */}
@@ -231,23 +234,40 @@ const MarketCanodromes = () => {
                             <div className="mb-2">
                                 <div>{canodromesMarket.length} Canodromes Listed  </div>
                             </div>
-                             <div className="row">
-                             {canodromesMarket.length != 0 && canodromesMarket.map((item) => {
-                                    return (
-                                        <div key={item._id} className="col-4 border">
-                                          <div>id: {item.id}</div>  
-                                          <div>price: {item.onSale.price}</div>  
-                                          <div>type: {item.type}</div>  
-                                          <div> <button className="btn btn-primary"> Buy </button> </div>
-                                          
-                                        </div>
-                                    )
-                                })
-                                }
-                            </div> 
+                            <div className="container">
+                                <div className="row">
+                                    {canodromesMarket.length != 0 && canodromesMarket.map((item) => {
+                                        return (
+                                            <div key={item._id} className="col-4 p-2">
+                                                <div className="canodromeCardMarket">
+                                                    <div className="d-flex justify-content-between align-items-center">
+                                                        <div>#{item.id}</div>
+                                                        <div>
+                                                            {item.type == 1 && <div className="rarity common px-3"> Common </div>}
+                                                            {item.type == 2 && <div className="rarity rare px-3"> Rare </div>}
+                                                            {item.type == 3 && <div className="rarity epic px-3"> Epic </div>}
+                                                            {item.type == 4 && <div className="rarity legendary px-3"> Legendary </div>}
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <img className="w-100" src={canodromo} alt="" />
+                                                    </div>
+                                                    <div className="price-canodrome text-warning text-center">
+                                                        {item.onSale.price} BNB
+                                                    </div>
+                                                    <div>
+                                                        <button onClick={() => { setCanodrome(item); setRenderModal(true) }} className="btn btn-primary form-control"> Buy </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
+                                    })
+                                    }
+                                </div>
+                            </div>
                         </>}
-                    </div>
-                        
+
+
                     </div>
                 </div>
             </div>

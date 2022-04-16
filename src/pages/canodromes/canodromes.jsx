@@ -174,7 +174,7 @@ const Canodromes = () => {
                 <div key={canodromeItem._id} className='row canodromeCard mt-4'>
                     <div className='col-md-4 col-12 text-center p-3 imgCanodromeBg'>
                         <div className='text-center mb-2'>
-                            {canodromeItem._id}
+                          #{canodromeItem.id} - {canodromeItem._id}
                         </div>
                         <div>
                             {canodromeItem.onSale.sale && <>
