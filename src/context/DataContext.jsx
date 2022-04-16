@@ -31,7 +31,6 @@ export const DataProvider = ({ children }) => {
     const [oracule, setOracule] = useState(false)
     const [minimunToClaim, setMinimunToClaim] = useState(false)
     const [dayReset, setDayReset] = useState(false)
-    const [canodromeMarket, setCanodromeMarket] = useState([]);
     const gas = web3.utils.toWei("0.00015", "gwei")
     const gasPrice = web3.utils.toWei("15", "gwei")
     const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
@@ -247,8 +246,7 @@ export const DataProvider = ({ children }) => {
         converType, claimPercent, getBnb,
         getCCT, ownerWallet,
         getCanodromeState, poolContract,
-        oracule, minimunToClaim, dayReset,
-        canodromeMarket
+        oracule, minimunToClaim, dayReset
     }
 
     return (
