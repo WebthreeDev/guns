@@ -219,7 +219,7 @@ export const DataProvider = ({ children }) => {
     }
 
     const converType = (type) => {
-        const _type = [0, 6, 12, 18, 24]
+        const _type = [0, 12, 24, 36, 48]
         return _type[type]
     }
 

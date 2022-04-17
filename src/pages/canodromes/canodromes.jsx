@@ -225,7 +225,7 @@ const Canodromes = () => {
                                                                     # {canodromeItem.cans[index].can.id}
                                                                 </div>
                                                                 <div>
-                                                                    {canodromeItem.cans[index].can.energy} / 2
+                                                                    {canodromeItem.cans[index].can.energy} / 4
                                                                 </div>
                                                             </div>
                                                             <div className='text-center'>
@@ -253,7 +253,7 @@ const Canodromes = () => {
                                                                     # {canodromeItem.cans[index].can.id}
                                                                 </div>
                                                                 <div>
-                                                                    {canodromeItem.cans[index].can.energy} / 2
+                                                                    {canodromeItem.cans[index].can.energy} / 4
                                                                 </div>
                                                             </div>
                                                             <div className='text-center'>
@@ -282,7 +282,7 @@ const Canodromes = () => {
                                                                     # {canodromeItem.cans[index].can.id}
                                                                 </div>
                                                                 <div>
-                                                                    {canodromeItem.cans[index].can.energy} / 2
+                                                                    {canodromeItem.cans[index].can.energy} / 4
                                                                 </div>
                                                             </div>
                                                             <div className='text-center'>
@@ -311,7 +311,7 @@ const Canodromes = () => {
                                                                     # {canodromeItem.cans[index].can.id}
                                                                 </div>
                                                                 <div>
-                                                                    {canodromeItem.cans[index].can.energy} / 2
+                                                                    {canodromeItem.cans[index].can.energy} / 4
                                                                 </div>
                                                             </div>
                                                             <div className='text-center'>

@@ -39,7 +39,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                                     <progress className='' min={"0"} value={item.energy} max={"2"} name="" id="" />
                                 </div>
                             </div>
-                            <div className='totalStats lb-color'> {item.energy}/2 </div>
+                            <div className='totalStats lb-color'> {item.energy}/4 </div>
                         </div>
                         <div className='d-flex justify-content-between  align-items-center'>
                             <div className='lb-color'>
