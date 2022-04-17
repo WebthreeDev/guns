@@ -13,19 +13,23 @@ const Canodromes = () => {
     const _context = useContext(DataContext)
     const [selectCans, setSelectCans] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
-    const [takedCans, setTakedCans] = useState(false)
-    const [filteredCans, setFilteredCans] = useState(false)
+    // const [takedCans, setTakedCans] = useState(false)
+    const [filteredCans, setFilteredCans] = useState([])
     const [sellingCanodrome, setSellingCanodrome] = useState(false)
     const [canodromeOnSell, setCanodromeOnSell] = useState(false)
     const [canodromePrice, setCanodromePrice] = useState(false)
+
     const addCan = async (canodromeId) => {
+
         let _filteredCans = []
-        const taked = await getTakedCans()
+        const canodromesAll = _context.canodromes.map((canodrome) => canodrome.cans);
+        const canodromesAllFlat = canodromesAll.flat();
+        const arrayCanInCanodromes = canodromesAllFlat.map(can => can.can.id);
+        
         _context.cans.map(item => {
             let suma = 0
-            console.log(takedCans)
-            taked.map(_item => { if (item.id == _item.can.id) suma++ })
-            if (suma == 0) _filteredCans.push(item)
+            arrayCanInCanodromes.map(_item => { if (item.id == _item) suma++ })
+            if (suma == 0 && item.onSale.sale == false) _filteredCans.push(item)
         })
 
         setFilteredCans(_filteredCans)
@@ -43,7 +47,7 @@ const Canodromes = () => {
             //console.log(res.data.response)
             await _context.getCanodromes(_context.wallet)
             setSelectCans(false)
-            getTakedCans()
+            // getTakedCans()
             _context.setLoading(false)
         } catch (error) {
             _context.setLoading(false)
@@ -61,19 +65,19 @@ const Canodromes = () => {
         }
     }
 
-    const getTakedCans = async _ => {
-        let _takedCans = []
-        if (_context.wallet != false && _context.canodromes != false) {
-            console.log("obteniendo taked Cans:")
-            console.log(_context.wallet)
-            console.log(_context.canodromes)
-            _context.canodromes.map((canodrome) => {
-                _takedCans = [...canodrome.cans]
-            })
-            setTakedCans(_takedCans)
-        }
-        return _takedCans
-    }
+    // const getTakedCans = async _ => {
+    //     let _takedCans = []
+    //     if (_context.wallet != false && _context.canodromes != false) {
+    //         console.log("obteniendo taked Cans:")
+    //         console.log(_context.wallet)
+    //         console.log(_context.canodromes)
+    //         _context.canodromes.map((canodrome) => {
+    //             _takedCans = [...canodrome.cans]
+    //         })
+    //         setTakedCans(_takedCans)
+    //     }
+    //     return _takedCans
+    // }
 
 
     const setRenderModal = _ => { }
@@ -83,7 +87,7 @@ const Canodromes = () => {
         _context.setLoading(true)
         await axios.delete(baseUrl + "canodrome/" + canodromeId + "/" + canId)
         await _context.getCanodromes(_context.wallet)
-        getTakedCans()
+        // getTakedCans()
         _context.setLoading(false)
     }
 
