@@ -41,13 +41,9 @@ const Shop = () => {
         console.log(price)
         try {
             const contractResponse = await nftContract.methods.mint(packageId).send({ from: wallet, value, gas, gasPrice })
-
-            //Get Hash
-            const hash = contractResponse.events.Transfer.transactionHash
-
             if (packageId <= 3) {
-                const canId = await contractResponse.events.Transfer.returnValues.tokenIdole.log()
-                const body = { wallet, packageId, canId, hash }
+                const canId = await contractResponse.events.Transfer.returnValues.tokenId
+                const body = { wallet, packageId, canId }
                 const mintedCan = await axios.post(process.env.REACT_APP_BASEURL + "cans/", body)
                 console.log(mintedCan.data.response)
                 setCanMinted(mintedCan.data.response)
