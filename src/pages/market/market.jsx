@@ -158,7 +158,7 @@ const Market = () => {
                                 {can.name}
                                 <div>Rarity: {setRarity(can.rarity)}</div>
                                 <div>
-                                    precio <b className="text-warning">{can.onSale.price} BNB</b>
+                                    precio <b className="text-warning">{can.onSale.price} MATIC</b>
                                 </div>
                             </div>
                             <div className="w-50 d-flex justify-content-around">

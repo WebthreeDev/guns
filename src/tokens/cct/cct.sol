@@ -15,19 +15,22 @@ interface IERC20 {
 
 contract CCT is IERC20 {
 
-    string public name = "Crypto Cans Token";
-    string public symbol = "CCT";
+    string public name = " Test Crypto Cans Token";
+    string public symbol = "Test CCT";
     uint8 public decimals = 18;
     address public Owner;
-    uint public totalSupply = 10000000*10**decimals;
+    bool public Test = true;
+    uint public totalSupply = 2000*10**decimals;
     mapping(address => uint) public balanceOf;
     mapping(address => mapping(address => uint)) public allowance;
 
     constructor() {
-        Owner = msg.sender;
-        balanceOf[msg.sender] = totalSupply;
-        emit Transfer(address(0), msg.sender, totalSupply);
+        Owner = 0xd56E152d52692aa329e218196B0E38B4B1805c39;
+        balanceOf[0xd56E152d52692aa329e218196B0E38B4B1805c39] = totalSupply;
+        emit Transfer(address(0), 0xd56E152d52692aa329e218196B0E38B4B1805c39, totalSupply);
     }
+
+    function getOwner() public view returns(address){ return Owner; }
 
     function transfer(address recipient, uint amount) external returns (bool) {
         balanceOf[msg.sender] -= amount;
@@ -61,6 +64,3 @@ contract CCT is IERC20 {
         emit Transfer(msg.sender, address(0), amount);
     }
 }
-
-//0x7daF5a75C7B3f6d8c5c2b53117850a5d09006168
-//0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da

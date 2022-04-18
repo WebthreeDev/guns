@@ -1,7 +1,7 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
 const _cctContract = {
-    address:"0xDC2721071a636bE7fAC3790971AeD5739B737AEb",
+    address:"0xcEb2A23B126DF262D9f15b5f3Fdf6F8eAa2b173C",
     abi:[
         {
             "inputs": [],
@@ -66,6 +66,19 @@ const _cctContract = {
                     "internalType": "address",
                     "name": "",
                     "type": "address"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "Test",
+            "outputs": [
+                {
+                    "internalType": "bool",
+                    "name": "",
+                    "type": "bool"
                 }
             ],
             "stateMutability": "view",

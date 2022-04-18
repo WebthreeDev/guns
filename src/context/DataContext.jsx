@@ -32,7 +32,7 @@ export const DataProvider = ({ children }) => {
     const [minimunToClaim, setMinimunToClaim] = useState(false)
     const [dayReset, setDayReset] = useState(false)
     const gas = web3.utils.toWei("0.00015", "gwei")
-    const gasPrice = web3.utils.toWei("15", "gwei")
+    const gasPrice = web3.utils.toWei("50", "gwei")
     const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
 
     useEffect(() => {
@@ -79,43 +79,52 @@ export const DataProvider = ({ children }) => {
 
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
-                const wallet = accounts[0]
-                axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
-                    .then(async (res) => {
-                        const _data = res.data.response
-                        /*  console.log("_data")*/
-                        console.log(_data)
-                        setBalance(_data.getWallet.balance)
-                        setClaimPersent(_data.claim.porcent)
-                        setWallet(wallet)
-                        setCans(_data.cansUser)
-                        setCanodromes(_data.canodromes)
-                        setOracule(_data.oracule.value)
-                        setMinimunToClaim(_data.oracule.min)
-                        setDayReset(_data.dayReset)
+                const _chainId = 137
+                const chainId = await w3S.chainId()
+                if (chainId == _chainId) {
+                    const wallet = accounts[0]
+                    axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
+                        .then(async (res) => {
+                            const _data = res.data.response
+                            /*  console.log("_data")*/
+                            console.log(_data)
+                            setBalance(_data.getWallet.balance)
+                            setClaimPersent(_data.claim.porcent)
+                            setWallet(wallet)
+                            setCans(_data.cansUser)
+                            setCanodromes(_data.canodromes)
+                            setOracule(_data.oracule.value)
+                            setMinimunToClaim(_data.oracule.min)
+                            setDayReset(_data.dayReset)
 
-                        await getBnb(wallet)
-                        await getCCT(wallet)
-                        await getCanodromes(wallet, _data.canodromes)
-                        setLoading(false)
-                        return res.data.response
-                    }).catch(error => {
-                        setLoading(false)
-                        if (error.response) {
-                            console.log("Error Response")
-                            console.log(error.response.data);
-                            console.log(error.response.status);
-                            console.log(error.response.headers);
-                        } else if (error.request) {
-                            console.log("Error Request")
-                            console.log(error.request);
-                        } else {
-                            console.log("Error Message")
-                            console.log('Error', error.message);
-                        }
-                        console.log(error.config);
-                    })
-                return wallet
+                            await getBnb(wallet)
+                            await getCCT(wallet)
+                            await getCanodromes(wallet, _data.canodromes)
+                            setLoading(false)
+                            return res.data.response
+                        }).catch(error => {
+                            setLoading(false)
+                            if (error.response) {
+                                console.log("Error Response")
+                                console.log(error.response.data);
+                                console.log(error.response.status);
+                                console.log(error.response.headers);
+                            } else if (error.request) {
+                                console.log("Error Request")
+                                console.log(error.request);
+                            } else {
+                                console.log("Error Message")
+                                console.log('Error', error.message);
+                            }
+                            console.log(error.config);
+                        })
+                    return wallet
+                } else {
+                    alert("Incorrect chain!")
+                    w3S.switchEthereumChain(_chainId)
+                }
+
+
             }).catch(error => {
                 console.log("Metamask error:")
                 console.log(error)
@@ -203,7 +212,7 @@ export const DataProvider = ({ children }) => {
             //console.log("conodrome price : "+ _price)
             setCanodromeCommonPrice(_price)
         })
-        nftContract.methods.canodromeLegendaryPrice().call().then(res => {
+        nftContract.methods.x().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             //console.log("conodrome legendary price : "+ _price)
             setCanodromeLegendaryPrice(_price)

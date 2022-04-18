@@ -8,6 +8,7 @@ import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
+import logoPolygon from '../../img/logoPoligon.png'
 const Dashboard = () => {
     const { minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
@@ -226,7 +227,7 @@ const Dashboard = () => {
                             <div className=''>
                                 {selectedCan.onSale.sale &&
                                     <div className='d-flex align-items-center justify-content-between'>
-                                        <div className='text-warning'> Price: {Number.parseFloat(selectedCan.onSale.price)} BNB </div>
+                                        <div className='text-warning'> Price: {Number.parseFloat(selectedCan.onSale.price)} MATIC </div>
                                         <button onClick={() => _remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
                                     </div>
                                 }
@@ -241,8 +242,8 @@ const Dashboard = () => {
                                     {selectedCan.rarity == 3 && <i className="rarity epic px-2">Epic </i>}
                                     {selectedCan.rarity == 4 && <i className="rarity legendary px-2">Legendary </i>}
                                 </>}
-                                <h3 className='text-warning'>{price} BNB</h3>
-                                <p className='text-warning'> Sales fee: {Number.parseFloat(price / 100).toFixed(6)} BNB </p>
+                                <h3 className='text-warning'>{price} MATIC</h3>
+                                <p className='text-warning'> Sales fee: {Number.parseFloat(price / 100).toFixed(6)} MATIC </p>
                                 <input className='form-control' type="number" onChange={e => _setPrice(e.target.value)} />
                             </div>
                             <div className='mt-3'>
@@ -263,9 +264,9 @@ const Dashboard = () => {
                             <div className="menuSectionDshboard separator">
                                 <div className="text-center h-100 d-flex align-items-center">
                                     <div className="w-100">
-                                        <img className="my-2" height="50px" src="https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png" alt="" />
+                                        <img className="my-2" height="50px" src={logoPolygon} alt="" />
                                         <div>
-                                            <h5>{bnb ? bnb : 0} BNB
+                                            <h5>{bnb ? bnb : 0} MATIC
                                             </h5>
                                         </div>
                                     </div>
