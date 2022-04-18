@@ -230,12 +230,15 @@ const Market = () => {
                                         Stats
                                     </div>
                                     <div>
-                                        <h3 className="breedCount"> min {rangoMin} max {rangoMax}</h3>
+                                        <h3 className="breedCount"> min {rangoMin}</h3>
                                     </div>
                                 </div>
                                 <div>
                                     <input onChange={e => setRangoMin(e.target.value)} min="200" max={rangoMax} className="w-100" type="range" value={rangoMin} name="" id="" />
                                 </div>
+                                <div>
+                                        <h3 className="breedCount"> max {rangoMax}</h3>
+                                    </div>
                                 <div>
                                     <input onChange={e => setRangoMax(e.target.value)} min={rangoMin} max="360" className="w-100" type="range" value={rangoMax} name="" id="" />
                                 </div>
