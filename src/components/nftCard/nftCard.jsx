@@ -25,7 +25,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                 <img height="100px" src={perro} alt="" />
             </div>
             <div className="">
-                <div className="p-2 ">
+                <div className="p-2">
                     <div className="">
                         <div className="lb-color nft-name"> {item.name} </div>
                     </div>
