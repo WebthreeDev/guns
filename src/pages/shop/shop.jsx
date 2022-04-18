@@ -109,7 +109,7 @@ const Shop = () => {
                                                 </div>
                                                 <div className="">
                                                     <b className="mx-1">
-                                                        {commonPackagePrice} BNB
+                                                        {commonPackagePrice} MATIC
                                                     </b>
                                                 </div>
                                             </div>
@@ -163,7 +163,7 @@ const Shop = () => {
                                                 </div>
                                                 <div className="">
                                                     <b className="mx-1">
-                                                        {epicPackagePrice} BNB
+                                                        {epicPackagePrice} MATIC
                                                     </b>
                                                 </div>
                                             </div>
@@ -218,7 +218,7 @@ const Shop = () => {
                                                 </div>
                                                 <div className="">
                                                     <b className="mx-1">
-                                                        {legendaryPackagePrice} BNB
+                                                        {legendaryPackagePrice} MATIC
                                                     </b>
                                                 </div>
                                             </div>
@@ -275,7 +275,7 @@ const Shop = () => {
                                                 </div>
                                                 <div className="">
                                                     <b className="mx-1">
-                                                        {canodromeCommonPrice} BNB
+                                                        {canodromeCommonPrice} MATIC
                                                     </b>
                                                 </div>
                                             </div>
@@ -329,7 +329,7 @@ const Shop = () => {
                                                 </div>
                                                 <div className="">
                                                     <b className="mx-1">
-                                                        {canodromeLegendaryPrice} BNB
+                                                        {canodromeLegendaryPrice} MATIC
                                                     </b>
                                                 </div>
                                             </div>

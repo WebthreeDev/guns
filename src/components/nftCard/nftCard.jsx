@@ -13,7 +13,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
             <div className="d-flex justify-content-between h40">
                 {btnPrice != 0 && (
                     <div className='button-market px-1'>
-                        <img src="" alt="" /> {Number.parseFloat(item.onSale.price)} BNB
+                        <img src="" alt="" /> {Number.parseFloat(item.onSale.price)} MATIC
                     </div>
                 )}
                 <div className="px-2 lb-color item-id"> #{item.id} </div>
@@ -36,7 +36,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                                     Energy
                                 </div>
                                 <div>
-                                    <progress className='' min={"0"} value={item.energy} max={"2"} name="" id="" />
+                                    <progress className='' min={"0"} value={item.energy} max={"4"} name="" id="" />
                                 </div>
                             </div>
                             <div className='totalStats lb-color'> {item.energy}/4 </div>
