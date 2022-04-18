@@ -219,7 +219,7 @@ const Canodromes = () => {
                             <div className='col-12'>
                                 <div className="container-fluid">
                                     <div className='row'>
-                                        {canodromeItem.type == 1 && <>
+                                        {canodromeItem.type == 1 && canodromeItem.onSale.sale == false && <>
                                             {canodromeItemsCommon.map((index) => {
                                                 return <div key={index} className="col-4">
                                                     {canodromeItem.cans[index] ?
@@ -247,7 +247,7 @@ const Canodromes = () => {
                                                 </div>
                                             })}</>}
 
-                                        {canodromeItem.type == 2 && <>
+                                        {canodromeItem.type == 2 && canodromeItem.onSale.sale == false && <>
                                             {canodromeItemsRare.map((index) => {
                                                 return <div key={index} className="col-4">
                                                     {canodromeItem.cans[index] ?
@@ -275,7 +275,7 @@ const Canodromes = () => {
                                                 </div>
                                             })}</>}
 
-                                        {canodromeItem.type == 3 && <>
+                                        {canodromeItem.type == 3 && canodromeItem.onSale.sale == false && <>
                                             {canodromeItemsEpic.map((index) => {
                                                 return <div key={index} className="col-4">
                                                     {canodromeItem.cans[index] ?
@@ -304,7 +304,7 @@ const Canodromes = () => {
                                                 </div>
                                             })}</>}
 
-                                        {canodromeItem.type == 4 && <>
+                                        {canodromeItem.type == 4 && canodromeItem.onSale.sale == false && <>
                                             {canodromeItemsLegendary.map((index) => {
                                                 return <div key={index} className="col-4">
                                                     {canodromeItem.cans[index] ?
