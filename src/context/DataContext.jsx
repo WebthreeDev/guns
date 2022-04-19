@@ -31,8 +31,8 @@ export const DataProvider = ({ children }) => {
     const [oracule, setOracule] = useState(false)
     const [minimunToClaim, setMinimunToClaim] = useState(false)
     const [dayReset, setDayReset] = useState(false)
-    const gas = web3.utils.toWei("0.00015", "gwei")
-    const gasPrice = web3.utils.toWei("50", "gwei")
+    const gas = web3.utils.toWei("0.0002", "gwei")
+    const gasPrice = web3.utils.toWei("20", "gwei")
     const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
 
     useEffect(() => {
@@ -79,7 +79,7 @@ export const DataProvider = ({ children }) => {
 
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
-                const _chainId = 137
+                const _chainId = 97
                 const chainId = await w3S.chainId()
                 if (chainId == _chainId) {
                     const wallet = accounts[0]
@@ -212,7 +212,7 @@ export const DataProvider = ({ children }) => {
             //console.log("conodrome price : "+ _price)
             setCanodromeCommonPrice(_price)
         })
-        nftContract.methods.x().call().then(res => {
+        nftContract.methods.canodromeLegendary().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             //console.log("conodrome legendary price : "+ _price)
             setCanodromeLegendaryPrice(_price)

@@ -1,7 +1,7 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
 const _poolContract = {
-    address:"0x4C9C8f28205b2438ed928864C4c5945A52ec3D16",
+    address:"0x693f8Ea857f5D71825Dd03E598931b3E48dC5a95",
     abi:[
         {
             "inputs": [

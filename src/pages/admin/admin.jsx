@@ -74,7 +74,7 @@ const Admin = () => {
                     <h4>Get Balance</h4>
                     <h1 className="">
                         <div className="text-warning">
-                            {balance} MATIC
+                            {balance} BNB
                         </div>
                         <div>
                             <button onClick={withdraw} className="btn btn-danger mx-2"> withdraw to owner wallet </button>
@@ -97,41 +97,41 @@ const Admin = () => {
                     <div className="packages">
                         <b> Common:</b>
                         <div className="gray mx-2">
-                            {_context.commonPackagePrice} MATIC
+                            {_context.commonPackagePrice} BNB
                         </div>
-                        <input onChange={changePackagePrice} className="form-control" placeholder="New MATIC Price" type="text" />
+                        <input onChange={changePackagePrice} className="form-control" placeholder="New BNB Price" type="text" />
                         <button className="btn btn-danger my-2" onClick={() => changeNftPrice(1)}> Change Price </button>
                     </div>
                     <div className="packages">
                         <b> Epic:</b>
                         <div className="gray mx-2">
-                            {_context.epicPackagePrice} MATIC
+                            {_context.epicPackagePrice} BNB
                         </div>
-                        <input onChange={changePackagePrice} className="form-control" placeholder="New MATIC Price" type="text" />
+                        <input onChange={changePackagePrice} className="form-control" placeholder="New BNB Price" type="text" />
                         <button className="btn btn-danger my-2" onClick={() => changeNftPrice(2)}> Change Price </button>
                     </div>
                     <div className="packages">
                         <b> Legendary:</b>
                         <div className="gray mx-2">
-                            {_context.legendaryPackagePrice} MATIC
+                            {_context.legendaryPackagePrice} BNB
                         </div>
-                        <input onChange={changePackagePrice} className="form-control" placeholder="New MATIC Price" type="text" />
+                        <input onChange={changePackagePrice} className="form-control" placeholder="New BNB Price" type="text" />
                         <button className="btn btn-danger my-2" onClick={() => changeNftPrice(3)}> Change Price </button>
                     </div>
                     <div className="packages2">
                         <b> Canodrome Common:</b>
                         <div className="gray mx-2">
-                            {_context.canodromeCommonPrice} MATIC
+                            {_context.canodromeCommonPrice} BNB
                         </div>
-                        <input onChange={changePackagePrice} className="form-control" placeholder="New MATIC Price" type="text" />
+                        <input onChange={changePackagePrice} className="form-control" placeholder="New BNB Price" type="text" />
                         <button className="btn btn-danger my-2" onClick={() => changeNftPrice(4)}> Change Price </button>
                     </div>
                     <div className="packages2">
                         <b> Canodrome Legendary:</b>
                         <div className="gray mx-2">
-                            {_context.canodromeLegendaryPrice} MATIC
+                            {_context.canodromeLegendaryPrice} BNB
                         </div>
-                        <input onChange={changePackagePrice} className="form-control" placeholder="New MATIC Price" type="text" />
+                        <input onChange={changePackagePrice} className="form-control" placeholder="New BNB Price" type="text" />
                         <button className="btn btn-danger my-2" onClick={() => changeNftPrice(5)}> Change Price </button>
                     </div>
 

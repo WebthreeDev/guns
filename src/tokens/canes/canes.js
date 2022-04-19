@@ -1,7 +1,7 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
 const canContract = {
-    address:"0xdcE08691157c0E2C0722d834b8a7092cb146BE15",
+    address:"0x247f2895B8D6866d9e40249009114a8782Bb8aa2",
     abi:[
         {
             "inputs": [],
@@ -334,6 +334,19 @@ const canContract = {
         },
         {
             "inputs": [],
+            "name": "canodromeLegendary",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
             "name": "contractOwner",
             "outputs": [
                 {
@@ -507,19 +520,6 @@ const canContract = {
         {
             "inputs": [],
             "name": "totalSold",
-            "outputs": [
-                {
-                    "internalType": "uint256",
-                    "name": "",
-                    "type": "uint256"
-                }
-            ],
-            "stateMutability": "view",
-            "type": "function"
-        },
-        {
-            "inputs": [],
-            "name": "x",
             "outputs": [
                 {
                     "internalType": "uint256",

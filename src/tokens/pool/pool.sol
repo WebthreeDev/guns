@@ -11,14 +11,16 @@ contract CCT {
         uint amount
     ) external returns (bool) {}
     function burn(uint amount) external {}
+
+    function allowance(address owner, address spender) external view returns (uint){}
 }
 
 contract CCTCALLER {
     CCT c;
     address contractOwner;
-    constructor ( address _address ) {
-        c = CCT(_address);
-        contractOwner  = msg.sender;
+    constructor () {
+        c = CCT(0x2F7cEe8Ee2Df75535d8368996e221F9dAB7b0dE8);
+        contractOwner  = 0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da;
     }
 
     modifier onlyOwner() {
@@ -40,6 +42,10 @@ contract CCTCALLER {
 
     function burnCaller(uint amount) external onlyOwner {
         c.burn(amount);
+    }
+
+    function allowanceCaller(address owner, address spender) external view returns (uint){
+        return c.allowance(owner,spender);
     }
 
 }

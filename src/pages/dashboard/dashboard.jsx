@@ -8,7 +8,6 @@ import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
-import logoPolygon from '../../img/logoPoligon.png'
 const Dashboard = () => {
     const { minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
@@ -26,7 +25,14 @@ const Dashboard = () => {
     useEffect(() => {
         getRaces()
         getApproved()
+        getClaimPercent()
     }, [wallet])
+
+    const getClaimPercent = ()=>{
+        if(wallet) {
+            axios.post(process.env.REACT_APP_BASEURL+"claim/"+wallet)
+        } 
+    }
 
     const _setPrice = (ammount) => {
         const _ammount = Number.parseFloat(ammount).toFixed(6);
@@ -116,9 +122,9 @@ const Dashboard = () => {
             axios.patch(process.env.REACT_APP_BASEURL + "claim", body).then((res) => {
                 console.log("claime")
                 console.log(res.data.response)
-                setTimeout(() => {
+                 setTimeout(() => {
                     console.log("transfiriendo fondos")
-                    const discountAmount = ((Math.floor(res.data.response.discountAmount * 1000)) / 1000).toString()
+                    const discountAmount = res.data.response.value.toString()
                     const claiming = web3.utils.toWei(discountAmount, "ether")
 
                     cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
@@ -133,13 +139,13 @@ const Dashboard = () => {
                             await exectConnect()
                             setLoading(false)
                         })
-                }, 20000)
+                }, 20000) 
 
             }).catch(error => {
                 setLoading(false)
                 if (error.response) {
-                    console.log(error.response.data.error);
-                    alert(error.response.data.error)
+                    console.log(error.response);
+                    alert(error.response)
                 } else if (error.request) {
                     console.log("Error request: ", error.request)
                 } else {
@@ -227,7 +233,7 @@ const Dashboard = () => {
                             <div className=''>
                                 {selectedCan.onSale.sale &&
                                     <div className='d-flex align-items-center justify-content-between'>
-                                        <div className='text-warning'> Price: {Number.parseFloat(selectedCan.onSale.price)} MATIC </div>
+                                        <div className='text-warning'> Price: {Number.parseFloat(selectedCan.onSale.price)} BNB </div>
                                         <button onClick={() => _remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
                                     </div>
                                 }
@@ -242,8 +248,8 @@ const Dashboard = () => {
                                     {selectedCan.rarity == 3 && <i className="rarity epic px-2">Epic </i>}
                                     {selectedCan.rarity == 4 && <i className="rarity legendary px-2">Legendary </i>}
                                 </>}
-                                <h3 className='text-warning'>{price} MATIC</h3>
-                                <p className='text-warning'> Sales fee: {Number.parseFloat(price / 100).toFixed(6)} MATIC </p>
+                                <h3 className='text-warning'>{price} BNB</h3>
+                                <p className='text-warning'> Sales fee: {Number.parseFloat(price / 100).toFixed(6)} BNB </p>
                                 <input className='form-control' type="number" onChange={e => _setPrice(e.target.value)} />
                             </div>
                             <div className='mt-3'>
@@ -264,9 +270,9 @@ const Dashboard = () => {
                             <div className="menuSectionDshboard separator">
                                 <div className="text-center h-100 d-flex align-items-center">
                                     <div className="w-100">
-                                        <img className="my-2" height="50px" src={logoPolygon} alt="" />
+                                        <img className="my-2" height="50px" src='https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png' alt="" />
                                         <div>
-                                            <h5>{bnb ? bnb : 0} MATIC
+                                            <h5>{bnb ? bnb : 0} BNB
                                             </h5>
                                         </div>
                                     </div>
