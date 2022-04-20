@@ -3,12 +3,11 @@ import resumeWallet from './services/resumeWallet'
 import lastForWallet from './services/lastForWallet'
 import w3S, { web3 } from '../services/w3S'
 import { nftContract } from '../tokens/canes/canes'
-import { cctContract } from '../tokens/cct/cct'
-import { poolContract } from '../tokens/pool/pool'
+import { cctContract, _cctContract } from '../tokens/cct/cct'
+import { poolContract, _poolContract } from '../tokens/pool/pool'
 import connect from './services/connectS'
 import axios from 'axios'
 import changeStateCanInMarket from './services/changeStateCanInMarket'
-
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
 
@@ -33,7 +32,7 @@ export const DataProvider = ({ children }) => {
     const [dayReset, setDayReset] = useState(false)
     const gas = web3.utils.toWei("0.0002", "gwei")
     const gasPrice = web3.utils.toWei("20", "gwei")
-    const ownerWallet = "0xDD4f413f98dD8Bf8cABc9877156aE2B5108f1397"
+    const ownerWallet = _poolContract.address
 
     useEffect(() => {
         exectConnect()
@@ -76,10 +75,10 @@ export const DataProvider = ({ children }) => {
         if (storageCanId) {
             changeStateCanInMarket(storageCanId)
         }
-
+        const _chainId = 97
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
-                const _chainId = 97
+
                 const chainId = await w3S.chainId()
                 if (chainId == _chainId) {
                     const wallet = accounts[0]
@@ -126,6 +125,7 @@ export const DataProvider = ({ children }) => {
 
 
             }).catch(error => {
+                w3S.switchEthereumChain(_chainId)
                 console.log("Metamask error:")
                 console.log(error)
                 setLoading(false)
@@ -255,7 +255,8 @@ export const DataProvider = ({ children }) => {
         converType, claimPercent, getBnb,
         getCCT, ownerWallet,
         getCanodromeState, poolContract,
-        oracule, minimunToClaim, dayReset
+        oracule, minimunToClaim, dayReset,
+        _cctContract
     }
 
     return (

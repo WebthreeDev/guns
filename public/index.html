@@ -31,6 +31,11 @@
     
     window.ethereum.on('chainChanged', async _ => {
       console.log("useted a cambiado de red")
+      const chainId = "0x61"
+      const id = await window.ethereum.request({ method: 'eth_chainId' })
+      if(id!=chainId){
+        window.ethereum.request({ method: 'wallet_switchEthereumChain', params: [{ chainId }] })
+      }
       location.reload()
     })
 

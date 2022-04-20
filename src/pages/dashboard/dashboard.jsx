@@ -9,7 +9,7 @@ import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const { minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const {_cctContract, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -335,6 +335,9 @@ const Dashboard = () => {
                                                 No cans in your dashboard
                                             </>}
                                         </>}
+                                    </div>
+                                    <div>
+                                        CCT Contract: {_cctContract.address}
                                     </div>
                                     <div>
                                         <button onClick={() => setRaceModal(true)} className='mx-2 btn btn-primary'> Races History </button>
