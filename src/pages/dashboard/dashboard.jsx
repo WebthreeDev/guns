@@ -9,7 +9,7 @@ import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
 const Dashboard = () => {
-    const {_cctContract, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const { _cctContract, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -28,10 +28,10 @@ const Dashboard = () => {
         getClaimPercent()
     }, [wallet])
 
-    const getClaimPercent = ()=>{
-        if(wallet) {
-            axios.post(process.env.REACT_APP_BASEURL+"claim/"+wallet)
-        } 
+    const getClaimPercent = () => {
+        if (wallet) {
+            axios.post(process.env.REACT_APP_BASEURL + "claim/" + wallet)
+        }
     }
 
     const _setPrice = (ammount) => {
@@ -122,7 +122,7 @@ const Dashboard = () => {
             axios.patch(process.env.REACT_APP_BASEURL + "claim", body).then((res) => {
                 console.log("claime")
                 console.log(res.data.response)
-                 setTimeout(() => {
+                setTimeout(() => {
                     console.log("transfiriendo fondos")
                     const discountAmount = res.data.response.value.toString()
                     const claiming = web3.utils.toWei(discountAmount, "ether")
@@ -139,7 +139,7 @@ const Dashboard = () => {
                             await exectConnect()
                             setLoading(false)
                         })
-                }, 20000) 
+                }, 20000)
 
             }).catch(error => {
                 setLoading(false)
@@ -175,6 +175,14 @@ const Dashboard = () => {
                 setLoading(false)
             })
     }
+
+    const cansRarity = [
+        <i className="rarity common px-2">Common </i>,
+        <i className="rarity rare px-2">Rare </i>,
+        <i className="rarity epic px-2">Epic </i>,
+        <i className="rarity legendary px-2">Legendary </i>
+    ]
+
     return (
         <div className="">
             {raceModal && <>
@@ -240,14 +248,10 @@ const Dashboard = () => {
                                 <div>
                                     Selling canId: #{selectedCan && selectedCan.id}
                                 </div>
-                                Rarity: 
-                                
-                                {selectedCan && <>
-                                    {selectedCan.rarity == 1 && <i className="rarity common px-2">Common </i>}
-                                    {selectedCan.rarity == 2 && <i className="rarity rare px-2">Rare </i>}
-                                    {selectedCan.rarity == 3 && <i className="rarity epic px-2">Epic </i>}
-                                    {selectedCan.rarity == 4 && <i className="rarity legendary px-2">Legendary </i>}
-                                </>}
+                                Rarity:
+
+                                {selectedCan && cansRarity[selectedCan.rarity - 1]}
+
                                 <h3 className='text-warning'>{price} BNB</h3>
                                 <p className='text-warning'> Sales fee: {Number.parseFloat(price / 100).toFixed(6)} BNB </p>
                                 <input className='form-control' type="number" onChange={e => _setPrice(e.target.value)} />

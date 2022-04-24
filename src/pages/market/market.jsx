@@ -18,14 +18,14 @@ const Market = () => {
 
     //market cans
     const [order, setOrder] = useState(1)
-    const [canMarket, setCanMarket] = useState([])
-    const [cans, setCans] = useState([]);
-    const [commonCheck, setCommonCheck] = useState(true)
     const [rareCheck, setRareCheck] = useState(true)
+    const [commonCheck, setCommonCheck] = useState(true)
     const [epicCheck, setEpicCheck] = useState(true)
     const [legendaryCheck, setLegendaryCheck] = useState(true)
     const [rangoMin, setRangoMin] = useState(200)
     const [rangoMax, setRangoMax] = useState(360)
+    const [canMarket, setCanMarket] = useState([])
+    const [cans, setCans] = useState([]);
 
     const setModalText = () => { }
 
@@ -48,13 +48,12 @@ const Market = () => {
     }
 
     const confirmBuy = async () => {
+        setLoading(true)
+        setRenderModal(false)
+
         const storage = JSON.parse(localStorage.getItem('windowsData'))
         if (!storage) {
             localStorage.setItem('windowsData', JSON.stringify({ id: can.id }));
-            setLoading(true)
-            setRenderModal(false)
-            const canId = can.id
-
             setTimeout(() => {
                 const _storage = JSON.parse(localStorage.getItem('windowsData')) || null
                 console.log(_storage)
@@ -66,7 +65,7 @@ const Market = () => {
 
             try {
 
-                console.log("comprando bien aki")
+                const canId = can.id
                 const apiGetCan = process.env.REACT_APP_BASEURL + "cans/" + canId
                 const canObj = await axios.get(apiGetCan)
                 if (canObj.status == 3) throw "Esta en proceso de venta"
@@ -143,7 +142,17 @@ const Market = () => {
         if (rarity === "3") return "epic"
         if (rarity === "4") return "legendary"
     }
-    
+
+    const clear = () => {
+        setOrder(1)
+        setRareCheck(true)
+        setCommonCheck(true)
+        setEpicCheck(true)
+        setLegendaryCheck(true)
+        setRangoMin(200)
+        setRangoMax(360)
+    }
+
     return (
         <div>
             {loading && <Loader />}
@@ -188,7 +197,7 @@ const Market = () => {
                         <div className="sidebar-bg">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
-                                <button className="btn btn-primary btn-sm" href="">Clear filter</button>
+                                <button onClick={clear} className="btn btn-primary btn-sm" href="">Clear filter</button>
                             </div>
                             <div className="mt-3">
                                 <div className="sidebarText mb-1">
@@ -237,8 +246,8 @@ const Market = () => {
                                     <input onChange={e => setRangoMin(e.target.value)} min="200" max={rangoMax} className="w-100" type="range" value={rangoMin} name="" id="" />
                                 </div>
                                 <div>
-                                        <h3 className="breedCount"> max {rangoMax}</h3>
-                                    </div>
+                                    <h3 className="breedCount"> max {rangoMax}</h3>
+                                </div>
                                 <div>
                                     <input onChange={e => setRangoMax(e.target.value)} min={rangoMin} max="360" className="w-100" type="range" value={rangoMax} name="" id="" />
                                 </div>

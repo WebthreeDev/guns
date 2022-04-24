@@ -54,12 +54,13 @@ $borders:rgb(65,60,80);
 .wallet{
     background-color: $gradient2;
     border-radius:30px;
+    border: 1px solid transparent;
     width: 150px;
     align-items: center;
     display: flex;
     height: 25px;
     &:hover{
-        border: 1px solid rgb(73, 73, 73);
+        border: 1px solid rgba(73, 73, 73, 0.838);
         cursor: pointer;
     }
 }
@@ -71,6 +72,7 @@ $borders:rgb(65,60,80);
     text-align: center;
     height: 40px;
     width: 40px;
+    margin-left: -1px;
 }
 .minted-text{
     font-size: 14px;
@@ -257,6 +259,15 @@ progress{
     align-items: center;
 
 }
+.rbtn1{
+    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/single.jpg);
+}
+.rbtn2{
+    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/copas.png);
+}
+.rbtn3{
+    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/beats.webp);
+}
 .raceButton{
     height: 270px;
     padding: 10px;
@@ -267,7 +278,6 @@ progress{
     font-size: 35px;
     font-weight: 700;
     box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
-    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/single.jpg);
     background-position: center;
     background-size: cover;
     transition: 0.5s;
@@ -318,4 +328,10 @@ progress{
     height: 100vh;
     overflow-y: scroll;
     padding-bottom: 50px;
+}
+
+.pantalla{
+    background-color: rgb(10, 10, 10);
+    border: 1px solid red;
+    padding: 10px 0px;
 }

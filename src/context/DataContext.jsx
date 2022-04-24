@@ -8,6 +8,7 @@ import { poolContract, _poolContract } from '../tokens/pool/pool'
 import connect from './services/connectS'
 import axios from 'axios'
 import changeStateCanInMarket from './services/changeStateCanInMarket'
+import changeStateCanodrome from './services/changeStateCanodrome'
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
 
@@ -75,6 +76,13 @@ export const DataProvider = ({ children }) => {
         if (storageCanId) {
             changeStateCanInMarket(storageCanId)
         }
+
+        const storageCanodromeId = JSON.parse(localStorage.getItem('windowsData2')) || null
+        console.log(storageCanodromeId)
+        if (storageCanodromeId) {
+            changeStateCanodrome(storageCanodromeId)
+        }
+        
         const _chainId = 97
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {

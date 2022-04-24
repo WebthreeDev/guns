@@ -4,16 +4,18 @@ import { useContext, useState } from 'react'
 import { DataContext } from '../../context/DataContext'
 import NftCard from '../../components/nftCard/nftCard'
 import axios from 'axios'
+import web3 from '../../tokens/canes/canes'
 import Loader from '../../components/loader/loader'
 import perro from '../../img/perro.png'
 import { Link } from 'react-router-dom'
+import errorManager from '../../services/errorManager'
 
 const Canodromes = () => {
     const baseUrl = process.env.REACT_APP_BASEURL
     const _context = useContext(DataContext)
+    const { nftContract } = useContext(DataContext)
     const [selectCans, setSelectCans] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
-    // const [takedCans, setTakedCans] = useState(false)
     const [filteredCans, setFilteredCans] = useState([])
     const [sellingCanodrome, setSellingCanodrome] = useState(false)
     const [canodromeOnSell, setCanodromeOnSell] = useState(false)
@@ -25,7 +27,7 @@ const Canodromes = () => {
         const canodromesAll = _context.canodromes.map((canodrome) => canodrome.cans);
         const canodromesAllFlat = canodromesAll.flat();
         const arrayCanInCanodromes = canodromesAllFlat.map(can => can.can.id);
-        
+
         _context.cans.map(item => {
             let suma = 0
             arrayCanInCanodromes.map(_item => { if (item.id == _item) suma++ })
@@ -65,21 +67,6 @@ const Canodromes = () => {
         }
     }
 
-    // const getTakedCans = async _ => {
-    //     let _takedCans = []
-    //     if (_context.wallet != false && _context.canodromes != false) {
-    //         console.log("obteniendo taked Cans:")
-    //         console.log(_context.wallet)
-    //         console.log(_context.canodromes)
-    //         _context.canodromes.map((canodrome) => {
-    //             _takedCans = [...canodrome.cans]
-    //         })
-    //         setTakedCans(_takedCans)
-    //     }
-    //     return _takedCans
-    // }
-
-
     const setRenderModal = _ => { }
     const setModalText = _ => { }
 
@@ -91,10 +78,12 @@ const Canodromes = () => {
         _context.setLoading(false)
     }
 
-    const canodromeItemsCommon = [0, 1, 2]
-    const canodromeItemsRare = [0, 1, 2, 3, 4, 5]
-    const canodromeItemsEpic = [0, 1, 2, 3, 4, 5, 6, 7, 8]
-    const canodromeItemsLegendary = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    const canodromeItemsAndButtons = [
+        [0, 1, 2],
+        [0, 1, 2, 3, 4, 5],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    ]
 
     const sellCanodrome = (canodrome) => {
         setCanodromeOnSell(canodrome)
@@ -103,14 +92,23 @@ const Canodromes = () => {
     }
 
     const sendSell = async () => {
-        const body = {
-            "canodrome": {
-                "onSale": {
-                    "sale": true,
-                    "price": canodromePrice
-                }
-            }
-        }
+        _context.setLoading(true)
+        const _value = Number.parseFloat(canodromePrice / 100).toFixed(6)
+        const value = web3.utils.toWei(_value.toString(), "ether")
+        nftContract.methods.onSale().send({ from: _context.wallet, value, gas: _context.gas, gasPrice: _context.gasPrice }).then(async (res) => {
+            await sendCanodromeOnSellToDB()
+            _context.setLoading(false)
+        }).catch(error => {
+            console.log(error)
+            alert(error.message)
+            _context.setLoading(false)
+        })
+
+
+    }
+
+    const sendCanodromeOnSellToDB = async () => {
+        const body = { "canodrome": { "onSale": { "sale": true, "price": canodromePrice } } }
         try {
             console.log("sellin canodrome")
             const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/sell/" + canodromeOnSell._id, body)
@@ -118,19 +116,7 @@ const Canodromes = () => {
             setSellingCanodrome(false)
             _context.getCanodromes(_context.wallet)
         } catch (error) {
-            if (error.response) {
-                console.log("Error Response")
-                console.log(error.response.data);
-                console.log(error.response.status);
-                console.log(error.response.headers);
-            } else if (error.request) {
-                console.log("Error Request")
-                console.log(error.request);
-            } else {
-                console.log("Error Message")
-                console.log('Error', error.message);
-            }
-            console.log(error.config);
+            errorManager(error)
         }
     }
 
@@ -156,7 +142,7 @@ const Canodromes = () => {
                     </div>
                     <input onChange={(e) => setCanodromePrice(e.target.value)} className='form-control mt-3' type="text" />
                     <button onClick={sendSell} className='btn btn-primary form-control mt-3'>Sell</button>
-                    <button onClick={()=>setSellingCanodrome(false)} className='btn btn-danger mt-3'> Cancel </button>
+                    <button onClick={() => setSellingCanodrome(false)} className='btn btn-danger mt-3'> Cancel </button>
                 </div>
             </div>
         </div>}
@@ -184,12 +170,18 @@ const Canodromes = () => {
                     </div>
                 </div>
             </div>}
+        {_context.canodromes && <>
+            {_context.canodromes.length == 0 && <div className='my-5'>
+                <h1> Todavia no posees un canodromo</h1>
+                <Link className='btn btn-primary' to='/shop'> Go to Shop </Link>
+            </div>}
+        </>}
         {_context.canodromes && _context.canodromes.map((canodromeItem) => {
             return (
                 <div key={canodromeItem._id} className='row canodromeCard mt-4'>
                     <div className='col-md-4 col-12 text-center p-3 imgCanodromeBg'>
                         <div className='text-center mb-2'>
-                          #{canodromeItem.id} - {canodromeItem._id}
+                            #{canodromeItem.id} - {canodromeItem._id}
                         </div>
                         <div>
                             {canodromeItem.onSale.sale && <>
@@ -219,99 +211,13 @@ const Canodromes = () => {
                             <div className='col-12'>
                                 <div className="container-fluid">
                                     <div className='row'>
-                                        {canodromeItem.type == 1 && canodromeItem.onSale.sale == false && <>
-                                            {canodromeItemsCommon.map((index) => {
+                                        {canodromeItem.onSale.sale == false && <>
+                                            {canodromeItemsAndButtons[canodromeItem.type - 1].map((index) => {
                                                 return <div key={index} className="col-4">
                                                     {canodromeItem.cans[index] ?
                                                         <div className='cardCanodrome mb-3'>
                                                             <div className='d-flex justify-content-between'>
                                                                 <div>
-                                                                    # {canodromeItem.cans[index].can.id}
-                                                                </div>
-                                                                <div>
-                                                                    {canodromeItem.cans[index].can.energy} / 4
-                                                                </div>
-                                                            </div>
-                                                            <div className='text-center'>
-                                                                <img height={"60px"} src={perro} alt="" />
-                                                            </div>
-                                                            <div>
-                                                                <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
-                                                                    Remove Can
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        <button className='btnaddcan mb-3' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
-                                                    }
-                                                </div>
-                                            })}</>}
-
-                                        {canodromeItem.type == 2 && canodromeItem.onSale.sale == false && <>
-                                            {canodromeItemsRare.map((index) => {
-                                                return <div key={index} className="col-4">
-                                                    {canodromeItem.cans[index] ?
-                                                        <div className='cardCanodrome mb-3'>
-                                                            <div className='d-flex justify-content-between'>
-                                                                <div>
-                                                                    # {canodromeItem.cans[index].can.id}
-                                                                </div>
-                                                                <div>
-                                                                    {canodromeItem.cans[index].can.energy} / 4
-                                                                </div>
-                                                            </div>
-                                                            <div className='text-center'>
-                                                                <img height={"60px"} src={perro} alt="" />
-                                                            </div>
-                                                            <div>
-                                                                <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
-                                                                    Remove Can
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        <button className='btnaddcan mb-3' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
-                                                    }
-                                                </div>
-                                            })}</>}
-
-                                        {canodromeItem.type == 3 && canodromeItem.onSale.sale == false && <>
-                                            {canodromeItemsEpic.map((index) => {
-                                                return <div key={index} className="col-4">
-                                                    {canodromeItem.cans[index] ?
-                                                        <div className='cardCanodrome mb-3'>
-                                                            <div className='d-flex justify-content-between'>
-                                                                <div>
-
-                                                                    # {canodromeItem.cans[index].can.id}
-                                                                </div>
-                                                                <div>
-                                                                    {canodromeItem.cans[index].can.energy} / 4
-                                                                </div>
-                                                            </div>
-                                                            <div className='text-center'>
-                                                                <img height={"60px"} src={perro} alt="" />
-                                                            </div>
-                                                            <div>
-                                                                <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
-                                                                    Remove Can
-                                                                </button>
-                                                            </div>
-                                                        </div>
-                                                        :
-                                                        <button className='btnaddcan mb-3' onClick={_ => addCan(canodromeItem._id)}> Add Can +</button>
-                                                    }
-                                                </div>
-                                            })}</>}
-
-                                        {canodromeItem.type == 4 && canodromeItem.onSale.sale == false && <>
-                                            {canodromeItemsLegendary.map((index) => {
-                                                return <div key={index} className="col-4">
-                                                    {canodromeItem.cans[index] ?
-                                                        <div className='cardCanodrome mb-3'>
-                                                            <div className='d-flex justify-content-between'>
-                                                                <div>
-
                                                                     # {canodromeItem.cans[index].can.id}
                                                                 </div>
                                                                 <div>

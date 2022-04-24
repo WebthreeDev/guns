@@ -3,10 +3,11 @@ import React, { useState, useContext, useEffect } from "react"
 import { DataContext } from "../../context/DataContext"
 import web3, { nftContract } from "../../tokens/canes/canes"
 import Loader from "../../components/loader/loader"
-import changeStateCanInMarket from "../../context/services/changeStateCanInMarket"
+import changeStateCanodrome from "../../context/services/changeStateCanodrome"
 import { Link } from "react-router-dom"
 import socket from '../../socket';
 import canodromo from '../../img/canodrome.png'
+import errorManager from '../../services/errorManager'
 
 const MarketCanodromes = () => {
 
@@ -46,29 +47,26 @@ const MarketCanodromes = () => {
     const confirmBuy = async () => {
         setLoading(true)
         setRenderModal(false)
-        if (true) {
-            /* const storage = JSON.parse(localStorage.getItem('windowsData'))
-            if (!storage) {
-                localStorage.setItem('windowsData', JSON.stringify({ id: canodrome.id }));
-                setLoading(true)
-                setRenderModal(false)
-                const canId = canodrome.id
-    
-                setTimeout(() => {
-                    const _storage = JSON.parse(localStorage.getItem('windowsData')) || null
-                    console.log(_storage)
-                    if (_storage) {
-                        console.log("este es el timeout")
-                        changeStateCanInMarket(_storage)
-                    }
-                }, 200000); */
+        const storage = JSON.parse(localStorage.getItem('windowsData2'))
+        console.table(storage)
+        if (!storage) {
+
+            localStorage.setItem('windowsData2', JSON.stringify({ id: canodrome._id }));
+            setTimeout(() => {
+                const _storage = JSON.parse(localStorage.getItem('windowsData2')) || null
+                console.log(_storage)
+                if (_storage) {
+                    changeStateCanodrome(_storage)
+                }
+            }, 200000);
 
             try {
 
                 console.log("comprando bien aki")
-                /*  const apiGetCan = process.env.REACT_APP_BASEURL + "Canodromes/" + canId
-                 const canObj = await axios.get(apiGetCan)
-                 if (canObj.status == 3) throw "Esta en proceso de venta" */
+                const apiGetCan = process.env.REACT_APP_BASEURL + "canodrome?id=" + canodrome._id
+                const canObj = await axios.get(apiGetCan)
+                console.table("obtener un canodromo:", canObj)
+                if (canObj.status == 3) throw "Esta en proceso de venta"
 
                 //cobro y envio a el contrato
                 const from = wallet
@@ -78,35 +76,44 @@ const MarketCanodromes = () => {
                 const address = canodrome.wallet
 
                 nftContract.methods.buyNft(address).send({ from, value, gas, gasPrice }).then(async blockchainRes => {
-                    /* localStorage.removeItem('windowsData'); */
+                    localStorage.removeItem('windowsData2');
                     console.log(blockchainRes);
                     //envio el hash de la compra al back
                     try {
-                        const body = { canodrome: { onSale: { sale: false, price: 0 }, wallet } }
+                        const body = {
+                            canodrome: {
+                                onSale: {
+                                    sale: false,
+                                    price: 0
+                                },
+                                wallet
+                            }
+                        }
                         const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/sell/" + canodrome._id, body)//cambia a estado 3 de espera
                         const _can = res.data.response
-                        console.log(_can)
+                        console.log("este es el can: ", _can)
                         await getCanodromes(wallet)
                         setLoading(false)
                         alert("Congratulation!! you have a new canodrome, go to canodrome section")
                     } catch (error) {
-                        console.log("error: " + error)
-                        console.log(error)
+                        errorManager(error)
                         setLoading(false)
                     }
                     //console.log(envio.data.response)
-                }).catch(async error => {
-                    console.log("Rechazo la transaccion")
-                    console.log(error)
+                }).catch(error => {
+                    setLoading(false)
+                    errorManager(error)
                     /* const trans = await axios.post(apiMarket, { "blockchainStatus": false, canId })
                     console.log(trans) */
-                    await setLoading(false)
                 })
             } catch (error) {
-                console.log(error)
+                setLoading(false)
+                errorManager(error)
             }
         } else {
-            alert("Usted tiene una transaccion pendiente por favor espere 3 minutos")
+            setLoading(false)
+            window.location.reload()
+
         }
     }
 
@@ -132,6 +139,14 @@ const MarketCanodromes = () => {
         if (rarity === "2") return "rare"
         if (rarity === "3") return "epic"
         if (rarity === "4") return "legendary"
+    }
+
+    const clear = () => {
+        setCommonCheck(true)
+        setRareCheck(true)
+        setEpicCheck(true)
+        setLegendaryCheck(true)
+        setOrder(1)
     }
 
     return (
@@ -182,7 +197,7 @@ const MarketCanodromes = () => {
                         <div className="sidebar-bg">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
-                                <button className="btn btn-primary btn-sm" href="">Clear filter</button>
+                                <button onClick={clear} className="btn btn-primary btn-sm" href="">Clear filter</button>
                             </div>
                             <div className="mt-3">
                                 <div className="sidebarText mb-1">
@@ -266,8 +281,6 @@ const MarketCanodromes = () => {
                                 </div>
                             </div>
                         </>}
-
-
                     </div>
                 </div>
             </div>
