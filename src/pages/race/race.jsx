@@ -159,19 +159,24 @@ const Race = () => {
                     </div>
                 </div>
             </div>}
-
+            
             <div className="row racebg">
-                <div className="col-md-4 col-12">
+            <div className="col-md-3 col-12">
                     <div onClick={() => race(0)} className="raceButton rbtn1">
                         SINGLE RACE
                     </div>
                 </div>
-                <div className="col-md-4 col-12">
+                <div className="col-md-3 col-12">
+                    <Link to="/minigame" className="raceButton rbtn4 t">
+                        TICKET MINIGAME
+                    </Link>
+                </div>
+                <div className="col-md-3 col-12">
                     <div onClick={() => race(1)} className="raceButton rbtn2">
                         RANK MODE
                     </div>
                 </div>
-                <div className="col-md-4 col-12">
+                <div className="col-md-3 col-12">
                     <div onClick={() => race(2)} className="raceButton rbtn3">
                         RACE BEATS
                     </div>

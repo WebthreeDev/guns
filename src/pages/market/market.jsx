@@ -1,6 +1,5 @@
 import axios from "axios"
-import React, { useEffect, useState, useContext, useLayoutEffect } from "react"
-import perro from '../../img/perro.png'
+import React, { useEffect, useState, useContext } from "react"
 import { DataContext } from "../../context/DataContext"
 import web3, { nftContract } from "../../tokens/canes/canes"
 import Loader from "../../components/loader/loader"
@@ -10,7 +9,8 @@ import { Link } from "react-router-dom"
 import socket from '../../socket';
 const Market = () => {
 
-    const { _context, setLoading, loading } = useContext(DataContext)
+    const {wallet, setLoading, loading } = useContext(DataContext)
+    const _context = useContext(DataContext)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
 
     const [renderModal, setRenderModal] = useState(false)
@@ -69,18 +69,18 @@ const Market = () => {
                 const apiGetCan = process.env.REACT_APP_BASEURL + "cans/" + canId
                 const canObj = await axios.get(apiGetCan)
                 if (canObj.status == 3) throw "Esta en proceso de venta"
-
+                
                 const res = await axios.patch(apiMarket, { canId })//cambia a estado 3 de espera
                 const _can = res.data.response
                 console.log(res.data.response)
                 //cobro y envio a el contrato
-                const from = _context.wallet
+                const from = wallet
                 const price = _can.onSale.price.toString()
                 console.log(price)
                 const value = web3.utils.toWei(_can.onSale.price.toString(), "ether")
                 const address = _can.wallet
 
-                nftContract.methods.buyNft(address).send({ from: _context.wallet, value, gas: _context.gas, gassPrice: _context.gassPrice }).then(async blockchainRes => {
+                nftContract.methods.buyNft(address).send({ from, value, gas: _context.gas, gassPrice: _context.gassPrice }).then(async blockchainRes => {
                     localStorage.removeItem('windowsData');
                     console.log(blockchainRes);
                     //envio el hash de la compra al back
@@ -90,6 +90,7 @@ const Market = () => {
                             walletBuyer: _context.wallet,
                             hash: blockchainRes.transactionHash
                         })
+                        setLoading(false)
                     } catch (error) {
                         console.log("error: " + error)
                         console.log(error)
@@ -137,10 +138,8 @@ const Market = () => {
     }
 
     const setRarity = (rarity) => {
-        if (rarity === "1") { return "common" }
-        if (rarity === "2") return "rare"
-        if (rarity === "3") return "epic"
-        if (rarity === "4") return "legendary"
+        const r = ["common","rare","epic","legendary"]
+        return r[rarity+1]
     }
 
     const clear = () => {

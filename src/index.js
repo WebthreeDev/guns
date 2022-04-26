@@ -6,18 +6,18 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import { DataProvider } from './context/DataContext'
 
-ReactDOM.render(
+/* ReactDOM.render(
     <DataProvider>
       <App />
     </DataProvider>,
   document.getElementById('root')
-);
-/* ReactDOM.render(
+); */
+ReactDOM.render(
   <React.StrictMode>
     <DataProvider>
       <App />
     </DataProvider>
   </React.StrictMode>,
   document.getElementById('root')
-); */
+);
 

@@ -268,6 +268,9 @@ progress{
 .rbtn3{
     background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/beats.webp);
 }
+.rbtn4{
+    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/tikets/ticket.jpg);
+}
 .raceButton{
     height: 270px;
     padding: 10px;
@@ -332,6 +335,57 @@ progress{
 
 .pantalla{
     background-color: rgb(10, 10, 10);
-    border: 1px solid red;
+    border: 1px solid rgba(255, 0, 0, 0.062);
     padding: 10px 0px;
+}
+.boxy{
+    background-color: #6e71913d;
+    padding:5px 0px;
+    width: 2.5%;
+    font-size: 12px;
+    margin: 0px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid white;
+    &:hover{
+      background-color: #6e7191;
+      cursor: pointer; 
+    }
+}
+.findTiket{
+    background-color: #1d1d1d;
+}
+.vrfbtn{
+    border: none !important;
+    color: #fff;
+    background-color:rgb(20, 218, 125) !important;
+    border-radius: 20px;
+    
+    font-family: inherit;
+    font-size: 17px;
+    padding-left:10px !important;
+    padding-right:10px !important;
+    background-position: right center;
+    background-size: 200% auto;
+    -webkit-animation: pulse 1s infinite;
+    animation: pulse512 1s infinite;
+}
+   
+@keyframes pulse512 {
+    0% {
+     box-shadow: 0 0 0 0 #03803bbe;
+    }
+   
+    70% {
+     box-shadow: 0 0 0 10px rgba(68, 218, 68, 0);
+    }
+   
+    100% {
+     box-shadow: 0 0 0 0 rgba(103, 218, 68, 0);
+    }
+}
+.t{
+    text-decoration: none !important;
+    color: #fff;
+    text-align: end;
 }

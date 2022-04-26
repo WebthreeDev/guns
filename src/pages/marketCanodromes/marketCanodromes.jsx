@@ -12,7 +12,7 @@ import errorManager from '../../services/errorManager'
 const MarketCanodromes = () => {
 
     const { gas, gasPrice, wallet, setLoading, loading, getCanodromes } = useContext(DataContext)
-
+    const _context = useContext(DataContext)
     const [canodrome, setCanodrome] = useState(false)
     const [renderModal, setRenderModal] = useState(false)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
@@ -257,6 +257,7 @@ const MarketCanodromes = () => {
                                                 <div className="canodromeCardMarket">
                                                     <div className="d-flex justify-content-between align-items-center">
                                                         <div>#{item.id}</div>
+                                                        <div>{_context.lastForWallet(item.wallet)} </div>
                                                         <div>
                                                             {item.type == 1 && <div className="rarity common px-3"> Common </div>}
                                                             {item.type == 2 && <div className="rarity rare px-3"> Rare </div>}

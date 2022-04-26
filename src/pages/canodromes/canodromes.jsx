@@ -93,10 +93,12 @@ const Canodromes = () => {
 
     const sendSell = async () => {
         _context.setLoading(true)
+        setSellingCanodrome(false)
         const _value = Number.parseFloat(canodromePrice / 100).toFixed(6)
         const value = web3.utils.toWei(_value.toString(), "ether")
         nftContract.methods.onSale().send({ from: _context.wallet, value, gas: _context.gas, gasPrice: _context.gasPrice }).then(async (res) => {
             await sendCanodromeOnSellToDB()
+            
             _context.setLoading(false)
         }).catch(error => {
             console.log(error)

@@ -34,6 +34,8 @@ export const DataProvider = ({ children }) => {
     const gas = web3.utils.toWei("0.0002", "gwei")
     const gasPrice = web3.utils.toWei("20", "gwei")
     const ownerWallet = _poolContract.address
+    const [tiket,setTiket] = useState(false)
+    const [pass,setPass] = useState(false)
 
     useEffect(() => {
         exectConnect()
@@ -103,6 +105,8 @@ export const DataProvider = ({ children }) => {
                             setOracule(_data.oracule.value)
                             setMinimunToClaim(_data.oracule.min)
                             setDayReset(_data.dayReset)
+                            setTiket(_data.getWallet.ticket)
+                            setPass(_data.getWallet.pass)
 
                             await getBnb(wallet)
                             await getCCT(wallet)
@@ -264,7 +268,8 @@ export const DataProvider = ({ children }) => {
         getCCT, ownerWallet,
         getCanodromeState, poolContract,
         oracule, minimunToClaim, dayReset,
-        _cctContract
+        _cctContract,tiket,
+        pass
     }
 
     return (
