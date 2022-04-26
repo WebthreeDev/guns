@@ -126,7 +126,7 @@ const Minigame = () => {
                         <div>
                             {tiket1 && tiket2 && tiket3 && tiket4 ?
                                 <button onClick={() => verify()} className="btn w-100 mt-3 vrfbtn"> Verify </button> :
-                                <button onClick={() => verify()} className="btn btn-secondary w-100 mt-3" >  Verify </button>
+                                <button disabled className="btn btn-secondary w-100 mt-3" >  Verify </button>
                             }
                         </div>
 
