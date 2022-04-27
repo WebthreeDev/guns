@@ -187,9 +187,9 @@ const Market = () => {
                     <Link to="/marketcanodromes" className="secondNavButton">
                         Canodromes
                     </Link>
-                    <button className="secondNavButton">
+                    <Link to="/marketItems" className="secondNavButton">
                         Items
-                    </button>
+                    </Link>
                 </div>
                 <div className="row">
                     <div className="col-3 sidebarx">

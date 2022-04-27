@@ -21,6 +21,7 @@ const Minigame = () => {
     const [tiket3, setTiket3] = useState(false)
     const [tiket4, setTiket4] = useState(false)
     const [modalFinding, setModalFinding] = useState(false)
+    const [modalInfo, setModalInfo] = useState(false)
     const [finding, setFinding] = useState(false)
 
     useEffect(() => {
@@ -84,6 +85,19 @@ const Minigame = () => {
     }
 
     return (<>
+        {modalInfo && <div className="modalX">
+            <div className="modalIn">
+                <div>
+                    <div className="infoText">
+                        Participa junto con otros jugadores en la búsqueda de los trozos de tickets perdidos, busca dentro de todas las casillas y encuentra las cuatro partes de ticket y únelas para obtener un Pase de carrera con este Pase tendrás el derecho de participar en las carreras con tus canes en los distintos modos de juego o completa los pases para luego venderlos dentro del mercado a otros jugadores
+                    </div>
+                    <div className="pt-4 ">
+                        <button onClick={() => setModalInfo(false)} className="btn btn-primary"> Entendido! </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>}
         {modalFinding && <div className="modalX">
             <div className="modalIn">
                 <div className="w-100 text-center">
@@ -129,6 +143,12 @@ const Minigame = () => {
                                 <button disabled className="btn btn-secondary w-100 mt-3" >  Verify </button>
                             }
                         </div>
+                        <div className="pt-4 text-center">
+                            <button onClick={() => setModalInfo(true)} className="infoBtn"> ! </button>
+
+                        </div>
+
+
 
                     </div>
                     <div className="col-9">

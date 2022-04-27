@@ -8,11 +8,16 @@ import Admin from "./pages/admin/admin";
 import Canodromes from "./pages/canodromes/canodromes";
 import MarketCanodromes from "./pages/marketCanodromes/marketCanodromes";
 import Minigame from "./pages/minigame/minigame";
+import MarketItems from "./pages/marketItems/marketItems";
+
 const Router = () => {
     return (
         <Switch>
             <Route path="/market">
                 <Market />
+            </Route>
+            <Route path="/marketItems">
+                <MarketItems />
             </Route>
             <Route path="/minigame">
                 <Minigame/>

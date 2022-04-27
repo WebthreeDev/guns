@@ -21,7 +21,7 @@ contract CCTCALLER {
     address public contractOwner;
 
     constructor () {
-        c = CCT(0xc3b7C04b1c5dBf7FD36Ff5E573AaA1E82130Cc47);
+        c = CCT(0xe38d2c817f9e6104d0372922740064d3ce8eceC6);
         contractOwner  = 0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da;
     }
 

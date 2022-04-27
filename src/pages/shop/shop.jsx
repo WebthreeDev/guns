@@ -9,6 +9,8 @@ import Loader from "../../components/loader/loader";
 import axios from "axios"
 import web3 from "../../tokens/canes/canes"
 import { nftContract } from "../../tokens/canes/canes"
+import { cctContract } from "../../tokens/cct/cct"
+import { ticketsContract, _ticketsContract } from "../../tokens/buyTickets/buyTickets"
 import Package from "../../components/package/package";
 import MintModal from "../../components/mintModal/mintModal";
 import bnbLogo from "../../img/bnbLogo.png"
@@ -18,7 +20,7 @@ const Shop = () => {
     const {
         gas, gasPrice, getCans, getERC721Contract, loading, setLoading, wallet,
         connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice,
-        canodromeCommonPrice, canodromeLegendaryPrice, getCanodromes
+        canodromeCommonPrice, canodromeLegendaryPrice, getCanodromes,exectConnect
     } = useContext(DataContext)
 
     const [minted, setMinted] = useState(false)
@@ -27,9 +29,19 @@ const Shop = () => {
     const [canodromeMintedData, setCanodromeMintedData] = useState(false)
     const [canodromeMinted, setCanodromeMinted] = useState(false)
 
+    const [ticketModal, setTicketModal] = useState(false)
+    const [ticketAmmount, setTicketAmmount] = useState(false)
+    const [ticketPrice, setTicketPrice] = useState(false)
+
     useEffect(_ => {
         erc721()
+        getTicketPrice()
     }, [])
+
+    const getTicketPrice = async () => {
+        const price = await ticketsContract.methods.ticketPrice().call()
+        setTicketPrice(price)
+    }
 
     const erc721 = async () => await getERC721Contract()
 
@@ -44,7 +56,7 @@ const Shop = () => {
 
             //Get hash 
             const hash = contractResponse.events.Transfer.transactionHash;
-           
+
             if (packageId <= 3) {
                 const canId = await contractResponse.events.Transfer.returnValues.tokenId
                 const body = { wallet, packageId, canId, hash }
@@ -82,13 +94,57 @@ const Shop = () => {
         }
     }
 
+
+    const buyTicket = async () => {
+        //approve ammout in the cct contract
+        setTicketModal(false)
+        setLoading(true)
+        const address = _ticketsContract.address
+        const total = ticketAmmount * ticketPrice
+        const ammount = web3.utils.toWei(total.toString(), "ether")
+        const from = wallet
+        console.log(cctContract.methods)
+        try {
+            const cctRes = await cctContract.methods.approve(address, ammount).send({ from, gas, gasPrice })
+            if (cctRes.status) {
+                const ticketRes = await ticketsContract.methods.buyTicket(ticketAmmount).send({ from, gas, gasPrice })
+                if (ticketRes.status) {
+                    const body = { 
+                         wallet,amount:ticketAmmount
+                    }
+                    const res = await axios.post(process.env.REACT_APP_BASEURL + "ticket",body)
+                    console.log(res.data.response)
+                    await exectConnect(wallet)
+                    setLoading(false)
+                }
+            }
+
+        } catch (error) {
+            alert("Error")
+            console.log(error)
+        }
+        //save the hash
+        //send ammout tiket for this user
+    }
+
     return (
         <div className="bg1 unikeRouter">
+            {ticketModal && <div className="modalX">
+                <div className="modalIn">
+                    <div>
+                        <h5> 1 ticket = {ticketPrice && ticketPrice} CCT</h5>
+                        <h3>Ammount to buy</h3>
+                        <input className="form-control" onChange={(e) => { setTicketAmmount(e.target.value) }} type="text" />
+                        {wallet && <button className="btn btn-primary form-control" onClick={buyTicket}> Confirm </button>}
+                        <button onClick={() => setTicketModal(false)} className="btn btn-danger"> Cancel </button>
+                    </div>
+                </div>
+            </div>}
             {canodromeMinted && <>
                 <div className='modalX'>
                     <div className='modalIn'>
                         <h5>Congratulations!</h5>
-                       <button onClick={()=>setCanodromeMinted(false)} className="btn btn-primary"> Continue </button>
+                        <button onClick={() => setCanodromeMinted(false)} className="btn btn-primary"> Continue </button>
                     </div>
                 </div>
             </>
@@ -96,6 +152,12 @@ const Shop = () => {
             {minted && <MintModal getCans={getCans} wallet={wallet} canMinted={canMinted} setMinted={setMinted} />}
             {loading && <Loader />}
             <div className="container py-4">
+                <div className="border p-4 bg-primary mb-4">
+                    <h1 className="text-warning"> Need Ticket for the minigame? </h1>
+                    <p> In this section you will buy the ticket to play in the ticket search minigame </p>
+                    <h3 className="text-warning">Price: {ticketPrice && ticketPrice} CCT</h3>
+                    <button onClick={() => setTicketModal(true)} className="btn btn-danger"> Buy </button>
+                </div>
                 <div className="w-100">
                     <div className="row">
                         <div className="col-12 col-sm-6 mb-3 col-md-4">

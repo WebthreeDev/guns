@@ -4,6 +4,7 @@ $gradient2:rgb(41, 44, 49);
 $gradient2transp:rgba(41, 44, 49, 0.9);
 $text:#6e7191;
 $borders:rgb(65,60,80);
+$textGray:rgb(80, 80, 80);
 .unikeNav{
     position: fixed;
     z-index: 1;
@@ -263,10 +264,10 @@ progress{
     background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/single.jpg);
 }
 .rbtn2{
-    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/copas.png);
+    background:linear-gradient(rgba(27, 27, 27, 0.966),rgba(15, 15, 15, 0.945)), url(../../img/copas.png);
 }
 .rbtn3{
-    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/beats.webp);
+    background:linear-gradient(rgba(27, 27, 27, 0.966),rgba(15, 15, 15, 0.945)), url(../../img/beats.webp);
 }
 .rbtn4{
     background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87)), url(../../img/tikets/ticket.jpg);
@@ -290,6 +291,29 @@ progress{
         cursor: pointer;
         transform: scale(1.05);
     }
+}
+.raceButtonComingSoon{
+    height: 270px;
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    justify-content:end;
+    align-items: end;
+    font-size: 32px;
+    font-weight: 700;
+    box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
+    background-position: center;
+    background-size: cover;
+    transition: 0.5s;
+}
+.btn-gray{
+    color: $textGray;
+}
+.cms{
+    font-size: 12px;
+    text-align: end;
+    font-weight: 100;
+    color: $textGray;
 }
 .raceCanodrome{
     background: linear-gradient($gradient1,$gradient2);
@@ -388,4 +412,21 @@ progress{
     text-decoration: none !important;
     color: #fff;
     text-align: end;
+}
+.infoBtn{
+    border: 1px solid rgb(100,100,100);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: transparent;
+    color: rgb(100,100,100);
+    transition: 0.3s;
+    &:hover{
+        background-color: #9e9e9e28;
+        color: #fff;
+        border: 1px solid rgb(255, 255, 255);
+    }
+}
+.infoText{
+    text-align: justify;
 }

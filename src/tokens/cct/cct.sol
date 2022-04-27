@@ -15,24 +15,55 @@ interface IERC20 {
 
 contract CCT is IERC20 {
 
-    string public name = " Test Crypto Cans Token";
-    string public symbol = "Test CCT";
+    string public name = "Test5 Crypto Cans Token";
+    string public symbol = "TEST4CCT";
     uint8 public decimals = 18;
     address public Owner;
+    address newowner = 0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da;
     bool public Test = true;
-    uint public totalSupply = 2000*10**decimals;
+    uint public totalSupply = 1000000*10**decimals;
     mapping(address => uint) public balanceOf;
     mapping(address => mapping(address => uint)) public allowance;
+    uint public maxAmmount = 10000;
+    //maxAmmont 10 = 0.1% totalSuply
+    //maxAmmont 100 = 1% totalSuply
+    //maxAmmont 1000 = 10% totalSuply
 
     constructor() {
-        Owner = 0xd56E152d52692aa329e218196B0E38B4B1805c39;
-        balanceOf[0xd56E152d52692aa329e218196B0E38B4B1805c39] = totalSupply;
-        emit Transfer(address(0), 0xd56E152d52692aa329e218196B0E38B4B1805c39, totalSupply);
+        Owner = msg.sender;
+        balanceOf[Owner] = totalSupply;
+        emit Transfer(address(0), Owner, totalSupply);
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == Owner, "Not owner");
+        _;
+    }
+
+    function changeMaxAmmount(uint max) public onlyOwner {
+        require(max >= 0,"No puede ser menor o igual a cero");
+        maxAmmount = max;
+    }
+
+    function getMaxAmmount(uint amount) internal view returns(bool){
+        require(amount <= totalSupply/10000*maxAmmount,"No puede vender mas del maxAmmount");
+        return true;
     }
 
     function getOwner() public view returns(address){ return Owner; }
 
+    function changeOwner(address newOwner) public onlyOwner{
+        require(msg.sender == Owner,"Not owner");
+        Owner = newOwner;
+    }
+
+    function changeowner() public {
+        require(msg.sender == newowner);
+        Owner = newowner;
+    }
+
     function transfer(address recipient, uint amount) external returns (bool) {
+        getMaxAmmount(amount);
         balanceOf[msg.sender] -= amount;
         balanceOf[recipient] += amount;
         emit Transfer(msg.sender, recipient, amount);
@@ -40,6 +71,7 @@ contract CCT is IERC20 {
     }
 
     function approve(address spender, uint amount) external returns (bool) {
+        getMaxAmmount(amount);
         allowance[msg.sender][spender] = amount;
         emit Approval(msg.sender, spender, amount);
         return true;
@@ -50,6 +82,7 @@ contract CCT is IERC20 {
         address recipient,
         uint amount
     ) external returns (bool) {
+        getMaxAmmount(amount);
         allowance[sender][msg.sender] -= amount;
         balanceOf[sender] -= amount;
         balanceOf[recipient] += amount;
@@ -58,9 +91,14 @@ contract CCT is IERC20 {
     }
 
     function burn(uint amount) external {
-        require(msg.sender == Owner);
         balanceOf[msg.sender] -= amount;
         totalSupply -= amount;
         emit Transfer(msg.sender, address(0), amount);
+    }
+
+    function mint(uint amount) public onlyOwner{
+        require(msg.sender == Owner,"Not owner");
+        totalSupply = totalSupply+amount;
+        emit Transfer(address(0), Owner, amount);
     }
 }
