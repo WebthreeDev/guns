@@ -6,10 +6,13 @@ import { DataContext } from "../../context/DataContext";
 import axios from "axios";
 import Loader from '../../components/loader/loader'
 import lastForWallet from "../../context/services/lastForWallet";
+import errorManager from "../../services/errorManager";
 const MarketItems = () => {
     const _context = useContext(DataContext)
 
     const [pass, setPass] = useState([])
+    const [confirmModal,setConfirmModal] = useState(false)
+    const [passId,setPassId] = useState(false)
 
     useEffect(() => {
         if (pass.length == 0) fetch(process.env.REACT_APP_BASEURL + "pass")
@@ -24,11 +27,12 @@ const MarketItems = () => {
 
     }
 
-    const buyTicket = async ({ _id }) => {
+    const buyTicket = async () => {
         _context.setLoading(true)
+        setConfirmModal(false)
         const body = {
             wallet: _context.wallet,
-            passId: _id
+            passId
         }
         try {
             const res = await axios.post(process.env.REACT_APP_BASEURL + "pass/buy", body)
@@ -38,12 +42,21 @@ const MarketItems = () => {
             alert("Yo have a new pass")
         } catch (error) {
             _context.setLoading(false)
-            console.log(error)
+            errorManager(error)
+            alert(error.response.data.error)
         }
     }
 
     return (<div>
         {_context.loading && <Loader />}
+        {confirmModal && <div className="modalX">
+            <div className="modalIn">
+                <div className="w-100">
+                Esta seguro de comprar estos tickets
+                <button onClick={buyTicket}> Confirm </button>
+                </div>
+            </div>
+        </div> }
         <div className="container-fluid">
             <div className="secondNav mt-50px mb-3">
                 <Link to="/market" className="secondNavButton">
@@ -121,7 +134,7 @@ const MarketItems = () => {
                                                         {item.price} Credits
                                                     </div>
                                                 </div>
-                                                <button onClick={() => buyTicket(item)} className="btn btn-primary w-100"> Buy </button>
+                                                <button onClick={() =>{ setPassId(item._id);setConfirmModal(true) }} className="btn btn-primary w-100"> Buy </button>
                                             </div>
                                         </div>
                                     </div>)
