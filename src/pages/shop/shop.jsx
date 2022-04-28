@@ -105,9 +105,9 @@ const Shop = () => {
         const from = wallet
         console.log(cctContract.methods)
         try {
-            const cctRes = await cctContract.methods.approve(address, ammount).send({ from, gas, gasPrice })
+            const cctRes = await cctContract.methods.approve(address, ammount).send({ from })
             if (cctRes.status) {
-                const ticketRes = await ticketsContract.methods.buyTicket(ticketAmmount).send({ from, gas, gasPrice })
+                const ticketRes = await ticketsContract.methods.buyTicket(ticketAmmount).send({ from })
                 if (ticketRes.status) {
                     const body = { 
                          wallet,amount:ticketAmmount

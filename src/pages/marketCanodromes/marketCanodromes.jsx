@@ -240,11 +240,7 @@ const MarketCanodromes = () => {
                     </div>
                     <div className="col-9 ">
 
-                        {canodromesMarket.length == 0 ? <>
-                            <div className="text-center mt-5">
-                                {/* <button onClick={refresh} className="btn btn-primary"> Refresh Market </button> */}
-                            </div>
-                        </> : <>
+                        {canodromesMarket.length != 0 && <>
 
                             <div className="mb-2">
                                 <div>{canodromesMarket.length} Canodromes Listed  </div>

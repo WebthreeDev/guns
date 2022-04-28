@@ -8,8 +8,11 @@ import web3 from '../../tokens/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
+import ticketImg from '../../img/tikets/ticket.png'
+import passTicket from '../../img/tikets/pass.png'
+import errorManager from '../../services/errorManager'
 const Dashboard = () => {
-    const { _cctContract, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const { tiket, pass, _cctContract, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -21,6 +24,10 @@ const Dashboard = () => {
     const [modalText, setModalText] = useState(false)////viene texto confirm
     const [raceModal, setRaceModal] = useState(false)
     const [approved, setApproved] = useState(false)
+
+    const [modalSellTicket, setModalSellTicket] = useState(false)
+    const [ticketAmmount, setTicketAmmount] = useState(0)
+    const [ticketPrice, setTicketPrice] = useState(0)
 
     useEffect(() => {
         getRaces()
@@ -113,6 +120,8 @@ const Dashboard = () => {
     }
 
     const claim = async () => {
+        if (balance < ammountToClaim) return alert("You don't have enough credit")
+
         setLoading(true)
         setClaiming(false)
         const amount = ammountToClaim
@@ -183,8 +192,45 @@ const Dashboard = () => {
         <i className="rarity legendary px-2">Legendary </i>
     ]
 
+    const sellTicket = async () => {
+        if(ticketAmmount <= 0) return alert("Incorrect Amount")
+        if(ticketPrice <= 0 ) return alert("Incorrect Price")
+        setLoading(true)
+        setModalSellTicket(false)
+        const body = {
+            wallet,
+            price: ticketPrice,
+            amount: ticketAmmount
+        }
+        try {
+            console.log(body)
+            const res = await axios.post(process.env.REACT_APP_BASEURL + "pass/sell", body)
+            console.log(res)
+            await exectConnect()
+            setLoading(false)
+        } catch (error) {
+            setLoading(false)
+            errorManager(error)
+        }
+    }
+
+
     return (
         <div className="">
+            {modalSellTicket && <div className='modalX'>
+                <div className='modalIn'>
+                    <div>
+                        <h2>Sell Pass</h2>
+                        <span> Pass Price </span>
+                        <input onChange={(e)=>setTicketPrice(e.target.value)} className='form-control mb-2' type="text" />
+                        <span> Amount </span>
+                        <input className='form-control mb-2' onChange={(e) => setTicketAmmount(e.target.value)} type="text" />
+                        <button onClick={sellTicket}> Sell </button>
+                        <button onClick={()=>setModalSellTicket(false)}> Cancel </button>
+
+                    </div>
+                </div>
+            </div>}
             {raceModal && <>
                 <div className='cansSelection'>
                     <div className='selectTittle'>
@@ -290,6 +336,7 @@ const Dashboard = () => {
                                         <div>
                                             <h5>{balance ? <> {Math.round((balance * 100)) / 100}</> : <>0</>} Credits</h5>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -345,7 +392,9 @@ const Dashboard = () => {
                                     </div>
                                     <div>
                                         <button onClick={() => setRaceModal(true)} className='mx-2 btn btn-primary'> Races History </button>
-                                        <button className='btn btn-primary'> Activities </button>
+                                        <button className='btn btn-primary mx-2'> Activities </button>
+                                        <button onClick={() => setModalSellTicket(true)} className='btn btn-warning'> <img src={passTicket} height="20px" alt="" /> <b>{pass}</b> </button>
+                                        <button className='btn btn-primary'>  <img src={ticketImg} height="20px" alt="" /> {tiket} </button>
                                     </div>
                                 </div>
 

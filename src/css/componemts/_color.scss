@@ -363,18 +363,30 @@ progress{
     padding: 10px 0px;
 }
 .boxy{
-    background-color: #6e71913d;
+    background-color: #023315d7;
     padding:5px 0px;
-    width: 2.5%;
+    width: 5%;
     font-size: 12px;
     margin: 0px;
     display: inline-block;
     text-align: center;
-    border: 1px solid white;
+    border: 1px solid rgb(0, 29, 4);
+    
+}
+.boxy2{
+    background-color: #035322d7;
+    color: #fff;
+    padding:5px 0px;
+    width: 5%;
+    font-size: 12px;
+    margin: 0px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid rgb(0, 51, 7);
     &:hover{
-      background-color: #6e7191;
-      cursor: pointer; 
-    }
+        background-color: #006647;
+        cursor: pointer; 
+      }
 }
 .findTiket{
     background-color: #1d1d1d;
@@ -429,4 +441,27 @@ progress{
 }
 .infoText{
     text-align: justify;
+}
+.jcc{
+    justify-content: center;
+}
+.jcb{
+    justify-content: space-between;
+}
+.jca{
+    justify-content: space-around;
+}
+.aic{
+    align-items: center;
+}
+.text-small{
+    font-size: 14px;
+}
+.pass{
+    border: 1px solid $textGray;
+    border-radius: 10px;
+    text-align: center;
+    background-color: #50575509;
+    display: flex;
+    align-items: center;
 }

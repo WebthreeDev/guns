@@ -50,7 +50,7 @@ const Navbar = () => {
                         </Link>
                         <Link className="link" to="/race">
                             <div className="buttonLink">
-                                Race
+                                Play
                             </div>
                         </Link>
                     </div>

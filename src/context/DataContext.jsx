@@ -80,7 +80,6 @@ export const DataProvider = ({ children }) => {
         }
 
         const storageCanodromeId = JSON.parse(localStorage.getItem('windowsData2')) || null
-        console.log(storageCanodromeId)
         if (storageCanodromeId) {
             changeStateCanodrome(storageCanodromeId)
         }
@@ -206,7 +205,6 @@ export const DataProvider = ({ children }) => {
     }
 
     const getERC721Contract = async () => {
-        console.log("agregando precios")
         nftContract.methods.nftCommonPrice().call().then(res => {
             const _price = web3.utils.fromWei(res, "ether")
             setCommonPackagePrice(_price)
@@ -268,8 +266,8 @@ export const DataProvider = ({ children }) => {
         getCCT, ownerWallet,
         getCanodromeState, poolContract,
         oracule, minimunToClaim, dayReset,
-        _cctContract,tiket,
-        pass
+        _cctContract,
+        tiket,pass
     }
 
     return (

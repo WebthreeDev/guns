@@ -64,7 +64,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar />
-      <Router />
+      <Router/>
     </BrowserRouter>
   )
 }

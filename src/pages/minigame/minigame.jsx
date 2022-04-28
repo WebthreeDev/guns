@@ -23,6 +23,7 @@ const Minigame = () => {
     const [modalFinding, setModalFinding] = useState(false)
     const [modalInfo, setModalInfo] = useState(false)
     const [finding, setFinding] = useState(false)
+    const [finded, setFinded] = useState([])
 
     useEffect(() => {
         generateCodes()
@@ -54,6 +55,13 @@ const Minigame = () => {
         }
     }
 
+    const renderBoxes = (finding) => {
+        let aux = finded
+        aux.push(finding)
+        setFinded(aux)
+        generateCodes()
+    }
+
     const find = async (item) => {
         const body = { wallet, code: item }
         try {
@@ -64,6 +72,7 @@ const Minigame = () => {
                 if (validate.key === "b") setTiket2(true)
                 if (validate.key === "c") setTiket3(true)
                 if (validate.key === "d") setTiket4(true)
+                renderBoxes(finding)
             } else {
                 alert("Mala suerte")
             }
@@ -80,7 +89,7 @@ const Minigame = () => {
             setFinding(item)
             setModalFinding(true)
         } else {
-            alert("No tienes tikets, compralos en la tienda")
+            alert("You don't have a ticket, buy in the shop")
         }
     }
 
@@ -153,11 +162,16 @@ const Minigame = () => {
                     </div>
                     <div className="col-9">
                         <div className="">
-                            {codes && codes.map((item) => {
-                                return <button key={item} onClick={() => playGame(item)} className="boxy text-white">
-                                    {item}
-                                </button>
-                            })}
+                            {codes && codes.map((item) =>
+                                finded.includes(item) ?
+                                    <button key={item} className="boxy text-white">
+                                        {item}
+                                    </button>
+                                    :
+                                    <button key={item} onClick={() => playGame(item)} className="boxy2 text-white">
+                                        {item}
+                                    </button>
+                            )}
                         </div>
                     </div>
                 </div>
