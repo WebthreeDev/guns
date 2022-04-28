@@ -156,7 +156,9 @@ const Shop = () => {
                     <h1 className="text-warning"> Need Ticket for the minigame? </h1>
                     <p> In this section you will buy the ticket to play in the ticket search minigame </p>
                     <h3 className="text-warning">Price: {ticketPrice && ticketPrice} CCT</h3>
-                    <button onClick={() => setTicketModal(true)} className="btn btn-danger"> Buy </button>
+                    {ticketPrice ? <button onClick={() => setTicketModal(true)} className="btn btn-danger"> Buy </button>:
+                    <button className="btn btn-secondary" disabled> Loading </button>
+                    }
                 </div>
                 <div className="w-100">
                     <div className="row">
