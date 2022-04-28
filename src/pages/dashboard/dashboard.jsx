@@ -238,6 +238,7 @@ const Dashboard = () => {
         } catch (error) {
             setLoading(false)
             errorManager(error)
+            alert(error.response.data.error)
         }
     }
 
