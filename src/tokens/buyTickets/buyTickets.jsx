@@ -1,13 +1,8 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
 export const _ticketsContract = {
-    address:"0x5B676Ab1CB6d24EB04Ebb00c165f7b5834F22d6B",
+    address:"0xF8397A1Dd12a903755279BB81BF63d5A602341Dd",
     abi:[
-        {
-            "inputs": [],
-            "stateMutability": "nonpayable",
-            "type": "constructor"
-        },
         {
             "inputs": [
                 {
@@ -44,7 +39,7 @@ export const _ticketsContract = {
             "inputs": [
                 {
                     "internalType": "uint256",
-                    "name": "ammount",
+                    "name": "amount",
                     "type": "uint256"
                 }
             ],
@@ -58,6 +53,11 @@ export const _ticketsContract = {
             ],
             "stateMutability": "nonpayable",
             "type": "function"
+        },
+        {
+            "inputs": [],
+            "stateMutability": "nonpayable",
+            "type": "constructor"
         },
         {
             "inputs": [],

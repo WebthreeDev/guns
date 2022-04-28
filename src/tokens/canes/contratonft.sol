@@ -48,12 +48,12 @@ contract ERC721CCTNFT is ERC165, IERC721{
 
     constructor() payable {
         totalSold = 0;
-        contractOwner = payable(0xd56E152d52692aa329e218196B0E38B4B1805c39);
-        nftCommonPrice = 1000000000000000;
-        nftEpicPrice = 2000000000000000;
-        nftLegendaryPrice = 3000000000000000;
-        canodromeCommonPrice = 4000000000000000;
-        canodromeLegendary = 6000000000000000;
+        contractOwner = payable(msg.sender);
+        nftCommonPrice =       1000000000000000;
+        nftEpicPrice =         2000000000000000;
+        nftLegendaryPrice =    4000000000000000;
+        canodromeCommonPrice = 2000000000000000;
+        canodromeLegendary =   4000000000000000;
     }
 
     modifier onlyOwner() {

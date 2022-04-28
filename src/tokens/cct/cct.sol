@@ -12,16 +12,16 @@ interface IERC20 {
     event Transfer(address indexed from, address indexed to, uint value);
     event Approval(address indexed owner, address indexed spender, uint value);
 }
-
+//test
 contract CCT is IERC20 {
 
-    string public name = "Test5 Crypto Cans Token";
-    string public symbol = "TEST4CCT";
+    string public name = "Crypto Cans Token X";
+    string public symbol = "XCCT";
     uint8 public decimals = 18;
     address public Owner;
-    address newowner = 0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da;
+    address newowner = 0x0b18947426e74500dc0e96312A02E410d961a91E;
     bool public Test = true;
-    uint public totalSupply = 1000000*10**decimals;
+    uint public totalSupply = 10000000*10**decimals;
     mapping(address => uint) public balanceOf;
     mapping(address => mapping(address => uint)) public allowance;
     uint public maxAmmount = 10000;
@@ -41,12 +41,12 @@ contract CCT is IERC20 {
     }
 
     function changeMaxAmmount(uint max) public onlyOwner {
-        require(max >= 0,"No puede ser menor o igual a cero");
+        require(max >= 0,"ERROR: INVALID VALUE");
         maxAmmount = max;
     }
 
     function getMaxAmmount(uint amount) internal view returns(bool){
-        require(amount <= totalSupply/10000*maxAmmount,"No puede vender mas del maxAmmount");
+        require(amount <= totalSupply/10000*maxAmmount,"ERROR: maxAmmount");
         return true;
     }
 

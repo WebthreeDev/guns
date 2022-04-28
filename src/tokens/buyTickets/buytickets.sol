@@ -14,11 +14,11 @@ contract BUYTICKETS {
     CCT c;
     bool public pause = false;
     address public contractOwner;
-    uint public ticketPrice = 1;
+    uint public ticketPrice = 10;
 
     constructor () {
-        c = CCT(0xe38d2c817f9e6104d0372922740064d3ce8eceC6);
-        contractOwner  = 0x20a4DaBC7C80C1139Ffc84C291aF4d80397413Da;
+        c = CCT(0x2529B65f1250812f0c20693656cED9b7Bb3beA56);
+        contractOwner  = msg.sender;
     }
 
     modifier Pause(){
@@ -32,17 +32,13 @@ contract BUYTICKETS {
     }
 
     function changePause() public onlyOwner returns(bool){
-        if(pause == false){
-            pause = true;
-        }else{
-            pause = false;
-        }
+        pause = !pause;
         return pause;
     }
 
-    function changeTicketPrice(uint ammount) public onlyOwner Pause returns(bool){
-        require(ammount > 0,"No puede veler 0 o menos que 0!");
-        ticketPrice = ammount;
+    function changeTicketPrice(uint amount) public onlyOwner returns(bool){
+        require(amount > 0,"ERROR: invalid amount!");
+        ticketPrice = amount;
         return true;
     }
 

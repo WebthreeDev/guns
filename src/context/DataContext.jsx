@@ -72,7 +72,9 @@ export const DataProvider = ({ children }) => {
     } */
 
     const exectConnect = async () => {
-
+        const chainIdX = await w3S.chainId()
+        const ss = web3.utils.toHex(chainIdX)
+        console.log("hex:",ss,"- chainid: ",chainIdX)
         setLoading(true)
         const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null
         if (storageCanId) {
@@ -84,7 +86,7 @@ export const DataProvider = ({ children }) => {
             changeStateCanodrome(storageCanodromeId)
         }
         
-        const _chainId = 97
+        const _chainId = 56
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
 
