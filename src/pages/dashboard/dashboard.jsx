@@ -11,8 +11,12 @@ import NftCard from '../../components/nftCard/nftCard'
 import ticketImg from '../../img/tikets/ticket.png'
 import passTicket from '../../img/tikets/pass.png'
 import errorManager from '../../services/errorManager'
+import socket from '../../socket';
+import lastForWallet from '../../context/services/lastForWallet'
 const Dashboard = () => {
-    const { tiket, pass, _cctContract, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice, getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race, cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const { tiket, pass, _cctContract, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice,
+        getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race,
+        cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -29,11 +33,33 @@ const Dashboard = () => {
     const [ticketAmmount, setTicketAmmount] = useState(0)
     const [ticketPrice, setTicketPrice] = useState(0)
 
+    const [passOnSell, setPassOnSell] = useState([])
+    const [myPass, setMyPass] = useState([])
+
     useEffect(() => {
         getRaces()
         getApproved()
         getClaimPercent()
-    }, [wallet])
+    }, [wallet, pass])
+
+    useEffect(() => {
+        filterPass()
+        if (passOnSell.length == 0) fetch(process.env.REACT_APP_BASEURL + "pass")
+    }, [passOnSell]);
+
+    socket.on('passData', async passData => {
+        setPassOnSell(passData)
+    })
+
+    const filterPass = () => {
+        const filteredPass = passOnSell.filter(p => onlyUserPass(p))
+        setMyPass(filteredPass)
+    }
+
+    const onlyUserPass = (pass) => {
+        if (pass.wallet == wallet) return pass
+    }
+
 
     const getClaimPercent = () => {
         if (wallet) {
@@ -193,8 +219,8 @@ const Dashboard = () => {
     ]
 
     const sellTicket = async () => {
-        if(ticketAmmount <= 0) return alert("Incorrect Amount")
-        if(ticketPrice <= 0 ) return alert("Incorrect Price")
+        if (ticketAmmount <= 0) return alert("Incorrect Amount")
+        if (ticketPrice <= 0) return alert("Incorrect Price")
         setLoading(true)
         setModalSellTicket(false)
         const body = {
@@ -215,20 +241,54 @@ const Dashboard = () => {
         }
     }
 
+    const removePass = async (passId) => {
+        setLoading(true)
+        try {
+            fetch(process.env.REACT_APP_BASEURL + "pass/"+wallet+"/"+passId, {
+                method: 'delete',
+            })
+                .then(res => res.json()) // or res.json()
+                .then(res => {
+                    console.log(res)
+                    setLoading(false)
+                    alert("Removed Pass")
+                }
+                )
+        } catch (error) {
+            errorManager(error)
+            setLoading(false)
+            alert("Error")
+        }
+    }
 
     return (
         <div className="">
-            {modalSellTicket && <div className='modalX'>
-                <div className='modalIn'>
-                    <div>
-                        <h2>Sell Pass</h2>
-                        <span> Pass Price </span>
-                        <input onChange={(e)=>setTicketPrice(e.target.value)} className='form-control mb-2' type="text" />
-                        <span> Amount </span>
-                        <input className='form-control mb-2' onChange={(e) => setTicketAmmount(e.target.value)} type="text" />
-                        <button onClick={sellTicket}> Sell </button>
-                        <button onClick={()=>setModalSellTicket(false)}> Cancel </button>
-
+            {modalSellTicket && <div className='cansSelection overflow'>
+                <div className='selectTittle'>
+                    <div className='tittle'> Sell Pass </div>
+                    <button onClick={_ => setModalSellTicket(false)}> X </button>
+                </div>
+                <div className='container pt-2'>
+                    <div className="row">
+                        <div className="col-4">
+                            <h2>Sell Pass</h2>
+                            <span> Pass Price </span>
+                            <input onChange={(e) => setTicketPrice(e.target.value)} className='form-control mb-2' type="text" />
+                            <span> Amount </span>
+                            <input className='form-control mb-2' onChange={(e) => setTicketAmmount(e.target.value)} type="text" />
+                            <button onClick={sellTicket}> Sell </button>
+                            <button onClick={() => setModalSellTicket(false)}> Cancel </button>
+                        </div>
+                        <div className='col-8'>
+                            {myPass.length > 0 && myPass.map((item, index) => {
+                                return <div key={index} className="d-flex justify-content-between mb-1 border p-1 align-items-center">
+                                    <div>
+                                        {item._id} - {item.price} Credits {lastForWallet(item.wallet)}
+                                    </div>
+                                    <button onClick={() => removePass(item._id)} className='btn btn-danger'> Remove </button>
+                                </div>
+                            })}
+                        </div>
                     </div>
                 </div>
             </div>}
@@ -337,7 +397,7 @@ const Dashboard = () => {
                                         <div>
                                             <h5>{balance ? <> {Math.round((balance * 100)) / 100}</> : <>0</>} Credits</h5>
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                             </div>
@@ -394,8 +454,8 @@ const Dashboard = () => {
                                     <div>
                                         <button onClick={() => setRaceModal(true)} className='mx-2 btn btn-primary'> Races History </button>
                                         <button className='btn btn-primary mx-2'> Activities </button>
-                                        <button onClick={() => setModalSellTicket(true)} className='btn btn-warning'> <img src={passTicket} height="20px" alt="" /> <b>{pass}</b> </button>
-                                        <button className='btn btn-primary'>  <img src={ticketImg} height="20px" alt="" /> {tiket} </button>
+                                        <button onClick={() => { setModalSellTicket(true); fetch(process.env.REACT_APP_BASEURL + "pass") }} className='btn btn-warning mx-2'> <img src={passTicket} height="20px" alt="" /> <b>{pass}</b> </button>
+                                        <button className='btn btn-primary mx-2'>  <img src={ticketImg} height="20px" alt="" /> {tiket} </button>
                                     </div>
                                 </div>
 

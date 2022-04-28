@@ -11,8 +11,14 @@ const MarketItems = () => {
     const _context = useContext(DataContext)
 
     const [pass, setPass] = useState([])
-    const [confirmModal,setConfirmModal] = useState(false)
-    const [passId,setPassId] = useState(false)
+    const [passMarket, setPassMarket] = useState([])
+    const [confirmModal, setConfirmModal] = useState(false)
+    const [passId, setPassId] = useState(false)
+
+    //filters
+    const [order, setOrder] = useState(1)
+    const [rangoMin, setRangoMin] = useState(1)
+    const [rangoMax, setRangoMax] = useState(200)
 
     useEffect(() => {
         if (pass.length == 0) fetch(process.env.REACT_APP_BASEURL + "pass")
@@ -24,8 +30,25 @@ const MarketItems = () => {
     })
 
     const filterPass = () => {
-
+        const filteredPass = pass.sort((price1, price2) => orderFunction(price1, price2))
+            .filter(p => filterRank(p));
+        setPassMarket(filteredPass)
     }
+
+    const filterRank = (pass) => {
+        if (pass.amount >= rangoMin && pass.amount <= rangoMax) return pass;
+    }
+
+    const orderFunction = (price1, price2) => {
+        let orderAux;
+        (order == 1) ? orderAux = -1 : orderAux = 1;
+        if (price1.price > price2.price) return order;
+        if (price1.price < price2.price) return orderAux;
+        return 0;
+    }
+
+
+
 
     const buyTicket = async () => {
         _context.setLoading(true)
@@ -52,11 +75,12 @@ const MarketItems = () => {
         {confirmModal && <div className="modalX">
             <div className="modalIn">
                 <div className="w-100">
-                Esta seguro de comprar estos tickets
-                <button onClick={buyTicket}> Confirm </button>
+                    Esta seguro de comprar estos tickets
+                    <button className="btn btn-primary" onClick={buyTicket}> Confirm </button>
+                    <button className="btn btn-danger" onClick={() => setConfirmModal(false)}> Cancel </button>
                 </div>
             </div>
-        </div> }
+        </div>}
         <div className="container-fluid">
             <div className="secondNav mt-50px mb-3">
                 <Link to="/market" className="secondNavButton">
@@ -81,9 +105,9 @@ const MarketItems = () => {
                             </div>
                             <div className="mt-3">
                                 <div className="sidebarText mb-1">
-                                    Order by price: 1
+                                    Order by price: {order == 1 ? "Ask" : "Desc"}
                                 </div>
-                                <select className="select" name="" id="">
+                                <select onChange={e => setOrder(e.target.value)} className="select" name="" id="">
                                     <option className="optionFilter" value={1}>Price Ask</option>
                                     <option className="optionFilter" value={-1}>Price Desk</option>
                                 </select>
@@ -95,29 +119,29 @@ const MarketItems = () => {
                                         Ammount
                                     </div>
                                     <div>
-                                        <h3 className="breedCount"> min</h3>
+                                        <h3 className="breedCount"> min {rangoMin}</h3>
                                     </div>
                                 </div>
                                 <div>
-                                    <input min="200" className="w-100" type="range" name="" id="" />
+                                    <input onChange={e => setRangoMin(e.target.value)} min="1" max={rangoMax} className="w-100" type="range" value={rangoMin} name="" id="" />
                                 </div>
                                 <div>
-                                    <h3 className="breedCount"> max </h3>
+                                    <h3 className="breedCount"> max {rangoMax}</h3>
                                 </div>
                                 <div>
-                                    <input max="360" className="w-100" type="range" name="" id="" />
+                                    <input onChange={e => setRangoMax(e.target.value)} min={rangoMin} max="200" className="w-100" type="range" value={rangoMax} name="" id="" />
                                 </div>
                             </div>
                             <div className="mt-3">
-                                <button className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
+                                <button onClick={filterPass} className="w-100 btn btn-primary text-light" type="button" name="" id="" > Find </button>
                             </div>
                         </div>
                     </div>
                     <div className="col-9">
                         <div className="container-fluid">
                             <div className="row">
-                                {pass.length > 0 && <>
-                                    {pass.map((item, index) => <div className="col-2" key={index}>
+                                {passMarket.length > 0 && <>
+                                    {passMarket.map((item, index) => <div className="col-2" key={index}>
                                         <div className="pass mb-2">
                                             <div className="w-100 p-2">
                                                 <div className="wall">
@@ -134,7 +158,7 @@ const MarketItems = () => {
                                                         {item.price} Credits
                                                     </div>
                                                 </div>
-                                                <button onClick={() =>{ setPassId(item._id);setConfirmModal(true) }} className="btn btn-primary w-100"> Buy </button>
+                                                <button onClick={() => { setPassId(item._id); setConfirmModal(true) }} className="btn btn-primary w-100"> Buy </button>
                                             </div>
                                         </div>
                                     </div>)

@@ -50,7 +50,7 @@ const Race = () => {
     const rankRace = () => alert("Coming Soon!")
     const beatsRace = () => alert("Coming Soon!")
 
-    return (
+    return ( 
         <div className="container">
             {_context.loading && <Loader />}
             {modalRace && <div className="cansSelection overflow">
