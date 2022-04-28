@@ -59,6 +59,7 @@ const Race = () => {
                     <button onClick={_ => setModalRace(false)}> X </button>
                 </div>
                 <div className="container py-4 ">
+                    {!_context.canodromes && "You need a canodrome to play race"}
                     {_context.canodromes && _context.canodromes.map((canodrome, index) => {
                         return (
                             <div key={index} className="row raceCanodrome mb-2">
