@@ -4,6 +4,8 @@ import socket from '../../socket';
 import passTicket from "../../img/tikets/pass.png"
 import { DataContext } from "../../context/DataContext";
 import axios from "axios";
+import Loader from '../../components/loader/loader'
+import lastForWallet from "../../context/services/lastForWallet";
 const MarketItems = () => {
     const _context = useContext(DataContext)
 
@@ -22,16 +24,26 @@ const MarketItems = () => {
 
     }
 
-    const buyTicket = ({ _id }) => {
+    const buyTicket = async ({ _id }) => {
+        _context.setLoading(true)
         const body = {
             wallet: _context.wallet,
             passId: _id
         }
-        const res = axios.post(process.env.REACT_APP_BASEURL + "pass/buy", body)
-        console.log(res)
+        try {
+            const res = await axios.post(process.env.REACT_APP_BASEURL + "pass/buy", body)
+            console.log(res)
+            await _context.exectConnect()
+            _context.setLoading(false)
+            alert("Yo have a new pass")
+        } catch (error) {
+            _context.setLoading(false)
+            console.log(error)
+        }
     }
 
     return (<div>
+        {_context.loading && <Loader />}
         <div className="container-fluid">
             <div className="secondNav mt-50px mb-3">
                 <Link to="/market" className="secondNavButton">
@@ -95,6 +107,9 @@ const MarketItems = () => {
                                     {pass.map((item, index) => <div className="col-2" key={index}>
                                         <div className="pass mb-2">
                                             <div className="w-100 p-2">
+                                                <div className="wall">
+                                                    {lastForWallet(item.wallet)}
+                                                </div>
                                                 <div>
                                                     <img className="img-fluid" src={passTicket} alt="" />
                                                 </div>

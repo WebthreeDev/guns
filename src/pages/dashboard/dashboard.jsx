@@ -208,6 +208,7 @@ const Dashboard = () => {
             console.log(res)
             await exectConnect()
             setLoading(false)
+            alert("Your pass is on sell")
         } catch (error) {
             setLoading(false)
             errorManager(error)
