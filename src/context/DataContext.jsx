@@ -13,26 +13,26 @@ export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
 
     const [wallet, setWallet] = useState(false)
-    const [commonPackagePrice, setCommonPackagePrice] = useState(false)
     const [epicPackagePrice, setEpicPackagePrice] = useState(false)
-    const [legendaryPackagePrice, setLegendaryPackagePrice] = useState(false)
+    const [commonPackagePrice, setCommonPackagePrice] = useState(false)
     const [canodromeCommonPrice, setCanodromeCommonPrice] = useState(false)
+    const [legendaryPackagePrice, setLegendaryPackagePrice] = useState(false)
     const [canodromeLegendaryPrice, setCanodromeLegendaryPrice] = useState(false)
     const [newPackagePrice, setNewPackagePrice] = useState(false)
+    const [balance, setBalance] = useState(false)
     const [loading, setLoading] = useState(false)
     const [alert, setAlert] = useState(false)
     const [cans, setCans] = useState(false)
     const [bnb, setBnb] = useState(false)
     const [race, setRaces] = useState(false)
-    const [balance, setBalance] = useState(false)
     const [cct, setCCT] = useState(false)
+    const [oracule, setOracule] = useState(false)
+    const [dayReset, setDayReset] = useState(false)
     const [canodromes, setCanodromes] = useState(false)
     const [claimPercent, setClaimPersent] = useState(false)
-    const [oracule, setOracule] = useState(false)
     const [minimunToClaim, setMinimunToClaim] = useState(false)
-    const [dayReset, setDayReset] = useState(false)
-    const gas = web3.utils.toWei("0.0002", "gwei")
-    const gasPrice = web3.utils.toWei("20", "gwei")
+    const gas = web3.utils.toWei("0.0001", "gwei")
+    const gasPrice = web3.eth.getGasPrice()
     const ownerWallet = _poolContract.address
     const [tiket,setTiket] = useState(false)
     const [pass,setPass] = useState(false)
@@ -72,9 +72,9 @@ export const DataProvider = ({ children }) => {
     } */
 
     const exectConnect = async () => {
-        const chainIdX = await w3S.chainId()
-        const ss = web3.utils.toHex(chainIdX)
-        console.log("hex:",ss,"- chainid: ",chainIdX)
+        
+        const _chainId = 56
+        
         setLoading(true)
         const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null
         if (storageCanId) {
@@ -86,7 +86,6 @@ export const DataProvider = ({ children }) => {
             changeStateCanodrome(storageCanodromeId)
         }
         
-        const _chainId = 56
         window.ethereum.request({ method: "eth_requestAccounts" })
             .then(async accounts => {
 
@@ -195,9 +194,9 @@ export const DataProvider = ({ children }) => {
         return (_cans.data.response)
     }
 
-    const reset = async (_wallet) => {
+ /*    const reset = async (_wallet) => {
         if (_wallet) await axios.get(process.env.REACT_APP_BASEURL + "reset/" + _wallet)
-    }
+    } */
 
     const getBnb = async (wallet) => {
         const bnbWei = await web3.eth.getBalance(wallet)

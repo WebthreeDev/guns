@@ -160,6 +160,7 @@ const Dashboard = () => {
                 setTimeout(() => {
                     console.log("transfiriendo fondos")
                     const discountAmount = res.data.response.value.toString()
+                    console.log(res.data.response)
                     const claiming = web3.utils.toWei(discountAmount, "ether")
 
                     cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
@@ -197,7 +198,7 @@ const Dashboard = () => {
     const claimExcect = async () => {
         setLoading(true)
         const claiming = web3.utils.toWei(approved, "ether")
-        cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
+        cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet,gas })
             .then(async res => {
                 console.log(res)
                 await getBnb(wallet)

@@ -62,7 +62,7 @@ const Navbar = () => {
                     {wallet ?
                         <div className="wallet">
                             <div className="wallet-circle">
-                                <img alt="" height="17px" src="https://cryptocans.io/public/static/media/ico-wallet.e442439e75ab448c94c85f336099647e.svg" />
+                                <img alt="" height="28px" src="https://cryptocans.io/public/static/media/metamask.56461f8696b1cc56a0d59bd53bb5235e.svg" />
                             </div>
                             <b className="mx-2">
                                 {resumeWallet(wallet)}

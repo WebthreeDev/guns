@@ -68,7 +68,9 @@ $textGray:rgb(80, 80, 80);
 .wallet-circle{
     background-color: $gradient1;
     border: 2px solid $gradient2;
-    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     text-align: center;
     height: 40px;
