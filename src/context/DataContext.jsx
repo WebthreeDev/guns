@@ -2,7 +2,8 @@ import React, { createContext, useState, useEffect } from 'react'
 import resumeWallet from './services/resumeWallet'
 import lastForWallet from './services/lastForWallet'
 import w3S, { web3 } from '../services/w3S'
-import { nftContract } from '../tokens/canes/canes'
+//import { nftContract } from '../tokens/canes/canes'
+import nftContract from '../services/tokensManager'
 import { cctContract, _cctContract } from '../tokens/cct/cct'
 import { poolContract, _poolContract } from '../tokens/pool/pool'
 import connect from './services/connectS'
@@ -38,10 +39,15 @@ export const DataProvider = ({ children }) => {
     const [pass,setPass] = useState(false)
 
     useEffect(() => {
-        exectConnect()
-        getERC721Contract()
+       // exectConnect()
+        //getERC721Contract()
         //verifyClaim()
+        getEnviroment()
     }, [])
+
+    const getEnviroment = ()=>{
+        console.log("Enviroment: ",process.env.REACT_APP_ENVIROMENT)
+    }
 
     /*  const getClaimPersent = async () => {
          const account = await w3S.requestAccounts()
@@ -73,7 +79,9 @@ export const DataProvider = ({ children }) => {
 
     const exectConnect = async () => {
         
-        const _chainId = 56
+        let  _chainId
+        if(process.env.REACT_APP_ENVIROMENT == "dev") _chainId = 97
+        if(process.env.REACT_APP_ENVIROMENT == "prod") _chainId = 56
         
         setLoading(true)
         const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null

@@ -8,8 +8,6 @@ import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios"
 import web3 from "../../tokens/canes/canes"
-import { nftContract } from "../../tokens/canes/canes"
-import { cctContract } from "../../tokens/cct/cct"
 import { ticketsContract, _ticketsContract } from "../../tokens/buyTickets/buyTickets"
 import Package from "../../components/package/package";
 import MintModal from "../../components/mintModal/mintModal";
@@ -17,7 +15,7 @@ import bnbLogo from "../../img/bnbLogo.png"
 //import NftPack from "../../components/nftPack/nftPack";
 
 const Shop = () => {
-    const {
+    const { nftContract,cctContract,
         gas, gasPrice, getCans, getERC721Contract, loading, setLoading, wallet,
         connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice,
         canodromeCommonPrice, canodromeLegendaryPrice, getCanodromes,exectConnect

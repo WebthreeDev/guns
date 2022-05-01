@@ -1,7 +1,7 @@
 import axios from "axios"
 import React, { useEffect, useState, useContext } from "react"
 import { DataContext } from "../../context/DataContext"
-import web3, { nftContract } from "../../tokens/canes/canes"
+import web3 from "../../tokens/canes/canes"
 import Loader from "../../components/loader/loader"
 import NftCard from "../../components/nftCard/nftCard"
 import changeStateCanInMarket from "../../context/services/changeStateCanInMarket"
@@ -9,7 +9,7 @@ import { Link } from "react-router-dom"
 import socket from '../../socket';
 const Market = () => {
 
-    const {wallet, setLoading, loading } = useContext(DataContext)
+    const {wallet, setLoading, loading,nftContract } = useContext(DataContext)
     const _context = useContext(DataContext)
     const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
 

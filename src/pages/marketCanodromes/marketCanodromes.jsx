@@ -1,7 +1,7 @@
 import axios from "axios"
 import React, { useState, useContext, useEffect } from "react"
 import { DataContext } from "../../context/DataContext"
-import web3, { nftContract } from "../../tokens/canes/canes"
+import web3 from "../../tokens/canes/canes"
 import Loader from "../../components/loader/loader"
 import changeStateCanodrome from "../../context/services/changeStateCanodrome"
 import { Link } from "react-router-dom"
@@ -11,7 +11,7 @@ import errorManager from '../../services/errorManager'
 
 const MarketCanodromes = () => {
 
-    const { gas, gasPrice, wallet, setLoading, loading, getCanodromes } = useContext(DataContext)
+    const { nftContract,gas, gasPrice, wallet, setLoading, loading, getCanodromes } = useContext(DataContext)
     const _context = useContext(DataContext)
     const [canodrome, setCanodrome] = useState(false)
     const [renderModal, setRenderModal] = useState(false)
