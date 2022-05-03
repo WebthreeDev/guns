@@ -468,3 +468,95 @@ progress{
 .wall{
     text-align: end;
 }
+.raceUi{
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(255, 255, 0);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    padding-top: 50px;
+}
+
+.bg-gradas{
+    height: 60vh;
+    width: 100%;
+    background-image: url(../../img/raceui/g1065.png);
+    background-repeat:repeat-x;
+    background-position-x: right;
+    background-size:100vw 60vh;
+    animation-name: gradas;
+    animation-timing-function: linear;
+    animation-duration: 30s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes gradas {
+    0%{
+        background-position-x: 0vw;
+    }
+    100%{
+        background-position-x: 100vw;
+    }
+}
+
+.bg-pista{
+    margin-top: -45px;
+    height: 50vh;
+    width: 100%;
+    background-image: url(../../img/raceui/rect843.png);
+    background-repeat:repeat-x;
+    background-position-x: right;
+    background-size: 100vw 50vh;
+    animation-name: pista;
+    animation-timing-function: linear;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    position: relative;
+}
+
+@keyframes pista {
+    0%{
+        background-position-x: 100vw;
+    }
+    100%{
+        background-position-x: 0vw;
+    }
+}
+
+.dog1{
+    position: absolute;
+    left:0px;
+    top: 0px;
+    height: 120px;
+}
+.dog2{
+    position: absolute;
+    left: 0px;
+    top: 10px;
+    height: 125px;
+}
+.dog3{
+    position: absolute;
+    left: 0px;
+    top: 20px;
+    height: 140px;
+}
+.dog4{
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    height: 160px;
+}
+.dog5{
+    position: absolute;
+    left: 0px;
+    top: 40px;
+    height: 180px;
+}
+.dog6{
+    position: absolute;
+    top: 50px;
+    height: 200px;
+} 

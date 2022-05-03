@@ -6,6 +6,7 @@ import Loader from "../../components/loader/loader";
 import axios from "axios";
 import NftCard from "../../components/nftCard/nftCard";
 import { Link } from "react-router-dom"
+import RaceUi from "../../components/raceui/raceui";
 
 const Race = () => {
     const _context = useContext(DataContext)
@@ -14,6 +15,7 @@ const Race = () => {
     const [modalRaceActive, setModalRaceActive] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
+    const [raceUi,setRaceUi] = useState(true)
 
     const clickRun = async () => {
         const canId = selectedCan.id
@@ -52,6 +54,7 @@ const Race = () => {
 
     return ( 
         <div className="container">
+            {raceUi &&<RaceUi/>}
             {_context.loading && <Loader />}
             {modalRace && <div className="cansSelection overflow">
                 <div className='selectTittle'>

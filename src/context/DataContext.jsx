@@ -38,8 +38,8 @@ export const DataProvider = ({ children }) => {
     const [pass,setPass] = useState(false)
 
     useEffect(() => {
-        exectConnect()
-        getERC721Contract()
+       // exectConnect()
+        //getERC721Contract()
         //verifyClaim()
     }, [])
 
@@ -94,7 +94,6 @@ export const DataProvider = ({ children }) => {
                     axios.post(process.env.REACT_APP_BASEURL + "login", { wallet })
                         .then(async (res) => {
                             const _data = res.data.response
-                            /*  console.log("_data")*/
                             console.log(_data)
                             setBalance(_data.getWallet.balance)
                             setClaimPersent(_data.claim.porcent)
