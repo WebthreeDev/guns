@@ -530,33 +530,64 @@ progress{
     left:0px;
     top: 0px;
     height: 120px;
+    z-index: 2;
 }
 .dog2{
     position: absolute;
     left: 0px;
-    top: 10px;
-    height: 125px;
+    top: 15px;
+    height: 130px;
+    z-index: 3;
 }
 .dog3{
     position: absolute;
     left: 0px;
-    top: 20px;
+    top: 30px;
     height: 140px;
+    z-index: 4;
 }
 .dog4{
     position: absolute;
     left: 0px;
-    top: 30px;
-    height: 160px;
+    top: 45px;
+    height: 150px;
+    z-index: 5;
 }
 .dog5{
     position: absolute;
     left: 0px;
-    top: 40px;
-    height: 180px;
+    top: 60px;
+    height: 160px;
+    z-index: 6;
 }
 .dog6{
     position: absolute;
-    top: 50px;
-    height: 200px;
+    top: 75px;
+    height: 170px;
+    z-index: 7;
 } 
+.meta{
+    height: 60%;
+    background-color: rgba(255, 255, 255, 0.849);
+    width: 12px;
+    transform: skew(20deg);
+    left: 120vw;
+    top: 44px;
+    position: absolute;
+    animation-name: meta;
+    animation-duration: 4.2s;
+    animation-delay: 53s;
+    animation-timing-function: linear;
+    z-index: 1;
+}
+
+@keyframes meta {
+    0%{
+        left: 120vw;
+
+    }
+    100%{
+        left: -20vw;
+
+    }
+}

@@ -15,7 +15,7 @@ const Race = () => {
     const [modalRaceActive, setModalRaceActive] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
-    const [raceUi,setRaceUi] = useState(true)
+    const [raceUi,setRaceUi] = useState(false)
 
     const clickRun = async () => {
         const canId = selectedCan.id
@@ -52,9 +52,11 @@ const Race = () => {
     const rankRace = () => alert("Coming Soon!")
     const beatsRace = () => alert("Coming Soon!")
 
+  
+
     return ( 
         <div className="container">
-            {raceUi &&<RaceUi/>}
+            {raceUi &&<RaceUi setRaceUi={setRaceUi}/>}
             {_context.loading && <Loader />}
             {modalRace && <div className="cansSelection overflow">
                 <div className='selectTittle'>
@@ -165,6 +167,9 @@ const Race = () => {
             </div>}
 
             <div className="row racebg">
+                <div>
+                    <button onClick={()=>setRaceUi(true)}> Play race </button>
+                </div>
                 <div className="col-md-3 col-12">
                     <div onClick={() => race(0)} className="raceButton rbtn1">
                         SINGLE RACE
