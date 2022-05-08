@@ -25,7 +25,7 @@ const Navbar = () => {
                         <img height="40px"
                             src="https://www.gitbook.com/cdn-cgi/image/width=40,height=40,fit=contain,dpr=1,format=auto/https%3A%2F%2F3560466799-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FvdVUvBGUcENGvjpmxl0I%252Ficon%252FsEeQ2Ok9hqgKz7s54DHm%252Flogo.png%3Falt%3Dmedia%26token%3D5aa3fb3c-cf78-4d0c-b397-c31cfd419ab9" alt=""
                             className="mx-2" />
-                        <b className="logo-text">Cryptocans</b>
+                        <b className="logo-text">Cryptocans.io</b>
                     </div>
                     <div className="mx-2 d-flex">
                         <Link to="/dashboard" className="link" >
@@ -62,7 +62,7 @@ const Navbar = () => {
                     {wallet ?
                         <div className="wallet">
                             <div className="wallet-circle">
-                                <img alt="" height="17px" src="https://cryptocans.io/public/static/media/ico-wallet.e442439e75ab448c94c85f336099647e.svg" />
+                                <img alt="" height="28px" src="https://cryptocans.io/public/static/media/metamask.56461f8696b1cc56a0d59bd53bb5235e.svg" />
                             </div>
                             <b className="mx-2">
                                 {resumeWallet(wallet)}

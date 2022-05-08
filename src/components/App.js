@@ -63,6 +63,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <div className="etiketaEnviroment"> {process.env.REACT_APP_ENVIROMENT}  </div>
       <Navbar />
       <Router/>
     </BrowserRouter>

@@ -7,6 +7,7 @@ import axios from "axios";
 import Loader from '../../components/loader/loader'
 import lastForWallet from "../../context/services/lastForWallet";
 import errorManager from "../../services/errorManager";
+import enviroment from "../../env";
 const MarketItems = () => {
     const _context = useContext(DataContext)
 
@@ -21,7 +22,7 @@ const MarketItems = () => {
     const [rangoMax, setRangoMax] = useState(200)
 
     useEffect(() => {
-        if (pass.length == 0) fetch(process.env.REACT_APP_BASEURL + "pass")
+        if (pass.length == 0) fetch(enviroment().baseurl + "pass")
         filterPass()
     }, [pass]);
 
@@ -58,7 +59,7 @@ const MarketItems = () => {
             passId
         }
         try {
-            const res = await axios.post(process.env.REACT_APP_BASEURL + "pass/buy", body)
+            const res = await axios.post(enviroment().baseurl + "pass/buy", body)
             console.log(res)
             await _context.exectConnect()
             _context.setLoading(false)

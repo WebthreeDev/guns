@@ -1,7 +1,7 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
 const canContract = {
-    address:"0x247f2895B8D6866d9e40249009114a8782Bb8aa2",
+    address:"0xa31205c51B7b763C85299E90e9B6eB322e369ab2",
     abi:[
         {
             "inputs": [],
@@ -533,5 +533,9 @@ const canContract = {
     ]
 }
 
-export const nftContract = new web3.eth.Contract(canContract.abi, canContract.address)
+export const nftContractProd = () => {
+   const con = new web3.eth.Contract(canContract.abi, canContract.address)
+   return con
+}
+
 export default web3

@@ -1,12 +1,13 @@
 import axios from "axios"
 import w3S from "../../services/w3S"
+import enviroment from "../../env"
 const account = w3S.requestAccounts()
 const wallet = account[0]
 const service = {
     find: async (item) => {
         const body = { wallet, code: item }
         try {
-            const res = await axios.post(process.env.REACT_APP_BASEURL + "codes", body)
+            const res = await axios.post(enviroment().baseurl + "codes", body)
             const validate = res.data.response
             if (validate.result) {
                 if (validate.key == "a") {

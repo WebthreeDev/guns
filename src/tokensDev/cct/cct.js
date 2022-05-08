@@ -1,6 +1,6 @@
 import Web3 from "web3"
 const web3 = new Web3(window.ethereum)
-export const _cctContract = {
+export const _cctContractDev = {
     address:"0xe38d2c817f9e6104d0372922740064d3ce8eceC6",
     abi:[
         {
@@ -344,5 +344,5 @@ export const _cctContract = {
     ]
 }
 
-export const cctContract = new web3.eth.Contract(_cctContract.abi, _cctContract.address)
+export const cctContractDev = ()=> new web3.eth.Contract(_cctContractDev.abi, _cctContractDev.address)
 export default web3

@@ -4,14 +4,14 @@ import { useContext, useState } from 'react'
 import { DataContext } from '../../context/DataContext'
 import NftCard from '../../components/nftCard/nftCard'
 import axios from 'axios'
-import web3 from '../../tokens/canes/canes'
+import web3 from '../../tokensDev/canes/canes'
 import Loader from '../../components/loader/loader'
 import perro from '../../img/perro.png'
 import { Link } from 'react-router-dom'
 import errorManager from '../../services/errorManager'
-
+import enviroment from '../../env'
 const Canodromes = () => {
-    const baseUrl = process.env.REACT_APP_BASEURL
+    const baseUrl = enviroment().baseurl
     const _context = useContext(DataContext)
     const { nftContract } = useContext(DataContext)
     const [selectCans, setSelectCans] = useState(false)
@@ -45,7 +45,7 @@ const Canodromes = () => {
         const body = { can }
         try {
             console.log("poner un can en el canodromo")
-            const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/" + selectedCanodrome, body)
+            const res = await axios.patch(enviroment().baseurl + "canodrome/" + selectedCanodrome, body)
             //console.log(res.data.response)
             await _context.getCanodromes(_context.wallet)
             setSelectCans(false)
@@ -113,7 +113,7 @@ const Canodromes = () => {
         const body = { "canodrome": { "onSale": { "sale": true, "price": canodromePrice } } }
         try {
             console.log("sellin canodrome")
-            const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/sell/" + canodromeOnSell._id, body)
+            const res = await axios.patch(enviroment().baseurl + "canodrome/sell/" + canodromeOnSell._id, body)
             console.log(res.data.response)
             setSellingCanodrome(false)
             _context.getCanodromes(_context.wallet)
@@ -124,7 +124,7 @@ const Canodromes = () => {
 
     const removeCanodrome = async (_id) => {
         try {
-            const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/remove/" + _id)
+            const res = await axios.patch(enviroment().baseurl + "canodrome/remove/" + _id)
             console.log(res.data.response)
             _context.getCanodromes(_context.wallet)
         } catch (error) {

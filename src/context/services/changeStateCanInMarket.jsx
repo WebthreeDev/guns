@@ -1,5 +1,5 @@
 import axios from "axios"
-const baseUrl = process.env.REACT_APP_BASEURL+""
+import enviroment from "../../env"
 const changeStateCanInMarket = async (canId)=>{
     console.log(canId)
     const body = {
@@ -7,7 +7,7 @@ const changeStateCanInMarket = async (canId)=>{
         blockchainStatus: false
     }
 
-   axios.post(baseUrl+"marketplace", body).then((res)=>{
+   axios.post(enviroment().baseurl+"marketplace", body).then((res)=>{
        console.log(res.data.response)
        console.log("termino todo")
        localStorage.removeItem("windowsData")

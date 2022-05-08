@@ -11,8 +11,6 @@ $textGray:rgb(80, 80, 80);
     width: 100%;
     color: var(--light1);
     height: 52px;
-    background-color: $gradient1;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 .unikeRouter{
     min-height: 100vh !important;
@@ -68,7 +66,9 @@ $textGray:rgb(80, 80, 80);
 .wallet-circle{
     background-color: $gradient1;
     border: 2px solid $gradient2;
-    padding: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 50%;
     text-align: center;
     height: 40px;

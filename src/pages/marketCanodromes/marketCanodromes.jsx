@@ -1,13 +1,19 @@
 import axios from "axios"
 import React, { useState, useContext, useEffect } from "react"
 import { DataContext } from "../../context/DataContext"
-import web3, { nftContract } from "../../tokens/canes/canes"
+import web3 from "../../tokensDev/canes/canes"
 import Loader from "../../components/loader/loader"
 import changeStateCanodrome from "../../context/services/changeStateCanodrome"
 import { Link } from "react-router-dom"
 import socket from '../../socket';
 import canodromo from '../../img/canodrome.png'
 import errorManager from '../../services/errorManager'
+import enviroment from "../../env"
+import { nftContractProd } from "../../tokensProd/canes/canes"
+import { testNftContract } from "../../tokensDev/canes/canes"
+let nftContract
+if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
+if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
 
 const MarketCanodromes = () => {
 
@@ -15,7 +21,7 @@ const MarketCanodromes = () => {
     const _context = useContext(DataContext)
     const [canodrome, setCanodrome] = useState(false)
     const [renderModal, setRenderModal] = useState(false)
-    const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
+    const apiMarket = enviroment().baseurl + 'marketplace'
 
     //market canodromes
     const [order, setOrder] = useState(1)
@@ -63,7 +69,7 @@ const MarketCanodromes = () => {
             try {
 
                 console.log("comprando bien aki")
-                const apiGetCan = process.env.REACT_APP_BASEURL + "canodrome?id=" + canodrome._id
+                const apiGetCan = enviroment().baseurl + "canodrome?id=" + canodrome._id
                 const canObj = await axios.get(apiGetCan)
                 console.table("obtener un canodromo:", canObj)
                 if (canObj.status == 3) throw "Esta en proceso de venta"
@@ -89,7 +95,7 @@ const MarketCanodromes = () => {
                                 wallet
                             }
                         }
-                        const res = await axios.patch(process.env.REACT_APP_BASEURL + "canodrome/sell/" + canodrome._id, body)//cambia a estado 3 de espera
+                        const res = await axios.patch(enviroment().baseurl + "canodrome/sell/" + canodrome._id, body)//cambia a estado 3 de espera
                         const _can = res.data.response
                         console.log("este es el can: ", _can)
                         await getCanodromes(wallet)

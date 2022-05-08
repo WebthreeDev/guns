@@ -7,20 +7,31 @@ import sobre3 from "../../img/legendary.png"
 import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios"
-import web3 from "../../tokens/canes/canes"
-import { nftContract } from "../../tokens/canes/canes"
-import { cctContract } from "../../tokens/cct/cct"
-import { ticketsContract, _ticketsContract } from "../../tokens/buyTickets/buyTickets"
+import web3 from "../../tokensDev/canes/canes"
+import { ticketsContract, _ticketsContract } from "../../tokensDev/buyTickets/buyTickets"
 import Package from "../../components/package/package";
 import MintModal from "../../components/mintModal/mintModal";
 import bnbLogo from "../../img/bnbLogo.png"
-//import NftPack from "../../components/nftPack/nftPack";
+import enviroment from "../../env";
+import { nftContractProd } from "../../tokensProd/canes/canes"
+import { testNftContract } from "../../tokensDev/canes/canes"
+import { cctContractDev } from "../../tokensDev/cct/cct"
+import { cctContractProd } from "../../tokensProd/cct/cct"
+
+let cctContract
+if (process.env.REACT_APP_ENVIROMENT == "prod") cctContract = cctContractProd()
+if (process.env.REACT_APP_ENVIROMENT == "dev") cctContract = cctContractDev()
+let nftContract
+if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
+if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
 
 const Shop = () => {
+
+
     const {
         gas, gasPrice, getCans, getERC721Contract, loading, setLoading, wallet,
-        connect, commonPackagePrice, epicPackagePrice, legendaryPackagePrice,
-        canodromeCommonPrice, canodromeLegendaryPrice, getCanodromes,exectConnect
+        commonPackagePrice, epicPackagePrice, legendaryPackagePrice,
+        canodromeCommonPrice, canodromeLegendaryPrice, getCanodromes, exectConnect
     } = useContext(DataContext)
 
     const [minted, setMinted] = useState(false)
@@ -46,21 +57,22 @@ const Shop = () => {
     const erc721 = async () => await getERC721Contract()
 
     const buyPackage = async (packageId, wallet, price) => {
-        console.log(packageId)
+
+        console.log(nftContract.methods)
         setLoading(true)
         //envio a la blockchain el packageId
         const value = web3.utils.toWei(price.toString(), "ether")
         console.log(price)
         try {
-            const contractResponse = await nftContract.methods.mint(packageId).send({ from: wallet, value, gas, gasPrice })
+            const contractResponse = await nftContract.methods.mint(packageId).send({ from: wallet, value })
 
-            //Get hash 
+            //Get hash
             const hash = contractResponse.events.Transfer.transactionHash;
 
             if (packageId <= 3) {
                 const canId = await contractResponse.events.Transfer.returnValues.tokenId
                 const body = { wallet, packageId, canId, hash }
-                const mintedCan = await axios.post(process.env.REACT_APP_BASEURL + "cans/", body)
+                const mintedCan = await axios.post(enviroment().baseurl + "cans", body)
                 console.log(mintedCan.data.response)
                 setCanMinted(mintedCan.data.response)
                 setMinted(true)
@@ -69,7 +81,7 @@ const Shop = () => {
             } else if (packageId >= 4) {
                 const canodromeId = await contractResponse.events.Transfer.returnValues.tokenId
                 const body = { wallet, packageId, canodromeId, hash }
-                const mintedCanodrome = await axios.post(process.env.REACT_APP_BASEURL + "canodrome/mint", body)
+                const mintedCanodrome = await axios.post(enviroment().baseurl + "canodrome/mint", body)
                 console.log(mintedCanodrome.data.response)
                 setCanodromeMintedData(mintedCanodrome.data.response)
                 setCanodromeMinted(true)
@@ -109,10 +121,10 @@ const Shop = () => {
             if (cctRes.status) {
                 const ticketRes = await ticketsContract.methods.buyTicket(ticketAmmount).send({ from })
                 if (ticketRes.status) {
-                    const body = { 
-                         wallet,amount:ticketAmmount
+                    const body = {
+                        wallet, amount: ticketAmmount
                     }
-                    const res = await axios.post(process.env.REACT_APP_BASEURL + "ticket",body)
+                    const res = await axios.post(enviroment().baseurl + "ticket", body)
                     console.log(res.data.response)
                     await exectConnect(wallet)
                     setLoading(false)
@@ -156,7 +168,9 @@ const Shop = () => {
                     <h1 className="text-warning"> Need Ticket for the minigame? </h1>
                     <p> In this section you will buy the ticket to play in the ticket search minigame </p>
                     <h3 className="text-warning">Price: {ticketPrice && ticketPrice} CCT</h3>
-                    <button onClick={() => setTicketModal(true)} className="btn btn-danger"> Buy </button>
+                    {ticketPrice ? <button onClick={() => setTicketModal(true)} className="btn btn-danger"> Buy </button> :
+                        <button className="btn btn-secondary" disabled> Loading </button>
+                    }
                 </div>
                 <div className="w-100">
                     <div className="row">
@@ -181,7 +195,7 @@ const Shop = () => {
                                                 {wallet ?
                                                     <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-ccan w-100"> MINT </button>
                                                     :
-                                                    <button onClick={connect} className="btn-ccan w-100"> Connect </button>}
+                                                    <button onClick={exectConnect} className="btn-ccan w-100"> Connect </button>}
                                             </>}
                                             <div className="minted-text">
                                                 Minted 0/1000
@@ -235,7 +249,7 @@ const Shop = () => {
                                                 {wallet ?
                                                     <button onClick={() => buyPackage("2", wallet, epicPackagePrice)} className="btn-ccan w-100"> MINT </button>
                                                     :
-                                                    <button onClick={connect} className="btn-ccan w-100"> Connect </button>}
+                                                    <button onClick={exectConnect} className="btn-ccan w-100"> Connect </button>}
                                             </>}
                                             <div className="minted-text">
                                                 Minted 0/500
@@ -290,7 +304,7 @@ const Shop = () => {
                                                 {wallet ?
                                                     <button onClick={() => buyPackage("3", wallet, legendaryPackagePrice)} className="btn-ccan w-100"> MINT </button>
                                                     :
-                                                    <button onClick={connect} className="btn-ccan w-100"> Connect </button>}
+                                                    <button onClick={exectConnect} className="btn-ccan w-100"> Connect </button>}
                                             </>}
                                             <div className="minted-text">
                                                 Minted 0/250
@@ -347,7 +361,7 @@ const Shop = () => {
                                                 {wallet ?
                                                     <button onClick={() => buyPackage("4", wallet, canodromeCommonPrice)} className="btn-ccan w-100"> MINT </button>
                                                     :
-                                                    <button onClick={connect} className="btn-ccan w-100"> Connect </button>}
+                                                    <button onClick={exectConnect} className="btn-ccan w-100"> Connect </button>}
                                             </>}
                                             <div className="minted-text">
                                                 Minted 0/300
@@ -401,7 +415,7 @@ const Shop = () => {
                                                 {wallet ?
                                                     <button onClick={() => buyPackage("5", wallet, canodromeLegendaryPrice)} className="btn-ccan w-100"> MINT </button>
                                                     :
-                                                    <button onClick={connect} className="btn-ccan w-100"> Connect </button>}
+                                                    <button onClick={exectConnect} className="btn-ccan w-100"> Connect </button>}
                                             </>}
                                             <div className="minted-text">
                                                 Minted 0/100

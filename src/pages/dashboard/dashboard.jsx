@@ -4,7 +4,7 @@ import ccan from '../../img/ccan.png'
 import { DataContext } from '../../context/DataContext'
 import axios from 'axios'
 import Loader from '../../components/loader/loader'
-import web3 from '../../tokens/canes/canes'
+import web3 from '../../tokensDev/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
 import NftCard from '../../components/nftCard/nftCard'
@@ -13,9 +13,22 @@ import passTicket from '../../img/tikets/pass.png'
 import errorManager from '../../services/errorManager'
 import socket from '../../socket';
 import lastForWallet from '../../context/services/lastForWallet'
+import enviroment from '../../env'
+import { nftContractProd } from "../../tokensProd/canes/canes";
+import { testNftContract } from "../../tokensDev/canes/canes";
+import { cctContractDev } from "../../tokensDev/cct/cct"
+import { cctContractProd } from "../../tokensProd/cct/cct"
+
+let nftContract
+if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
+if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
+let cctContract
+if (process.env.REACT_APP_ENVIROMENT == "prod") cctContract = cctContractProd()
+if (process.env.REACT_APP_ENVIROMENT == "dev") cctContract = cctContractDev()
+
 const Dashboard = () => {
-    const { tiket, pass, _cctContract, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice,
-        getBnb, getCCT, claimPercent, cctContract, poolContract, nftContract, cct, balance, getRaces, race,
+    const { cctAddress, tiket, pass, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice,
+        getBnb, getCCT, claimPercent, poolContract, cct, balance, getRaces, race,
         cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
@@ -44,7 +57,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         filterPass()
-        if (passOnSell.length == 0) fetch(process.env.REACT_APP_BASEURL + "pass")
+        if (passOnSell.length == 0) fetch(enviroment().baseurl + "pass")
     }, [passOnSell]);
 
     socket.on('passData', async passData => {
@@ -60,10 +73,9 @@ const Dashboard = () => {
         if (pass.wallet == wallet) return pass
     }
 
-
     const getClaimPercent = () => {
         if (wallet) {
-            axios.post(process.env.REACT_APP_BASEURL + "claim/" + wallet)
+            axios.post(enviroment().baseurl + "claim/" + wallet)
         }
     }
 
@@ -80,7 +92,7 @@ const Dashboard = () => {
     const getApproved = async () => {
         if (wallet) {
             const recipient = wallet
-            const approved = await cctContract.methods.allowance(ownerWallet, recipient).call()
+            let approved = await cctContract.methods.allowance(ownerWallet, recipient).call()
             const _approved = web3.utils.fromWei(approved, "ether")
             setApproved(_approved)
         }
@@ -95,12 +107,12 @@ const Dashboard = () => {
         setLoading(true)
         setRenderModal(false)
 
-        const res = await axios.get(process.env.REACT_APP_BASEURL + "cans/validate/" + _id)
+        const res = await axios.get(enviroment().baseurl + "cans/validate/" + _id)
         if (!res.data.response) {
             let body = { can: { onSale: { sale: true, price: price }, } }
             const _value = Number.parseFloat(price / 100).toFixed(6)
             const value = web3.utils.toWei(_value.toString(), "ether")
-            nftContract.methods.onSale().send({ from: wallet, value, gas, gasPrice }).then(async (res) => {
+            nftContract.methods.onSale().send({ from: wallet, value }).then(async (res) => {
                 await sendCanOnSellToDB(_id, body)
                 setLoading(false)
             }).catch(error => {
@@ -126,7 +138,7 @@ const Dashboard = () => {
     const sendCanOnSellToDB = async (_id, body) => {
 
         try {
-            await axios.patch(process.env.REACT_APP_BASEURL + "cans/" + _id, body)
+            await axios.patch(enviroment().baseurl + "cans/" + _id, body)
             setRemove(false)
             setPrice(0)
             await getCans(wallet)
@@ -154,15 +166,16 @@ const Dashboard = () => {
         const body = { wallet, amount }
         try {
             console.log(body)
-            axios.patch(process.env.REACT_APP_BASEURL + "claim", body).then((res) => {
+            axios.patch(enviroment().baseurl + "claim", body).then((res) => {
                 console.log("claime")
                 console.log(res.data.response)
                 setTimeout(() => {
                     console.log("transfiriendo fondos")
                     const discountAmount = res.data.response.value.toString()
+                    console.log(discountAmount)
                     const claiming = web3.utils.toWei(discountAmount, "ether")
 
-                    cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
+                    cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet })
                         .then(async res => {
                             console.log(res)
                             await getApproved()
@@ -186,6 +199,8 @@ const Dashboard = () => {
                 } else {
                     console.log('Error message:', error.message);
                 }
+            }).finally(()=>{
+                setLoading(false)
             })
 
         } catch (error) {
@@ -197,7 +212,7 @@ const Dashboard = () => {
     const claimExcect = async () => {
         setLoading(true)
         const claiming = web3.utils.toWei(approved, "ether")
-        cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas, gasPrice })
+        cctContract.methods.transferFrom(ownerWallet, wallet, claiming).send({ from: wallet, gas })
             .then(async res => {
                 console.log(res)
                 await getBnb(wallet)
@@ -230,7 +245,7 @@ const Dashboard = () => {
         }
         try {
             console.log(body)
-            const res = await axios.post(process.env.REACT_APP_BASEURL + "pass/sell", body)
+            const res = await axios.post(enviroment().baseurl + "pass/sell", body)
             console.log(res)
             await exectConnect()
             setLoading(false)
@@ -245,7 +260,7 @@ const Dashboard = () => {
     const removePass = async (passId) => {
         setLoading(true)
         try {
-            fetch(process.env.REACT_APP_BASEURL + "pass/"+wallet+"/"+passId, {
+            fetch(enviroment().baseurl + "pass/" + wallet + "/" + passId, {
                 method: 'delete',
             })
                 .then(res => res.json()) // or res.json()
@@ -450,12 +465,12 @@ const Dashboard = () => {
                                         </>}
                                     </div>
                                     <div>
-                                        CCT Contract: {_cctContract.address}
+                                        CCT Contract: {cctAddress && cctAddress}
                                     </div>
                                     <div>
                                         <button onClick={() => setRaceModal(true)} className='mx-2 btn btn-primary'> Races History </button>
                                         <button className='btn btn-primary mx-2'> Activities </button>
-                                        <button onClick={() => { setModalSellTicket(true); fetch(process.env.REACT_APP_BASEURL + "pass") }} className='btn btn-warning mx-2'> <img src={passTicket} height="20px" alt="" /> <b>{pass}</b> </button>
+                                        <button onClick={() => { setModalSellTicket(true); fetch(enviroment().baseurl + "pass") }} className='btn btn-warning mx-2'> <img src={passTicket} height="20px" alt="" /> <b>{pass}</b> </button>
                                         <button className='btn btn-primary mx-2'>  <img src={ticketImg} height="20px" alt="" /> {tiket} </button>
                                     </div>
                                 </div>
