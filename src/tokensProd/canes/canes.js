@@ -533,5 +533,9 @@ const canContract = {
     ]
 }
 
-export const _nftContract = new web3.eth.Contract(canContract.abi, canContract.address)
+export const nftContractProd = () => {
+   const con = new web3.eth.Contract(canContract.abi, canContract.address)
+   return con
+}
+
 export default web3

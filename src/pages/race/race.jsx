@@ -6,7 +6,7 @@ import Loader from "../../components/loader/loader";
 import axios from "axios";
 import NftCard from "../../components/nftCard/nftCard";
 import { Link } from "react-router-dom"
-
+import enviroment from "../../env";
 const Race = () => {
     const _context = useContext(DataContext)
 
@@ -21,7 +21,7 @@ const Race = () => {
         const body = { canId, wallet: _context.wallet, canodromeId }
         console.log(body)
         try {
-            const res = await axios.post(process.env.REACT_APP_BASEURL + "race", body)
+            const res = await axios.post(enviroment().baseurl + "race", body)
             const _places = res.data.response.places
             let place = _places.indexOf(1)
             let lugar = ["er", "do", "er", "to", "to", "to"]

@@ -1,17 +1,25 @@
 import axios from "axios"
 import React, { useEffect, useState, useContext } from "react"
 import { DataContext } from "../../context/DataContext"
-import web3 from "../../tokens/canes/canes"
+import web3 from "../../tokensDev/canes/canes"
 import Loader from "../../components/loader/loader"
 import NftCard from "../../components/nftCard/nftCard"
 import changeStateCanInMarket from "../../context/services/changeStateCanInMarket"
 import { Link } from "react-router-dom"
 import socket from '../../socket';
+import enviroment from "../../env"
+import { nftContractProd } from "../../tokensProd/canes/canes"
+import { testNftContract } from "../../tokensDev/canes/canes"
+let nftContract
+if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
+if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
+
 const Market = () => {
 
-    const {wallet, setLoading, loading,nftContract } = useContext(DataContext)
+
+    const { wallet, setLoading, loading } = useContext(DataContext)
     const _context = useContext(DataContext)
-    const apiMarket = process.env.REACT_APP_BASEURL + 'marketplace'
+    const apiMarket = enviroment().baseurl + 'marketplace'
 
     const [renderModal, setRenderModal] = useState(false)
     const [can, setCan] = useState(false)
@@ -32,6 +40,7 @@ const Market = () => {
     useEffect(() => {
         if (cans.length == 0) fetch(apiMarket)
         filterCans()
+        console.log("socket del market",apiMarket)
     }, [cans]);
 
     socket.on('data', async cansData => {
@@ -66,10 +75,10 @@ const Market = () => {
             try {
 
                 const canId = can.id
-                const apiGetCan = process.env.REACT_APP_BASEURL + "cans/" + canId
+                const apiGetCan = enviroment().baseurl + "cans/" + canId
                 const canObj = await axios.get(apiGetCan)
                 if (canObj.status == 3) throw "Esta en proceso de venta"
-                
+
                 const res = await axios.patch(apiMarket, { canId })//cambia a estado 3 de espera
                 const _can = res.data.response
                 console.log(res.data.response)
@@ -80,7 +89,7 @@ const Market = () => {
                 const value = web3.utils.toWei(_can.onSale.price.toString(), "ether")
                 const address = _can.wallet
 
-                nftContract.methods.buyNft(address).send({ from, value, gas: _context.gas, gassPrice: _context.gassPrice }).then(async blockchainRes => {
+                nftContract.methods.buyNft(address).send({ from, value }).then(async blockchainRes => {
                     localStorage.removeItem('windowsData');
                     console.log(blockchainRes);
                     //envio el hash de la compra al back
@@ -138,8 +147,8 @@ const Market = () => {
     }
 
     const setRarity = (rarity) => {
-        const r = ["common","rare","epic","legendary"]
-        return r[rarity+1]
+        const r = ["common", "rare", "epic", "legendary"]
+        return r[rarity + 1]
     }
 
     const clear = () => {

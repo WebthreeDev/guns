@@ -11,7 +11,7 @@ import v4 from '../../img/tikets/v4.png'
 import { DataContext } from "../../context/DataContext"
 import w3S from "../../services/w3S"
 import service from "./service"
-
+import enviroment from "../../env"
 const Minigame = () => {
 
     const { wallet, tiket, pass, exectConnect } = useContext(DataContext)
@@ -41,7 +41,7 @@ const Minigame = () => {
         const account = await w3S.requestAccounts()
         const _wallet = account[0]
         const body = { wallet: _wallet }
-        const res = await axios.post(process.env.REACT_APP_BASEURL + "codes/verify", body)
+        const res = await axios.post(enviroment().baseurl + "codes/verify", body)
         console.log(res.data.response)
         if (res.data.response == "Add Pass") {
             setTiket1(false)
@@ -65,7 +65,7 @@ const Minigame = () => {
     const find = async (item) => {
         const body = { wallet, code: item }
         try {
-            const res = await axios.post(process.env.REACT_APP_BASEURL + "codes", body)
+            const res = await axios.post(enviroment().baseurl + "codes", body)
             const validate = res.data.response
             if (validate.result) {
                 if (validate.key === "a") setTiket1(true)

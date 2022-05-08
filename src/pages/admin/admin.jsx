@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import { DataContext } from "../../context/DataContext";
 import { web3 } from "../../services/w3S";
 import Loader from "../../components/loader/loader";
+import { nftContractProd } from "../../tokensProd/canes/canes";
+import { testNftContract } from "../../tokensDev/canes/canes";
 const Admin = () => {
     const _context = useContext(DataContext)
 
@@ -11,30 +13,34 @@ const Admin = () => {
     const [totalSold, setTotalSold] = useState(false)
 
     useEffect(() => {
-        _context.getERC721Contract()
         contractAdminSection()
-        console.log(_context.nftContract.methods)
     }, [])
 
+    let nftContract
+    if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
+    if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
+    
     const contractAdminSection = async () => {
+
+
         console.log("obtener los contratos")
-        _context.nftContract.methods.totalSold().call().then(res => {
+        nftContract.methods.totalSold().call().then(res => {
             setTotalSold(res)
             console.log("total sold")
         })
 
-        _context.nftContract.methods.contractOwner().call().then((res) => {
+        nftContract.methods.contractOwner().call().then((res) => {
             setContractOwner(res)
         })
 
-        _context.nftContract.methods.getBalance().call().then(res => {
+        nftContract.methods.getBalance().call().then(res => {
             const _balance = web3.utils.fromWei(res, "ether")
             setBalance(_balance)
         })
     }
 
     const changeOwner = () => {
-        _context.nftContract.methods.changeOwner(newOwnerWallet).send({ from: _context.wallet }).then(res => {
+        nftContract.methods.changeOwner(newOwnerWallet).send({ from: _context.wallet }).then(res => {
             //console.log(res)
             contractAdminSection()
         })
@@ -42,7 +48,7 @@ const Admin = () => {
     const newOwner = e => setNewOwnerWallet(e.target.value)
 
     const withdraw = () => {
-        _context.nftContract.methods.withdraw().send({ from: _context.wallet }).then(res => {
+        nftContract.methods.withdraw().send({ from: _context.wallet }).then(res => {
             //console.log(res)
             contractAdminSection()
         })
@@ -55,7 +61,7 @@ const Admin = () => {
     const changeNftPrice = async (id) => {
         await _context.setLoading(true)
         const newPrice = web3.utils.toWei(_context.newPackagePrice, "ether")
-        _context.nftContract.methods.changeNftPrice(id, newPrice).send({ from: _context.wallet }).then(res => {
+        nftContract.methods.changeNftPrice(id, newPrice).send({ from: _context.wallet }).then(res => {
             console.log(res)
         }).finally( async ()=>{
             await contractAdminSection()
