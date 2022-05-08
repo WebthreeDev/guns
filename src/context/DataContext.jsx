@@ -44,11 +44,11 @@ export const DataProvider = ({ children }) => {
     const ownerWallet = _poolContract.address
     const [tiket, setTiket] = useState(false)
     const [pass, setPass] = useState(false)
-    const [cctAddress,setCctAddress] = useState(false)
+    const [cctAddress, setCctAddress] = useState(false)
 
     useEffect(() => {
-       // exectConnect()
-        //getERC721Contract()
+        exectConnect()
+        getERC721Contract()
         //verifyClaim()
         getEnviroment()
     }, [])
@@ -175,13 +175,13 @@ export const DataProvider = ({ children }) => {
     const getCCT = async (wallet) => {
         let _cct
         let address
-        if(process.env.REACT_APP_ENVIROMENT == "dev") {
-            _cct = await cctContract.methods.balanceOf(wallet).call() 
+        if (process.env.REACT_APP_ENVIROMENT == "dev") {
+            _cct = await cctContract.methods.balanceOf(wallet).call()
             address = _cctContractDev.address
         }
-        
-        if(process.env.REACT_APP_ENVIROMENT == "prod") {
-            _cct = await cctContractProd.methods.balanceOf(wallet).call() 
+
+        if (process.env.REACT_APP_ENVIROMENT == "prod") {
+            _cct = await cctContractProd.methods.balanceOf(wallet).call()
             address = _cctContractProd.address
         }
 
@@ -253,7 +253,7 @@ export const DataProvider = ({ children }) => {
     const _context = {
         wallet, connect,
         resumeWallet, lastForWallet,
-        w3S, cctContractDev,cctContractProd,
+        w3S, cctContractDev, cctContractProd,
         commonPackagePrice, setCommonPackagePrice,
         epicPackagePrice, setEpicPackagePrice,
         legendaryPackagePrice, setLegendaryPackagePrice,
@@ -274,8 +274,8 @@ export const DataProvider = ({ children }) => {
         getCCT, ownerWallet,
         getCanodromeState, poolContract,
         oracule, minimunToClaim, dayReset,
-        _cctContractDev,_cctContractProd,
-        tiket, pass,cctAddress
+        _cctContractDev, _cctContractProd,
+        tiket, pass, cctAddress
     }
 
     return (

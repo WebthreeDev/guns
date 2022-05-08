@@ -6,12 +6,9 @@ import Loader from "../../components/loader/loader";
 import axios from "axios";
 import NftCard from "../../components/nftCard/nftCard";
 import { Link } from "react-router-dom"
-<<<<<<< HEAD
 import RaceUi from "../../components/raceui/raceui";
 
-=======
 import enviroment from "../../env";
->>>>>>> smart
 const Race = () => {
     const _context = useContext(DataContext)
 
@@ -20,6 +17,7 @@ const Race = () => {
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
     const [raceUi,setRaceUi] = useState(false)
+    const [places,setPlaces] = useState([])
 
     const clickRun = async () => {
         const canId = selectedCan.id
@@ -29,13 +27,17 @@ const Race = () => {
         try {
             const res = await axios.post(enviroment().baseurl + "race", body)
             const _places = res.data.response.places
-            let place = _places.indexOf(1)
-            let lugar = ["er", "do", "er", "to", "to", "to"]
-            let er = lugar[place]
-            await _context.exectConnect()
-            alert("Llegaste de " + (place + 1) + er + " lugar")
+            console.log(_places)
             setModalRaceActive(false)
+            goRace(_places)
         } catch (error) { alert(error.response.data.error) }
+    }
+
+    const goRace = (_places)=>{
+        console.log(_places)
+        setPlaces(_places)
+        setRaceUi(true)
+        _context.setLoading(false)
     }
 
     const setRenderModal = _ => { }
@@ -60,7 +62,7 @@ const Race = () => {
 
     return ( 
         <div className="container">
-            {raceUi &&<RaceUi setRaceUi={setRaceUi}/>}
+            {raceUi &&<RaceUi places={places} setRaceUi={setRaceUi}/>}
             {_context.loading && <Loader />}
             {modalRace && <div className="cansSelection overflow">
                 <div className='selectTittle'>
@@ -164,16 +166,12 @@ const Race = () => {
                                 </div>
 
                             </div>
-                            <button onClick={() => { clickRun() }} className="btn btn-success form-control"> Ready! </button>
+                            <button  onClick={() => { clickRun() }} className="btn btn-success form-control"> Ready! </button>
                         </div>
                     </div>
                 </div>
             </div>}
-
             <div className="row racebg">
-                <div>
-                    <button onClick={()=>setRaceUi(true)}> Play race </button>
-                </div>
                 <div className="col-md-3 col-12">
                     <div onClick={() => race(0)} className="raceButton rbtn1">
                         SINGLE RACE
