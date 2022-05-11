@@ -41,7 +41,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                             </div>
                             <div className='totalStats lb-color'> {item.energy}/4 </div>
                         </div>
-                        <div className='d-flex justify-content-between  align-items-center'>
+                        {/* <div className='d-flex justify-content-between  align-items-center'>
                             <div className='lb-color'>
                                 <div>
                                     Acceleration
@@ -70,7 +70,7 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
                                 <div> <progress min={"0"} value={item.resistencia} max={"300"} name="" id="" /> </div>
                             </div>
                             <div className='totalStats lb-color'> {item.resistencia} </div>
-                        </div>
+                        </div> */}
                         <div className='totalStatsCard'>
                             <div>
                                 Total stats

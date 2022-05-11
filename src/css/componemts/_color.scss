@@ -472,11 +472,12 @@ progress{
     background-size: cover;
     height: 100vh;
     width: 100vw;
-    background-color: rgb(255, 255, 0);
+    background-color: rgb(255, 0, 0);
     position: fixed;
     top: 0px;
     left: 0px;
-    padding-top: 50px;
+    padding-top: 0px;
+    z-index: 1;
 }
 
 .bg-gradas{
@@ -485,7 +486,8 @@ progress{
     background-image: url(../../img/raceui/g1065.png);
     background-repeat:repeat-x;
     background-position-x: right;
-    background-size:100vw 60vh;
+    background-position-y:top;
+    background-size:100vw 100%;
     animation-name: gradas;
     animation-timing-function: linear;
     animation-duration: 30s;
@@ -576,7 +578,7 @@ progress{
     position: absolute;
     animation-name: meta;
     animation-duration: 4.2s;
-    animation-delay: 56s;
+    animation-delay: 57s;
     animation-timing-function: linear;
     z-index: 1;
 }
@@ -599,4 +601,13 @@ progress{
     color: #fff;
     background-color: rgba(255, 0, 0, 0.493);
     padding: 2px 10px;
+}
+.guia{
+    height: 10px;
+    width: 100px;
+    background-color: rgb(0, 255, 21);
+    z-index: 1;
+    position: fixed;
+    left: 10px;
+    top: 120px;
 }

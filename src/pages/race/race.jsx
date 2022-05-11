@@ -18,6 +18,7 @@ const Race = () => {
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
     const [raceUi,setRaceUi] = useState(false)
     const [places,setPlaces] = useState([])
+    const [position,setPosition] = useState([])
 
     const clickRun = async () => {
         const canId = selectedCan.id
@@ -34,7 +35,18 @@ const Race = () => {
     }
 
     const goRace = (_places)=>{
-        console.log(_places)
+        let aux = []
+        console.log("Generando array random")
+        for (let i = 0; i <= 5; i++) {
+            let randomPosition = Math.round(Math.random() * (5 - 0) + 0)
+            //console.log(randomPosition)
+            if (aux.includes(randomPosition)) {
+                i--
+            } else {
+                aux[i] = randomPosition
+            }
+        }
+        setPosition(aux)
         setPlaces(_places)
         setRaceUi(true)
         _context.setLoading(false)
@@ -62,7 +74,7 @@ const Race = () => {
 
     return ( 
         <div className="container">
-            {raceUi &&<RaceUi places={places} setRaceUi={setRaceUi}/>}
+            {raceUi &&<RaceUi places={places} setRaceUi={setRaceUi} position={position}/>}
             {_context.loading && <Loader />}
             {modalRace && <div className="cansSelection overflow">
                 <div className='selectTittle'>
