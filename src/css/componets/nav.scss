@@ -1,0 +1,33 @@
+$text:#e0fbff;
+$blue:rgb(57, 241, 241);
+$borderButton:4px;
+.unikeNav{
+    color: $text;
+    height:8vh;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.logo-text{
+    color: $text;
+    font-size: 22px;
+    padding: 0px;
+}
+.btnConnect{
+    border-bottom: $borderButton solid $blue;
+    border-top: $borderButton solid transparent;
+    border-left: $borderButton solid transparent;
+    border-right: $borderButton solid transparent;
+    background-color: #00000010;
+    padding: 2px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    &:hover{
+        background-color: #c2f3f30e;
+        color: rgb(255, 255, 255);
+    }
+}
+.walletIcon{
+    height: 16px;
+    margin-bottom: 2px;
+}

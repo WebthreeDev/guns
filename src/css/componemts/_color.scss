@@ -1,17 +1,5 @@
-$gradient1:rgb(19,19,19);
-$gradient1transp:rgba(19,19,19,0.9);
-$gradient2:rgb(41, 44, 49);
-$gradient2transp:rgba(41, 44, 49, 0.9);
-$text:#6e7191;
-$borders:rgb(65,60,80);
-$textGray:rgb(80, 80, 80);
-.unikeNav{
-    position: fixed;
-    z-index: 1;
-    width: 100%;
-    color: var(--light1);
-    height: 52px;
-}
+
+
 .unikeRouter{
     min-height: 100vh !important;
     padding-top: 50px !important;
@@ -516,6 +504,7 @@ progress{
     animation-duration: 3s;
     animation-iteration-count: infinite;
     position: relative;
+    z-index: inherit;
 }
 
 @keyframes pista {
@@ -530,44 +519,48 @@ progress{
 .dog1{
     position: absolute;
     left:0px;
-    top: 0px;
-    height: 120px;
-    z-index: 2;
+    top: -10px;
+    height: 110px;
+    z-index: 1;
 }
 .dog2{
     position: absolute;
     left: 0px;
-    top: 15px;
-    height: 130px;
-    z-index: 3;
+    top: 5px;
+    height: 125px;
+    z-index: 1;
 }
 .dog3{
     position: absolute;
     left: 0px;
     top: 30px;
     height: 140px;
-    z-index: 4;
+   z-index: 1;
 }
 .dog4{
     position: absolute;
     left: 0px;
-    top: 45px;
+    top: 57px;
     height: 150px;
-    z-index: 5;
+   z-index: 5;
 }
 .dog5{
     position: absolute;
     left: 0px;
-    top: 60px;
-    height: 160px;
+    top: 85px;
+    height: 158px;
     z-index: 6;
+    
 }
 .dog6{
     position: absolute;
-    top: 75px;
+    top: 110px;
     height: 170px;
     z-index: 7;
-} 
+}
+.dogImg{
+    height: 100%;
+}
 .meta{
     height: 60%;
     background-color: rgba(255, 255, 255, 0.849);
@@ -580,7 +573,7 @@ progress{
     animation-duration: 4.2s;
     animation-delay: 57s;
     animation-timing-function: linear;
-    z-index: 1;
+    z-index: 0;
 }
 
 @keyframes meta {
@@ -593,21 +586,26 @@ progress{
 
     }
 }
-.etiketaEnviroment{
-    position: fixed;
-    bottom: 0px;
-    left: 0px;
-    
-    color: #fff;
-    background-color: rgba(255, 0, 0, 0.493);
-    padding: 2px 10px;
-}
-.guia{
+
+
+.guia1{
+    width: 100%;
+    background-color: #006647;
     height: 10px;
-    width: 100px;
-    background-color: rgb(0, 255, 21);
-    z-index: 1;
-    position: fixed;
-    left: 10px;
-    top: 120px;
+    bottom: 35px;
+    position: absolute;
+}
+
+.guia2{
+    width: 50%;
+    border-radius: 10px;
+    margin-left: 60px;
+    background-color: #d4fff228;
+    height: 8px;
+    top: 10px;
+    position: absolute;
+}
+.sidebar{
+    background-color: #006647;
+    height: 92vh;
 }

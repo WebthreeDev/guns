@@ -1,4 +1,7 @@
-import runDog from '../../img/rundog.gif'
+import dogCommon from '../../img/nftRace/dogCommon.gif'
+import dogRare from '../../img/nftRace/dogRare.gif'
+import dogEpic from '../../img/nftRace/dogEpic.gif'
+import dogLegendary from '../../img/nftRace/dogLegendary.gif'
 import { useState, useEffect, useRef } from "react";
 const RaceUi = ({ setRaceUi, places, position }) => {
 
@@ -8,7 +11,6 @@ const RaceUi = ({ setRaceUi, places, position }) => {
     const [position4, setPosition4] = useState(0)
     const [position5, setPosition5] = useState(0)
     const [position6, setPosition6] = useState(0)
-
 
     useEffect(() => {
         item1.current.style.left = `${position1}px`
@@ -30,10 +32,7 @@ const RaceUi = ({ setRaceUi, places, position }) => {
     const item5 = useRef(null)
     const item6 = useRef(null)
 
-
-
     const start = () => {
-
 
         console.log("array result:", position)
         console.log(position[5])
@@ -103,7 +102,6 @@ const RaceUi = ({ setRaceUi, places, position }) => {
             setPosition6(contador6)
         }, random(min, max))
 
-
     }
 
     return (
@@ -112,12 +110,12 @@ const RaceUi = ({ setRaceUi, places, position }) => {
             </div>
             <div className="bg-pista">
                 <div className="rundog">
-                    {position[0] == 0 ? <div className='dog1 border'><div className='guia'> asd sdfsdf</div> <img ref={item1} className='dog1' src={runDog} alt="" /> </div>: <img ref={item1} className='dog1' src={runDog} alt="" />}
-                    {position[1] == 0 ? <img ref={item2} className='dog2 border' src={runDog} alt="" /> : <img ref={item2} className='dog2' src={runDog} alt="" />}
-                    {position[2] == 0 ? <img ref={item3} className='dog3 border' src={runDog} alt="" /> : <img ref={item3} className='dog3' src={runDog} alt="" />}
-                    {position[3] == 0 ? <img ref={item4} className='dog4 border' src={runDog} alt="" /> : <img ref={item4} className='dog4' src={runDog} alt="" />}
-                    {position[4] == 0 ? <img ref={item5} className='dog5 border' src={runDog} alt="" /> : <img ref={item5} className='dog5' src={runDog} alt="" />}
-                    {position[5] == 0 ? <img ref={item6} className='dog6 border' src={runDog} alt="" /> : <img ref={item6} className='dog6' src={runDog} alt="" />}
+                    {position[0] == 0 ? <div ref={item1} className='dog1'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item1} className='dog1'> <img className='dogImg' src={dogCommon} alt="" /> </div>}
+                    {position[1] == 0 ? <div ref={item2} className='dog2'><div className='guia2'> </div> <img className='dogImg' src={dogEpic} alt="" /> </div> : <div ref={item2} className='dog2'><img className='dogImg' src={dogEpic} alt="" /></div>}
+                    {position[2] == 0 ? <div ref={item3} className='dog3'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item3} className='dog3'><img className='dogImg' src={dogLegendary} alt="" /></div>}
+                    {position[3] == 0 ? <div ref={item4} className='dog4'><div className='guia2'> </div> <img className='dogImg' src={dogLegendary} alt="" /> </div> : <div ref={item4} className='dog4'><img className='dogImg' src={dogCommon} alt="" /></div>}
+                    {position[4] == 0 ? <div ref={item5} className='dog5'><div className='guia2'> </div> <img className='dogImg' src={dogRare} alt="" /> </div> : <div ref={item5} className='dog5'><img className='dogImg' src={dogLegendary} alt="" /></div>}
+                    {position[5] == 0 ? <div ref={item6} className='dog6'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item6} className='dog6'><img className='dogImg' src={dogRare} alt="" /></div>}
                 </div>
                 <div className='meta'> </div>
             </div>

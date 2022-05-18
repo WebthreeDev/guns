@@ -18,6 +18,8 @@ import { nftContractProd } from "../../tokensProd/canes/canes";
 import { testNftContract } from "../../tokensDev/canes/canes";
 import { cctContractDev } from "../../tokensDev/cct/cct"
 import { cctContractProd } from "../../tokensProd/cct/cct"
+import perro from '../../img/perro.png'
+import burguer from '../../img/assets/icons/burguer.png'
 
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
@@ -199,7 +201,7 @@ const Dashboard = () => {
                 } else {
                     console.log('Error message:', error.message);
                 }
-            }).finally(()=>{
+            }).finally(() => {
                 setLoading(false)
             })
 
@@ -275,6 +277,16 @@ const Dashboard = () => {
             setLoading(false)
             alert("Error")
         }
+    }
+
+    const rarity = (r) => {
+        const rarityObj = {
+            1: <div className='rarityText'>Common</div>,
+            2: <div className='rarityText'>Rare</div>,
+            3: <div className='rarityText'>Epic</div>,
+            4: <div className='rarityText'>Legendary</div>
+        }
+        return rarityObj[r]
     }
 
     return (
@@ -392,7 +404,7 @@ const Dashboard = () => {
             }
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-md-2 h100vh">
+                    {/* <div className="col-md-2">
                         <div className='boxMenuDark'>
                             <div className="menuSectionDshboard separator">
                                 <div className="text-center h-100 d-flex align-items-center">
@@ -449,12 +461,91 @@ const Dashboard = () => {
                             </div>
                         </div>
 
-                    </div>
-                    <div className="col-md-10 dashBody">
+                    </div> */}
+                    <div className="col-12">
                         <div className="dogFeatures">
-
                             <div className="row g-2 mb-2">
-                                <div className='col-12 dashboardOptions'>
+                                <h1 className='welcome'>
+                                    WELCOME TO CRYPTOCANS.IO
+                                </h1>
+                                <div className="container-fluid">
+                                    <div className="row">
+                                        <div className="col-md-6 col-12">
+                                            <div className='item-bar'>
+                                                <button className='btn-bar'> Items </button>
+                                            </div>
+                                            <div className='containet-fluid pt-4'>
+                                                <div className='row'>
+                                                <div className='col-6'>
+                                                        <div className='itemSection'>
+                                                            <div className='inItem'>
+                                                                <img height={"40px"} src={passTicket} alt="" />
+                                                                <div className='numberItem'> 25 </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className='col-6'>
+                                                        <div className='itemSection'>
+                                                            <div className='inItem'>
+                                                                <img height={"40px"} src={ticketImg} alt="" />
+                                                                <div className='numberItem'> 45 </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="col-md-6 col-12">
+                                            <div className='item-bar'>
+                                                <button className='btn-bar'> Cans </button>
+                                                <button className='btn-bar'> Canodomes </button>
+                                            </div>
+                                            <div className='container-fluid px-0 pt-3'>
+                                                <div className="row gx-2">
+                                                    {cans && cans.map((i) => {
+                                                        return (
+                                                            <div key={i.id} className='col-md-4 col-6'>
+                                                                {/* <NftCard
+                                                                setRenderModal={setRenderModal}
+                                                                setModalText={setModalText}
+                                                                setCan={setCan}
+                                                                item={i}
+                                                                btnPrice={i.onSale.price}
+                                                            /> */}
+                                                                <div className='bgNft'>
+                                                                    <div className='imgSection'>
+                                                                        <img className='imgNft' src={perro} alt="" />
+                                                                        <div className='stats'>
+                                                                            <div className='totalStats'>Total stats</div>
+                                                                            <div className='statsNumber'>{i.resistencia + i.aceleracion + i.aerodinamica}</div>
+                                                                        </div>
+                                                                        <div className='rarity'>
+                                                                            {rarity(i.rarity)}
+                                                                        </div>
+                                                                        <div className='nftId'>
+                                                                            # {i.id}
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className='W-options'>
+                                                                        <div className='options'>
+                                                                            <div>
+                                                                                Spot A340
+                                                                            </div>
+                                                                            <div>
+                                                                                <img height={"16px"} src={burguer} alt="" />
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        )
+                                                    })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* <div className='col-12 dashboardOptions'>
                                     <div>
                                         {cans && <>
                                             {cans.length > 0 ? <>
@@ -473,26 +564,11 @@ const Dashboard = () => {
                                         <button onClick={() => { setModalSellTicket(true); fetch(enviroment().baseurl + "pass") }} className='btn btn-warning mx-2'> <img src={passTicket} height="20px" alt="" /> <b>{pass}</b> </button>
                                         <button className='btn btn-primary mx-2'>  <img src={ticketImg} height="20px" alt="" /> {tiket} </button>
                                     </div>
-                                </div>
+                                </div> */}
 
-                                {cans && cans.map((i) => {
-                                    return (
-                                        <div key={i.id} className='col-md-3'>
-                                            <NftCard
-                                                setRenderModal={setRenderModal}
-                                                setModalText={setModalText}
-                                                setCan={setCan}
-                                                item={i}
-                                                btnPrice={i.onSale.price}
-                                            />
-                                        </div>
-                                    )
-                                })}
+
 
                             </div>
-                        </div>
-                        <div className='p-2 mt-2'>
-
                         </div>
                     </div>
                 </div>
