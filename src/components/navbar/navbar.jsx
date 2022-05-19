@@ -14,11 +14,11 @@ const Navbar = () => {
             </div>
             <div className="d-flex align-items-center">
                 {wallet ?
-                    <button onClick={exectConnect} className="btnConnect"> <img className="walletIcon" src={walletIcon} alt="" /> Connect Wallet </button>
-                    : 
                     <div className="wallet">
-                        {/* {resumeWallet(wallet)} */}
+                      <img style={{"marginTop":"-2px","marginRight":"4px"}} className="walletIcon" src={walletIcon} alt="" /> {resumeWallet(wallet)}
                     </div>
+                    : 
+                    <button onClick={exectConnect} className="btnConnect"> <img className="walletIcon" src={walletIcon} alt="" /> Connect Wallet </button>
                 }
 
             </div>

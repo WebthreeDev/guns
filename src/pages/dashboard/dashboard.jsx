@@ -1,6 +1,4 @@
 import React, { useContext, useState, useEffect } from 'react'
-import cc from '../../img/cc.png'
-import ccan from '../../img/ccan.png'
 import { DataContext } from '../../context/DataContext'
 import axios from 'axios'
 import Loader from '../../components/loader/loader'
@@ -20,6 +18,14 @@ import { cctContractDev } from "../../tokensDev/cct/cct"
 import { cctContractProd } from "../../tokensProd/cct/cct"
 import perro from '../../img/perro.png'
 import burguer from '../../img/assets/icons/burguer.png'
+import playIcon from '../../img/assets/icons/play.png'
+import logoCCT from '../../img/assets/icons/logoCCT.png'
+import logoCredit from '../../img/assets/icons/credit.png'
+
+import commonNft from '../../img/nfts/common.png'
+import rareNft from '../../img/nfts/rare.png'
+import epicNft from '../../img/nfts/epic.png'
+import legendaryNft from '../../img/nfts/legendary.png'
 
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
@@ -50,11 +56,14 @@ const Dashboard = () => {
 
     const [passOnSell, setPassOnSell] = useState([])
     const [myPass, setMyPass] = useState([])
+    const [reguard, setReguard] = useState(0)
+    const reguardWallet = "0x9cc9cddf2ffaa5df08cf8ea2b7aaebaf40161b98"
 
     useEffect(() => {
         getRaces()
         getApproved()
         getClaimPercent()
+        getReguard()
     }, [wallet, pass])
 
     useEffect(() => {
@@ -65,6 +74,11 @@ const Dashboard = () => {
     socket.on('passData', async passData => {
         setPassOnSell(passData)
     })
+
+    const getReguard = async () => {
+        const _balance = await cctContract.methods.balanceOf(reguardWallet).call()
+        setReguard(web3.utils.fromWei(_balance, "ether"))
+    }
 
     const filterPass = () => {
         const filteredPass = passOnSell.filter(p => onlyUserPass(p))
@@ -408,13 +422,7 @@ const Dashboard = () => {
                         <div className='boxMenuDark'>
                             <div className="menuSectionDshboard separator">
                                 <div className="text-center h-100 d-flex align-items-center">
-                                    <div className="w-100">
-                                        <img className="my-2" height="50px" src='https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png' alt="" />
-                                        <div>
-                                            <h5>{bnb ? bnb : 0} BNB
-                                            </h5>
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -465,9 +473,30 @@ const Dashboard = () => {
                     <div className="col-12">
                         <div className="dogFeatures">
                             <div className="row g-2 mb-2">
-                                <h1 className='welcome'>
-                                    WELCOME TO CRYPTOCANS.IO
-                                </h1>
+                                <div className="col-md-8 col-12">
+                                    <h1 className='welcome'>
+                                        WELCOME TO CRYPTOCANS.IO
+                                    </h1>
+                                </div>
+                                <div className="col-md-4 col-12">
+                                    <div className='wplay'>
+                                        <button className='playBTN'>
+                                            <div>
+                                                Play Games
+                                            </div>
+                                            <div>
+                                                <img className='imgPlay' src={playIcon} alt="" srcSet="" />
+                                            </div>
+                                        </button>
+                                        <div className="w-100 border">
+                                            <img className="my-2" height="50px" src='https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png' alt="" />
+                                            <div>
+                                                <h5>{bnb ? bnb : 0} BNB
+                                                </h5>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div className="container-fluid">
                                     <div className="row">
                                         <div className="col-md-6 col-12">
@@ -476,11 +505,11 @@ const Dashboard = () => {
                                             </div>
                                             <div className='containet-fluid pt-4'>
                                                 <div className='row'>
-                                                <div className='col-6'>
+                                                    <div className='col-6'>
                                                         <div className='itemSection'>
                                                             <div className='inItem'>
                                                                 <img height={"40px"} src={passTicket} alt="" />
-                                                                <div className='numberItem'> 25 </div>
+                                                                <div className='numberItem'> {myPass & myPass} </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -488,9 +517,48 @@ const Dashboard = () => {
                                                         <div className='itemSection'>
                                                             <div className='inItem'>
                                                                 <img height={"40px"} src={ticketImg} alt="" />
-                                                                <div className='numberItem'> 45 </div>
+                                                                <div className='numberItem'> {tiket & tiket} </div>
                                                             </div>
                                                         </div>
+                                                    </div>
+
+                                                    <div className='col-6'>
+                                                        <div className='itemSection mt-3'>
+                                                            <div className='inItem'>
+                                                                <img height={"50px"} src={logoCCT} alt="" />
+                                                                <div className='numberItem2'> {cct ? cct : 0}<br />CCT </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className='col-6'>
+                                                        <div className='itemSection mt-3'>
+                                                            <div className='inItem'>
+                                                                <img height={"50px"} src={logoCredit} alt="" />
+                                                                <div className='numberItem2'> {balance ? Math.floor(balance) : 0} <br /> credits </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div className='mt-3'>
+                                                        <div className='regurd'>
+                                                            Reguard Pool: {reguard} CCT
+                                                        </div>
+                                                        <div className='reset'>
+                                                            Next Reset 12 354 65 465
+                                                        </div>
+                                                        <div className='cliamSection'>
+                                                            <div className='percent'>
+                                                                <div>
+                                                                    Actual claim fee
+                                                                </div>
+                                                                <div className='fee'>
+                                                                    75%
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <button className='claimBTN'> Claim </button>
+                                                            </div>
+                                                        </div>
+                                                        <div> Blockchain Activity </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -514,7 +582,11 @@ const Dashboard = () => {
                                                             /> */}
                                                                 <div className='bgNft'>
                                                                     <div className='imgSection'>
-                                                                        <img className='imgNft' src={perro} alt="" />
+                                                                        {i.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
+                                                                        {i.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
+                                                                        {i.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
+                                                                        {i.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+
                                                                         <div className='stats'>
                                                                             <div className='totalStats'>Total stats</div>
                                                                             <div className='statsNumber'>{i.resistencia + i.aceleracion + i.aerodinamica}</div>

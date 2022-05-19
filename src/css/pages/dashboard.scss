@@ -20,8 +20,8 @@ $lineHeight:3px;
     border-radius: $radius;
 }
 .social{
-    height: 30px;
-    margin-bottom: 15px;
+    height: 24px;
+    margin-bottom: 18px;
 }
 .welcome{
     font-size: 70px;
@@ -137,4 +137,77 @@ $lineHeight:3px;
 }
 .numberItem{
     font-size: 40px;
+}
+.numberItem2{
+    font-size: 20px;
+    line-height: 20px;
+    text-align: end;
+}
+.wplay{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    flex-direction: column;
+}
+.playBTN{
+    background-color: $dark;
+    border-radius: 5px;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid $blue;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    padding: 5px 10px;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 220px;
+    &:hover{
+        transform: scale(1.03);
+        border-bottom: 4px solid white;
+        color: $blue;
+        background-color: $light;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.432);
+    }
+}
+.imgPlay{
+    height: 20px;
+    margin-right: 10px;
+    margin-top: -3px;
+}
+.regurd{
+    font-size: 20px;
+    color: $light;
+}
+.reset{
+    font-size: 14px;
+    font-weight: 300;
+    color: rgba(255, 255, 255, 0.582);
+}
+.cliamSection{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: $dark;
+    padding: 5px 10px;
+    border-radius: 5px;
+    margin: 10px 0px;
+    border: 1px solid rgba(255, 255, 255, 0.075);
+}
+.percent{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.fee{
+    font-size: 24px;
+    margin-left: 15px;
+}
+.claimBTN{
+    color: white;
+    background-color: rgba(139, 0, 0, 0.616);
+    border-radius: 5px;
+    border: 2px solid rgba(136, 32, 32, 0.685);
+    padding: 4px 30px ;
 }
