@@ -27,9 +27,7 @@ const Navbar = () => {
 }
 export default Navbar
 
-{/* <div className="mx-2">
-                    Next reset: {dayReset&& dayReset} UTC
-                   </div> */}
+
 
 {/* <div className="mx-2 d-flex">
                         <Link to="/dashboard" className="link" >

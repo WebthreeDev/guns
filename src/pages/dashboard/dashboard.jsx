@@ -35,7 +35,7 @@ if (process.env.REACT_APP_ENVIROMENT == "prod") cctContract = cctContractProd()
 if (process.env.REACT_APP_ENVIROMENT == "dev") cctContract = cctContractDev()
 
 const Dashboard = () => {
-    const { cctAddress, tiket, pass, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice,
+    const { dayReset, cctAddress, tiket, pass, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice,
         getBnb, getCCT, claimPercent, poolContract, cct, balance, getRaces, race,
         cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
 
@@ -83,6 +83,7 @@ const Dashboard = () => {
     const filterPass = () => {
         const filteredPass = passOnSell.filter(p => onlyUserPass(p))
         setMyPass(filteredPass)
+        console.log(filteredPass)
     }
 
     const onlyUserPass = (pass) => {
@@ -305,35 +306,37 @@ const Dashboard = () => {
 
     return (
         <div className="">
-            {modalSellTicket && <div className='cansSelection overflow'>
-                <div className='selectTittle'>
-                    <div className='tittle'> Sell Pass </div>
-                    <button onClick={_ => setModalSellTicket(false)}> X </button>
-                </div>
-                <div className='container pt-2'>
-                    <div className="row">
-                        <div className="col-4">
-                            <h2>Sell Pass</h2>
-                            <span> Pass Price </span>
-                            <input onChange={(e) => setTicketPrice(e.target.value)} className='form-control mb-2' type="text" />
-                            <span> Amount </span>
-                            <input className='form-control mb-2' onChange={(e) => setTicketAmmount(e.target.value)} type="text" />
-                            <button onClick={sellTicket}> Sell </button>
-                            <button onClick={() => setModalSellTicket(false)}> Cancel </button>
-                        </div>
-                        <div className='col-8'>
-                            {myPass.length > 0 && myPass.map((item, index) => {
-                                return <div key={index} className="d-flex justify-content-between mb-1 border p-1 align-items-center">
-                                    <div>
-                                        {item._id} - {item.price} Credits {lastForWallet(item.wallet)}
-                                    </div>
-                                    <button onClick={() => removePass(item._id)} className='btn btn-danger'> Remove </button>
+            {modalSellTicket && <div className='modalX'>
+                <div className='modalInPass'>
+                    <div className='container-fluid'>
+                        <div className="row">
+                            <div className="col-md-4 col-12">
+                                <div className=' mb-3 d-flex justify-content-between align-items-center'>
+                                    <div className='textClaim'> Sell Pass </div>
+                                    <button className='btn btn-danger btn-sm' onClick={_ => setModalSellTicket(false)}> X </button>
                                 </div>
-                            })}
+                                <span className='textClaim'> Pass Price </span>
+                                <input onChange={(e) => setTicketPrice(e.target.value)} className='inputClaim w-100 mb-3' type="text" />
+                                <span className='textClaim'> Amount </span>
+                                <input className='inputClaim' onChange={(e) => setTicketAmmount(e.target.value)} type="text" />
+                                <button className='w-100 btn btn-primary mt-4' onClick={sellTicket}> Sell </button>
+                            </div>
+                            <div className="col-md-8 col-12 max80">
+                                {myPass.length > 0 && myPass.map((item, index) => {
+                                    return <div key={index} className="d-flex justify-content-between mb-1 p-1 align-items-center ticketsOnSell">
+                                        <div>
+                                            Selling {item.amount} Pass in {item.price} Credits
+                                        </div>
+                                        <button onClick={() => removePass(item._id)} className='btn btn-danger'> Remove </button>
+                                    </div>
+                                })}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>}
+            </div>
+
+            }
             {raceModal && <>
                 <div className='cansSelection'>
                     <div className='selectTittle'>
@@ -452,19 +455,7 @@ const Dashboard = () => {
 
                             <div className="col-md-12 col-3 menuSectionDshboard ">
                                 <div className="d-flex justify-content-center align-items-center  h-100">
-                                    <div className="text-center">
-                                        <div>
-                                            {approved && <>
-                                                {approved > 0 && <> {approved} CCT Approved</>}
-                                            </>}
-                                        </div>
-                                        <div>Current fee {claimPercent && claimPercent}%</div>
-                                        {approved == 0 ? <>
-                                            <button onClick={() => setClaiming(true)} className="form-control btn btn-primary mt-2"> Approve </button>
-                                        </> : <>
-                                            <button onClick={() => claimExcect()} className="form-control btn btn-danger mt-2"> Claim </button>
-                                        </>}
-                                    </div>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -474,13 +465,20 @@ const Dashboard = () => {
                         <div className="dogFeatures">
                             <div className="row g-2 mb-2">
                                 <div className="col-md-8 col-12">
+                                    <h6>CCT {cctAddress && cctAddress}</h6>
                                     <h1 className='welcome'>
                                         WELCOME TO CRYPTOCANS.IO
                                     </h1>
                                 </div>
                                 <div className="col-md-4 col-12">
-                                    <div className='wplay'>
-                                        <button className='playBTN'>
+                                    <div className='wplay '>
+                                        <div className="bnbBalance">
+                                            <img className="m-2" height="20px" src='https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png' alt="" />
+                                            <div className=''>
+                                                {bnb ? bnb : 0} BNB
+                                            </div>
+                                        </div>
+                                        <button className='playBTN mt-4'>
                                             <div>
                                                 Play Games
                                             </div>
@@ -488,13 +486,6 @@ const Dashboard = () => {
                                                 <img className='imgPlay' src={playIcon} alt="" srcSet="" />
                                             </div>
                                         </button>
-                                        <div className="w-100 border">
-                                            <img className="my-2" height="50px" src='https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png' alt="" />
-                                            <div>
-                                                <h5>{bnb ? bnb : 0} BNB
-                                                </h5>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                                 <div className="container-fluid">
@@ -510,6 +501,7 @@ const Dashboard = () => {
                                                             <div className='inItem'>
                                                                 <img height={"40px"} src={passTicket} alt="" />
                                                                 <div className='numberItem'> {myPass & myPass} </div>
+                                                                <button onClick={() => { setModalSellTicket(true); fetch(enviroment().baseurl + "pass") }} className='btn btn-warning mx-2'> <b>Sell</b> </button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -518,6 +510,7 @@ const Dashboard = () => {
                                                             <div className='inItem'>
                                                                 <img height={"40px"} src={ticketImg} alt="" />
                                                                 <div className='numberItem'> {tiket & tiket} </div>
+
                                                             </div>
                                                         </div>
                                                     </div>
@@ -543,22 +536,51 @@ const Dashboard = () => {
                                                             Reguard Pool: {reguard} CCT
                                                         </div>
                                                         <div className='reset'>
-                                                            Next Reset 12 354 65 465
+                                                            <div className="mx-2">
+                                                                Next reset: {dayReset && dayReset} UTC
+                                                            </div>
                                                         </div>
                                                         <div className='cliamSection'>
+
+                                                            {/* <div className="text-center">
+                                                                
+                                                                <div>Current fee {claimPercent && claimPercent}%</div>
+                                                                {approved == 0 ? <>
+                                                                    <button onClick={() => setClaiming(true)} className="form-control btn btn-primary mt-2"> Claim </button>
+                                                                </> : <>
+                                                                    <button onClick={() => claimExcect()} className="form-control btn btn-danger mt-2"> Claim </button>
+                                                                </>}
+                                                            </div> */}
+
                                                             <div className='percent'>
                                                                 <div>
-                                                                    Actual claim fee
+                                                                    Current fee
                                                                 </div>
                                                                 <div className='fee'>
-                                                                    75%
+                                                                    {claimPercent && claimPercent}%
                                                                 </div>
                                                             </div>
                                                             <div>
-                                                                <button className='claimBTN'> Claim </button>
+                                                                {approved && <>
+                                                                    {approved > 0 && <> {approved} CCT Approved</>}
+                                                                </>}
+                                                            </div>
+                                                            <div>
+                                                                {approved == 0 ? <>
+                                                                    <button onClick={() => setClaiming(true)} className="claimBTN"> Claim </button>
+                                                                </> : <>
+                                                                    <button onClick={() => claimExcect()} className="claimBTN"> Claim </button>
+                                                                </>}
                                                             </div>
                                                         </div>
-                                                        <div> Blockchain Activity </div>
+                                                        <div className='d-flex mt-4'>
+                                                            <div className='w-50 px-2'>
+                                                                <button onClick={() => setRaceModal(true)} className='playBTN w-100'> Races History </button>
+                                                            </div>
+                                                            <div className='w-50 px-2'>
+                                                                <button onClick={() => setRaceModal(true)} className='playBTN w-100'> Blockchain Activity </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -631,9 +653,9 @@ const Dashboard = () => {
                                         CCT Contract: {cctAddress && cctAddress}
                                     </div>
                                     <div>
-                                        <button onClick={() => setRaceModal(true)} className='mx-2 btn btn-primary'> Races History </button>
+                                        
                                         <button className='btn btn-primary mx-2'> Activities </button>
-                                        <button onClick={() => { setModalSellTicket(true); fetch(enviroment().baseurl + "pass") }} className='btn btn-warning mx-2'> <img src={passTicket} height="20px" alt="" /> <b>{pass}</b> </button>
+                                        
                                         <button className='btn btn-primary mx-2'>  <img src={ticketImg} height="20px" alt="" /> {tiket} </button>
                                     </div>
                                 </div> */}

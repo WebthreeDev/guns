@@ -35,6 +35,7 @@ $lineHeight:3px;
     height: 70px;
     transition: 0.3s;
     border: 4px solid transparent;
+    text-decoration: none;
     &:hover{
         background-color: rgba(255, 255, 255, 0.04);
         border-right: 4px solid $blue;
@@ -146,9 +147,9 @@ $lineHeight:3px;
 .wplay{
     height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: end;
     flex-direction: column;
+    align-items: end;
+    justify-content: center;
 }
 .playBTN{
     background-color: $dark;
@@ -178,7 +179,7 @@ $lineHeight:3px;
 }
 .regurd{
     font-size: 20px;
-    color: $light;
+    color: rgb(75, 86, 97);
 }
 .reset{
     font-size: 14px;
@@ -210,4 +211,8 @@ $lineHeight:3px;
     border-radius: 5px;
     border: 2px solid rgba(136, 32, 32, 0.685);
     padding: 4px 30px ;
+}
+.bnbBalance{
+    display: flex;
+    align-items: center;
 }

@@ -6,22 +6,22 @@ import marketIcon from '../../img/assets/icons/market.png'
 import canodromesIcon from '../../img/assets/icons/canodromes.png'
 import playIcon from '../../img/assets/icons/play.png'
 import shopIcon from '../../img/assets/icons/shop.png'
+import { Link } from 'react-router-dom'
 const Sidebar = () => {
     return (<div className="sidebar">
         <div className='sidebarWrap'>
             <div className='w-100'>
-                <div className='btnSidebar'>
+                <Link to='/dashboard' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={icon} alt="" />
-
                         </div>
                         <div className='text-sidebar'>
                             Dashboard
                         </div>
                     </div>
-                </div>
-                <div className='btnSidebar'>
+                </Link>
+                <Link to='/market' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={marketIcon} alt="" />
@@ -30,8 +30,8 @@ const Sidebar = () => {
                             Market
                         </div>
                     </div>
-                </div>
-                <div className='btnSidebar'>
+                </Link>
+                <Link to='/canodromes' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={canodromesIcon} alt="" />
@@ -40,8 +40,8 @@ const Sidebar = () => {
                             Canodromes
                         </div>
                     </div>
-                </div>
-                <div className='btnSidebar'>
+                </Link>
+                <Link to='/race' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={playIcon} alt="" />
@@ -50,8 +50,8 @@ const Sidebar = () => {
                             Games
                         </div>
                     </div>
-                </div>
-                <div className='btnSidebar'>
+                </Link>
+                <Link to='/shop' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={shopIcon} alt="" />
@@ -60,7 +60,7 @@ const Sidebar = () => {
                             Shop
                         </div>
                     </div>
-                </div>
+                </Link>
             </div>
             <div>
                 <div>
