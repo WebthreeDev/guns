@@ -59,6 +59,8 @@ const Dashboard = () => {
     const [reguard, setReguard] = useState(0)
     const reguardWallet = "0x9cc9cddf2ffaa5df08cf8ea2b7aaebaf40161b98"
 
+    const [canModal, setCanModal] = useState(false)
+
     useEffect(() => {
         getRaces()
         getApproved()
@@ -115,10 +117,7 @@ const Dashboard = () => {
         }
     }
 
-    const setCan = (can) => {
-        setSelectedCan(can)
-        setId(can.id)
-    }
+
 
     const sell = async (_id) => {
         setLoading(true)
@@ -304,8 +303,60 @@ const Dashboard = () => {
         return rarityObj[r]
     }
 
+    const openCanModal = (can) => {
+        setSelectedCan(can)
+        setId(can.id)
+
+        setCanModal(true)
+
+
+    }
+
     return (
         <div className="">
+            {canModal && <>
+                <div className='modalX'>
+                    <div className='canModalIn'>
+                        <div className="container-fluid">
+                            <div className="row gx-2">
+                                <div className="col-6">
+                                    <div className='canPhoto'>
+
+                                    <div className='idCan'>
+                                        # {selectedCan && selectedCan.id} <br />
+                                    </div>
+                                    {selectedCan.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
+                                    {selectedCan.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
+                                    {selectedCan.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
+                                    {selectedCan.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+                                    <div className='options'>
+                                        {selectedCan.name}
+                                    </div>
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className='canInfo'>
+
+
+                                        Rarity: {selectedCan && selectedCan.rarity} <br />
+                                        Aerodinamic: {selectedCan && selectedCan.aerodinamica} <br />
+                                        Aceleracion: {selectedCan && selectedCan.aceleracion} <br />
+                                        Resistencia: {selectedCan && selectedCan.resistencia} <br />
+                                        Energy: {selectedCan && selectedCan.energy} <br />
+                                        Total Stats: {selectedCan && selectedCan.aerodinamica + selectedCan.aceleracion + selectedCan.resistencia} <br />
+                                    </div>
+                                </div>
+                                <div className="col-12 p-1">
+                                    <div className='selectedCanHeading'>
+                                        <button className='btn btn-danger btnModal' onClick={() => setCanModal(false)}> Cancel </button>
+                                        <button className='btn btn-warning btnModal' onClick={() => setRenderModal(true)}> Sell </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>}
             {modalSellTicket && <div className='modalX'>
                 <div className='modalInPass'>
                     <div className='container-fluid'>
@@ -421,46 +472,6 @@ const Dashboard = () => {
             }
             <div className="container-fluid">
                 <div className="row">
-                    {/* <div className="col-md-2">
-                        <div className='boxMenuDark'>
-                            <div className="menuSectionDshboard separator">
-                                <div className="text-center h-100 d-flex align-items-center">
-                                    
-                                </div>
-                            </div>
-
-                            <div className="col-md-12 col-3 menuSectionDshboard separator">
-                                <div className="text-center h-100 justify-content-center d-flex align-items-center">
-                                    <div className="">
-                                        <img className="my-2" height="50px" src={cc} alt="" />
-                                        <div>
-                                            <h5>{balance ? <> {Math.round((balance * 100)) / 100}</> : <>0</>} Credits</h5>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-md-12 col-3 menuSectionDshboard separator">
-                                <div className="text-center h-100 d-flex align-items-center">
-                                    <div className="w-100">
-                                        <img className="my-2" height="50px" src={ccan} alt="" />
-                                        <div>
-                                            <h5>{cct ? cct : 0} CCT</h5>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="col-md-12 col-3 menuSectionDshboard ">
-                                <div className="d-flex justify-content-center align-items-center  h-100">
-                                    
-                                </div>
-                            </div>
-                        </div>
-
-                    </div> */}
                     <div className="col-12">
                         <div className="dogFeatures">
                             <div className="row g-2 mb-2">
@@ -541,17 +552,6 @@ const Dashboard = () => {
                                                             </div>
                                                         </div>
                                                         <div className='cliamSection'>
-
-                                                            {/* <div className="text-center">
-                                                                
-                                                                <div>Current fee {claimPercent && claimPercent}%</div>
-                                                                {approved == 0 ? <>
-                                                                    <button onClick={() => setClaiming(true)} className="form-control btn btn-primary mt-2"> Claim </button>
-                                                                </> : <>
-                                                                    <button onClick={() => claimExcect()} className="form-control btn btn-danger mt-2"> Claim </button>
-                                                                </>}
-                                                            </div> */}
-
                                                             <div className='percent'>
                                                                 <div>
                                                                     Current fee
@@ -592,6 +592,11 @@ const Dashboard = () => {
                                             </div>
                                             <div className='container-fluid px-0 pt-3'>
                                                 <div className="row gx-2">
+                                                    <div className="col-12">
+                                                        {cans.length == 0 && <>
+                                                            You do not have dogs in your inventory please buy it in the store
+                                                        </>}
+                                                    </div>
                                                     {cans && cans.map((i) => {
                                                         return (
                                                             <div key={i.id} className='col-md-4 col-6'>
@@ -602,7 +607,7 @@ const Dashboard = () => {
                                                                 item={i}
                                                                 btnPrice={i.onSale.price}
                                                             /> */}
-                                                                <div className='bgNft'>
+                                                                <div onClick={() => openCanModal(i)} className='bgNft'>
                                                                     <div className='imgSection'>
                                                                         {i.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
                                                                         {i.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
@@ -659,9 +664,6 @@ const Dashboard = () => {
                                         <button className='btn btn-primary mx-2'>  <img src={ticketImg} height="20px" alt="" /> {tiket} </button>
                                     </div>
                                 </div> */}
-
-
-
                             </div>
                         </div>
                     </div>

@@ -163,3 +163,52 @@ input{
     padding: 5px 10px;
     border: 1px solid $graytrans;
 }
+.canModalIn{
+    background: linear-gradient($dark2,$dark);
+    width: 600px;
+    border-bottom: 4px solid $blue;
+    border-radius:8px;
+    padding: 5px 10px;
+}
+.bgNft{
+    background: linear-gradient($dark2,$dark);
+    border-radius: 8px;
+    margin-bottom: 10px;
+    border: 1px solid transparent;
+    transition: 0.3s;
+    &:hover{
+        border: 1px solid rgba(255, 255, 255, 0.39);
+        cursor: pointer;
+        transform: scale(1.02);
+        background: linear-gradient($dark,$dark2);
+    }
+}
+.imgNft{
+    width: 100%;
+}
+.canInfo{
+    border-radius: 8px;
+    padding: 10px;
+    margin-top: 10px;
+    height: 100%;
+    background-color: #00070cee;
+}
+.selectedCanHeading{
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding-top:20px;
+}
+.btnModal{
+    min-width: 140px;
+    margin-left: 10px;
+}
+.canPhoto{
+    position: relative;
+    margin-top: 10px;
+}
+.idCan{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+}

@@ -67,20 +67,7 @@ $lineHeight:3px;
         border-right: $lineHeight solid transparent;
     }
 }
-.bgNft{
-    background: linear-gradient($dark2,$dark);
-    border-radius: 8px;
-    margin-bottom: 10px;
-    border: 1px solid transparent;
-    transition: 0.3s;
-    &:hover{
-        border: 1px solid white;
-        cursor: pointer;
-    }
-}
-.imgNft{
-    width: 100%;
-}
+
 .W-options{
     padding: 0px 5px 5px 5px;
 }
