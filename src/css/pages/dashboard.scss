@@ -139,6 +139,7 @@ $lineHeight:3px;
     justify-content: center;
 }
 .playBTN{
+    text-decoration: none;
     background-color: $dark;
     border-radius: 5px;
     border-top: 4px solid transparent;
@@ -202,4 +203,13 @@ $lineHeight:3px;
 .bnbBalance{
     display: flex;
     align-items: center;
+}
+.headerHistory{
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+}
+.containerRaceHistory{
+    height:80vh;
+    overflow-y: scroll;
 }

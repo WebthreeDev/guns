@@ -35,25 +35,8 @@
 
 }
 
-.btn-primary {
-    border: none !important;
-    color: #fff;
-    background-color:rgb(11, 114, 224) !important;
-    border-radius: 20px;
-    background-size: 100% auto;
-    font-family: inherit;
-    font-size: 17px;
-    padding-left:10px !important;
-    padding-right:10px !important;
 
-   }
    
-   .btn-primary:hover {
-    background-position: right center;
-    background-size: 200% auto;
-    -webkit-animation: pulse 2s infinite;
-    animation: pulse512 1.5s infinite;
-   }
    
    @keyframes pulse512 {
     0% {

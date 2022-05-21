@@ -5,7 +5,6 @@ import Loader from '../../components/loader/loader'
 import web3 from '../../tokensDev/canes/canes'
 import ClaimModal from '../../components/claimModal/claimModal'
 import Alert from '../../components/alert/alert'
-import NftCard from '../../components/nftCard/nftCard'
 import ticketImg from '../../img/tikets/ticket.png'
 import passTicket from '../../img/tikets/pass.png'
 import errorManager from '../../services/errorManager'
@@ -16,11 +15,12 @@ import { nftContractProd } from "../../tokensProd/canes/canes";
 import { testNftContract } from "../../tokensDev/canes/canes";
 import { cctContractDev } from "../../tokensDev/cct/cct"
 import { cctContractProd } from "../../tokensProd/cct/cct"
-import perro from '../../img/perro.png'
 import burguer from '../../img/assets/icons/burguer.png'
 import playIcon from '../../img/assets/icons/play.png'
 import logoCCT from '../../img/assets/icons/logoCCT.png'
 import logoCredit from '../../img/assets/icons/credit.png'
+import { Link } from 'react-router-dom'
+/* import NftCard from '../../components/nftCard/nftCard' */
 
 import commonNft from '../../img/nfts/common.png'
 import rareNft from '../../img/nfts/rare.png'
@@ -122,6 +122,7 @@ const Dashboard = () => {
     const sell = async (_id) => {
         setLoading(true)
         setRenderModal(false)
+        setCanModal(false)
 
         const res = await axios.get(enviroment().baseurl + "cans/validate/" + _id)
         if (!res.data.response) {
@@ -149,6 +150,7 @@ const Dashboard = () => {
         await sendCanOnSellToDB(_id, body)
         setLoading(false)
         setRenderModal(false)
+        setCanModal(false)
     }
 
     const sendCanOnSellToDB = async (_id, body) => {
@@ -322,35 +324,70 @@ const Dashboard = () => {
                                 <div className="col-6">
                                     <div className='canPhoto'>
 
-                                    <div className='idCan'>
-                                        # {selectedCan && selectedCan.id} <br />
+                                        <div className='stats'>
+                                            <div className='totalStats'>Total stats</div>
+                                            <div className='statsNumber'>{selectedCan.resistencia + selectedCan.aceleracion + selectedCan.aerodinamica}</div>
+                                        </div>
+                                        <div className='rarity'>
+                                            {rarity(selectedCan.rarity)}
+                                        </div>
+                                        <div className='nftId'>
+                                            # {selectedCan.id}
+                                        </div>
+                                        {selectedCan.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
+                                        {selectedCan.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
+                                        {selectedCan.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
+                                        {selectedCan.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+
                                     </div>
-                                    {selectedCan.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
-                                    {selectedCan.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
-                                    {selectedCan.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
-                                    {selectedCan.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
                                     <div className='options'>
                                         {selectedCan.name}
-                                    </div>
                                     </div>
                                 </div>
                                 <div className="col-6">
                                     <div className='canInfo'>
+                                        <div className='w-energy'>
+                                            <div className='energy'>
+                                                <div>
+                                                    Energy:
+                                                </div>
+                                                <div>
+                                                    {selectedCan && selectedCan.energy}/4
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <progress value={selectedCan.energy - 1} min="0" max="4" className='progressEnergy'> </progress>
+                                            </div>
+                                        </div>
+                                        <div className='energy mt-3'>
+                                            <div>Aerodinamic:</div>
+                                            <div>{selectedCan && selectedCan.aerodinamica}</div>
+                                        </div>
+                                        <div className='energy mt-3'>
+                                            <div>Aceleration:</div>
+                                            <div>{selectedCan && selectedCan.aceleracion}</div>
+                                        </div>
+                                        <div className='energy mt-3'>
+                                            <div>Resistence:</div>
+                                            <div>{selectedCan && selectedCan.resistencia}</div>
+                                        </div>
 
-
-                                        Rarity: {selectedCan && selectedCan.rarity} <br />
-                                        Aerodinamic: {selectedCan && selectedCan.aerodinamica} <br />
-                                        Aceleracion: {selectedCan && selectedCan.aceleracion} <br />
-                                        Resistencia: {selectedCan && selectedCan.resistencia} <br />
-                                        Energy: {selectedCan && selectedCan.energy} <br />
-                                        Total Stats: {selectedCan && selectedCan.aerodinamica + selectedCan.aceleracion + selectedCan.resistencia} <br />
+                                        <div>
+                                            {selectedCan.onSale.sale &&
+                                                <div className='d-flex align-items-center justify-content-between'>
+                                                    <div className='text-warning'> Price: {Number.parseFloat(selectedCan.onSale.price)} BNB </div>
+                                                    <button onClick={() => _remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
+                                                </div>
+                                            }
+                                        </div>
                                     </div>
                                 </div>
                                 <div className="col-12 p-1">
                                     <div className='selectedCanHeading'>
                                         <button className='btn btn-danger btnModal' onClick={() => setCanModal(false)}> Cancel </button>
-                                        <button className='btn btn-warning btnModal' onClick={() => setRenderModal(true)}> Sell </button>
+                                        {!selectedCan.onSale.sale && <button className='btn btn-warning btnModal' onClick={() => setRenderModal(true)}> Sell </button>}
                                     </div>
+
                                 </div>
                             </div>
                         </div>
@@ -376,7 +413,7 @@ const Dashboard = () => {
                                 {myPass.length > 0 && myPass.map((item, index) => {
                                     return <div key={index} className="d-flex justify-content-between mb-1 p-1 align-items-center ticketsOnSell">
                                         <div>
-                                            Selling {item.amount} Pass in {item.price} Credits
+                                            Selling <i className="passText"> {item.amount} Pass </i> in <i className="ticketText"> {item.price} Credits </i>
                                         </div>
                                         <button onClick={() => removePass(item._id)} className='btn btn-danger'> Remove </button>
                                     </div>
@@ -386,40 +423,41 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-
             }
             {raceModal && <>
-                <div className='cansSelection'>
-                    <div className='selectTittle'>
-                        <div className='tittle'> Races History </div>
-                        <button onClick={_ => setRaceModal(false)}> X </button>
-                    </div>
-                    <div className='container-fluid px-5 pt-2 containerSelectCans'>
-                        <div className="row">
-                            <table className='table table-dark'>
-                                <thead>
-                                    <tr>
-                                        <td> Race </td>
-                                        <td> Place </td>
-                                        <td> CanId </td>
-                                        <td> GainToken </td>
-                                        <td> Balance </td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-
-                                    {race && race.map((item, index) => {
-                                        return <tr key={item._id} >
-
-                                            <th scope="row">{index + 1}</th>
-                                            <td> {item.place} </td>
-                                            <td> {item.canId} </td>
-                                            <td> {item.gainToken == 0 ? <div className='text-danger'>Lose</div> : <div className='text-success' >Win: +{item.gainToken}</div>} </td>
-                                            <td> {item.balancePrev} | {item.balanceAfter} </td>
+                <div className='modalX'>
+                    <div className="modalRaceIn">
+                        <div className='headerHistory px-5 mb-3'>
+                            <div className='tittle'> Races History </div>
+                            <button className='btn btn-danger' onClick={_ => setRaceModal(false)}> X </button>
+                        </div>
+                        <div className='container-fluid px-5 pt-2 containerRaceHistory'>
+                            <div className="row">
+                                <table className='table text-light'>
+                                    <thead>
+                                        <tr>
+                                            <td> Race </td>
+                                            <td> Place </td>
+                                            <td> CanId </td>
+                                            <td> Tokens Earned </td>
+                                            <td> Balance </td>
                                         </tr>
-                                    })}
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody>
+
+                                        {race && race.map((item, index) => {
+                                            return <tr key={item._id} >
+
+                                                <th scope="row">{index + 1}</th>
+                                                <td> {item.place} </td>
+                                                <td> # {item.canId} </td>
+                                                <td> {item.gainToken == 0 ? <div className='text-danger'>Lose</div> : <div className='text-success' >Win: +{item.gainToken}</div>} </td>
+                                                <td> {item.balancePrev} | {item.balanceAfter} </td>
+                                            </tr>
+                                        })}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -439,8 +477,11 @@ const Dashboard = () => {
                 </div>}
             {renderModal &&
                 <div className='modalX'>
-                    <div className='modalIn'>
-                        <div className=' w-100'>
+                    <div className='modalInClaim'>
+                        <div className='wSellinCan'>
+                            <div>
+                                Selling #{selectedCan && selectedCan.id}
+                            </div>
                             <div className=''>
                                 {selectedCan.onSale.sale &&
                                     <div className='d-flex align-items-center justify-content-between'>
@@ -448,21 +489,16 @@ const Dashboard = () => {
                                         <button onClick={() => _remove(selectedCan.id)} className='btn btn-danger'> Remove </button>
                                     </div>
                                 }
-                                <div>
-                                    Selling canId: #{selectedCan && selectedCan.id}
-                                </div>
-                                Rarity:
-
-                                {selectedCan && cansRarity[selectedCan.rarity - 1]}
-
                                 <h3 className='text-warning'>{price} BNB</h3>
                                 <p className='text-warning'> Sales fee: {Number.parseFloat(price / 100).toFixed(6)} BNB </p>
                                 <input className='form-control' type="number" onChange={e => _setPrice(e.target.value)} />
                             </div>
-                            <div className='mt-3'>
-                                <div className="row gx-2">
-                                    <button onClick={_ => { setRenderModal(false); setPrice(0) }} className='btn mx-1 col btn-danger'> Cancel </button>
-                                    <button onClick={_ => sell(id)} className='btn mx-1 col btn-primary'> Continue </button>
+                            <div className='modalButtons w-100'>
+                                <div className="w-50 p-1">
+                                    <button onClick={_ => { setRenderModal(false); setPrice(0) }} className='btn mx-1 col btn-danger w-100'> Cancel </button>
+                                </div>
+                                <div className="w-50 p-1">
+                                    <button onClick={_ => sell(id)} className='btn mx-1 col btn-primary w-100'> Continue </button>
                                 </div>
                             </div>
 
@@ -489,14 +525,14 @@ const Dashboard = () => {
                                                 {bnb ? bnb : 0} BNB
                                             </div>
                                         </div>
-                                        <button className='playBTN mt-4'>
+                                        <Link to="/race" className='playBTN mt-4'>
                                             <div>
                                                 Play Games
                                             </div>
                                             <div>
-                                                <img className='imgPlay' src={playIcon} alt="" srcSet="" />
+                                                <img className='imgPlay' src={playIcon} alt="" />
                                             </div>
-                                        </button>
+                                        </Link >
                                     </div>
                                 </div>
                                 <div className="container-fluid">
@@ -567,7 +603,7 @@ const Dashboard = () => {
                                                             </div>
                                                             <div>
                                                                 {approved == 0 ? <>
-                                                                    <button onClick={() => setClaiming(true)} className="claimBTN"> Claim </button>
+                                                                    <button onClick={() => setClaiming(true)} className="btn btn-danger"> Claim </button>
                                                                 </> : <>
                                                                     <button onClick={() => claimExcect()} className="claimBTN"> Claim </button>
                                                                 </>}
@@ -609,6 +645,7 @@ const Dashboard = () => {
                                                             /> */}
                                                                 <div onClick={() => openCanModal(i)} className='bgNft'>
                                                                     <div className='imgSection'>
+                                                                        {i.onSale.sale && <div className='onSale'>On sale</div>}
                                                                         {i.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
                                                                         {i.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
                                                                         {i.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}

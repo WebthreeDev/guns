@@ -37,7 +37,7 @@ const ClaimModal = ({ minimunToClaim, claimPercent, claim, ammountToClaim, _setA
                     <div className='container-fluid p-0 mt-3'>
                         <div className="row gx-0">
                             <div className='col-2'>
-                                <img className='logoClaim' src={logoCredit} alt="" srcset="" />
+                                <img className='logoClaim' src={logoCredit} alt="" />
                             </div>
                             <div className='col-10'>
                                 <input onChange={(e) => _setAmmountToClaim(e.target.value)} className="inputClaim" type="number" />
@@ -50,7 +50,7 @@ const ClaimModal = ({ minimunToClaim, claimPercent, claim, ammountToClaim, _setA
                     <div className='container-fluid p-0'>
                         <div className="row">
                             <div className='col-2'>
-                                <img className='logoClaim' src={logoCCT} alt="" srcset="" />
+                                <img className='logoClaim' src={logoCCT} alt=""  />
                             </div>
                             <div className='col-10'>
                                 <div className="inputClaim">
