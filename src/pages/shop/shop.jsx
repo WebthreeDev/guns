@@ -19,6 +19,8 @@ import { testNftContract } from "../../tokensDev/canes/canes"
 import { cctContractDev } from "../../tokensDev/cct/cct"
 import { cctContractProd } from "../../tokensProd/cct/cct"
 import '../../css/pages/shop.scss';
+import ticket from '../../img/tikets/ticket.png'
+import logoCCT from '../../img/assets/icons/logoCCT.png'
 
 let cctContract
 if (process.env.REACT_APP_ENVIROMENT == "prod") cctContract = cctContractProd()
@@ -143,16 +145,53 @@ const Shop = () => {
 
     return (
         <div className="bg1 unikeRouter">
-            {ticketModal && <div className="modalX">
-                <div className="modalIn">
-                    <div>
-                        <h5> 1 ticket = {ticketPrice && ticketPrice} CCT</h5>
-                        <h3>Ammount to buy</h3>
-                        <input className="form-control" onChange={(e) => { setTicketAmmount(e.target.value) }} type="text" />
-                        {wallet && <button className="btn btn-primary form-control" onClick={buyTicket}> Confirm </button>}
-                        <button onClick={() => setTicketModal(false)} className="btn btn-danger"> Cancel </button>
+            {ticketModal && <div className='modalX'>
+            <div className="modalInClaim">
+                <div>
+                    <div className=" mb-3 d-flex justify-content-between align-items-center">
+                        <div className="textClaim">Buy Ticket</div>
+                        <div>
+                            <div className="w-50 p-2 ">
+                                <button className="btn btn-danger btn-sm" onClick={() => setTicketModal(false)}> X </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="textClaim">1 ticket = {ticketPrice && ticketPrice} CCT </div>
+                    <div className='textClaim2'>
+                        Amount to buy
+                    </div>
+                    <div className='container-fluid p-0 mt-3'>
+                        <div className="row gx-0">
+                            <div className='col-2'>
+                                <img className='logoClaim' src={logoCCT} alt=""  />
+                            </div>
+                            <div className='col-10'>
+                                <input className="inputClaim" onChange={(e) => { setTicketAmmount(e.target.value) }} type="text" />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="mt-2 mb-2 text-center">
+                        ↑↓
+                    </div>
+                    <div className='container-fluid p-0'>
+                        <div className="row">
+                            <div className='col-2'>
+                                <img className='logoClaim' src={ticket} alt="" />
+                            </div>
+                            <div className='col-10'>
+                                <div className="inputClaim">
+                                    {ticketAmmount && <input className="inputClaim" value={ticketAmmount} type="text" />}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="w-100 d-flex mt-5 px-4">
+                        <div className="w-100">
+                            <button className="btn btn-primary w-100" onClick={buyTicket}> Confirm </button>
+                        </div>
                     </div>
                 </div>
+            </div>
             </div>}
             {canodromeMinted && <>
                 <div className='modalX'>
@@ -166,7 +205,7 @@ const Shop = () => {
             {minted && <MintModal getCans={getCans} wallet={wallet} canMinted={canMinted} setMinted={setMinted} />}
             {loading && <Loader />}
             <div className="container py-4">
-                <div className="mb-4">
+                <div>
                     <h1> Need Ticket for the minigame? </h1>
                     <p> In this section you will buy the ticket to play in the ticket search minigame </p>
                     <div className="ticket-buy">
@@ -179,7 +218,22 @@ const Shop = () => {
                 <div className="w-100">
                     <div className="row card-container">
                         <div className="card mb-3 col-3">
-                            
+                            <div className="card-header">
+                                <div>
+                                    <img height="24px" src={bnbLogo} alt="" />
+                                    <b className="mx-1">
+                                        {commonPackagePrice} BNB
+                                    </b>
+                                </div>
+                                <div className="card-mint">
+                                    {commonPackagePrice == false ? <button>Loading</button> : <>
+                                        {wallet ?
+                                            <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-mint btn btn btn-warning"> MINT </button>
+                                            :
+                                            <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
+                                    </>}
+                                </div>
+                            </div>
                             <div className="card-body">
                                 <Package className="nft-img" img={sobre1} />
                                 <div className="card-text-footer">
@@ -205,22 +259,6 @@ const Shop = () => {
                                     </div>                    
                                 </div>
                             </div>
-                            <div className="card-header">
-                                <div>
-                                    <img height="24px" src={bnbLogo} alt="" />
-                                    <b className="mx-1">
-                                        {commonPackagePrice} BNB
-                                    </b>
-                                </div>
-                                <div className="card-mint">
-                                    {commonPackagePrice == false ? <button>Loading</button> : <>
-                                        {wallet ?
-                                            <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-mint btn btn btn-warning"> MINT </button>
-                                            :
-                                            <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
-                                    </>}
-                                </div>
-                            </div>
                         </div>
                         <div className="card mb-3 col-3">
                             <div className="card-header">
@@ -242,18 +280,26 @@ const Shop = () => {
                             <div className="card-body">
                                 <Package className="nft-img" img={sobre2} />
                                 <div className="card-text-footer">
-                                    <div className="p-2">
-                                        <p>Common</p>
-                                        <h6> 40%</h6>
-                                        <p>Epic</p>
-                                        <h6>19%</h6>
+                                    <div>
+                                        <div className="card-text-item">
+                                            <p>Common</p>
+                                            <h6>40%</h6>
+                                        </div>
+                                        <div className="card-text-item">
+                                            <p>Epic</p>
+                                            <h6>19%</h6>
+                                        </div>
                                     </div>
-                                    <div className="p-2">
-                                        <p>Rare</p>
-                                        <h6>40%</h6>
-                                        <p>Legendary</p>
-                                        <h6>1%</h6>
-                                    </div>
+                                    <div>
+                                        <div className="card-text-item">
+                                            <p>Rare</p>
+                                            <h6>40%</h6>
+                                        </div>
+                                        <div className="card-text-item">
+                                            <p>Legendary</p>
+                                            <h6>1%</h6>
+                                        </div>
+                                    </div> 
                                 </div>
                             </div>
                         </div>
