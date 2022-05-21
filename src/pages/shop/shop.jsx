@@ -179,22 +179,7 @@ const Shop = () => {
                 <div className="w-100">
                     <div className="row card-container">
                         <div className="card mb-3 col-3">
-                            <div className="card-header">
-                                <div>
-                                    <img height="24px" src={bnbLogo} alt="" />
-                                    <b className="mx-1">
-                                        {commonPackagePrice} BNB
-                                    </b>
-                                </div>
-                                <div className="card-mint">
-                                    {commonPackagePrice == false ? <button>Loading</button> : <>
-                                        {wallet ?
-                                            <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-mint btn btn btn-warning"> MINT </button>
-                                            :
-                                            <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
-                                    </>}
-                                </div>
-                            </div>
+                            
                             <div className="card-body">
                                 <Package className="nft-img" img={sobre1} />
                                 <div className="card-text-footer">
@@ -218,6 +203,22 @@ const Shop = () => {
                                             <h6>0.1%</h6>
                                         </div>
                                     </div>                    
+                                </div>
+                            </div>
+                            <div className="card-header">
+                                <div>
+                                    <img height="24px" src={bnbLogo} alt="" />
+                                    <b className="mx-1">
+                                        {commonPackagePrice} BNB
+                                    </b>
+                                </div>
+                                <div className="card-mint">
+                                    {commonPackagePrice == false ? <button>Loading</button> : <>
+                                        {wallet ?
+                                            <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-mint btn btn btn-warning"> MINT </button>
+                                            :
+                                            <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
+                                    </>}
                                 </div>
                             </div>
                         </div>
