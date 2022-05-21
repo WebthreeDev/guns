@@ -1,0 +1,71 @@
+$dark:rgba(16, 23, 29, 0.9);
+$dark2:rgba(12, 16, 23, 0.9);
+$blue:rgb(57, 241, 241);
+$light:rgb(31,41,51);
+$radius:20px;
+$lineHeight:3px;
+
+.ticket-buy{
+    display: flex;
+    gap: 20px;
+}
+
+.card-container{
+    display: flex;
+    justify-content: center;
+}
+
+.card{
+    background-color: $dark !important;
+    height: 230px;
+    padding: 5px;
+    width: 300px !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 12px;
+    margin: 0 10px;
+    border: 1px solid transparent;
+    transition: 0.3s;
+    border-radius: 8px;
+}
+
+.card-header{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.nft-img{
+    top: 0;
+    width: 100%;
+    max-width: 150px;
+    height: 150px;
+}
+
+.card-mint{
+    display: flex;
+    justify-content: space-between;
+}
+
+.card-body{
+    display: flex;
+    justify-content: center;
+}
+
+
+.card-text-footer{
+    display: flex;
+    justify-content: center;
+}
+
+.card-text-item{
+    display: flex;
+    flex-direction: column;
+}
+
+.btn-mint{
+    background-color: transparent;
+    font-weight: bolder !important;
+}
