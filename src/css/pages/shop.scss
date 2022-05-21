@@ -58,6 +58,7 @@ $lineHeight:3px;
 .card-text-footer{
     display: flex;
     justify-content: center;
+    gap: 0 10px;
 }
 
 .card-text-item{
@@ -68,4 +69,8 @@ $lineHeight:3px;
 .btn-mint{
     background-color: transparent;
     font-weight: bolder !important;
+}
+
+.modalX{
+    background-color: #00070cee !important;
 }
