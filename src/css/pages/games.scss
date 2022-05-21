@@ -1,0 +1,76 @@
+$dark:red;
+$blue:rgb(57, 241, 241);
+$dark:rgba(16, 23, 29, 0.9);
+$dark2:rgba(12, 16, 23, 0.9);
+.racebg{
+    height:90vh;
+    display:flex;
+    align-items: center;
+
+}
+.rbtn1{
+    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87));
+}
+.rbtn2{
+    background:linear-gradient(rgba(27, 27, 27, 0.966),rgba(15, 15, 15, 0.945));
+}
+.rbtn3{
+    background:linear-gradient(rgba(27, 27, 27, 0.966),rgba(15, 15, 15, 0.945));
+}
+.rbtn4{
+    background:linear-gradient(rgba(1, 40, 0, 0.875),rgba(37, 0, 36, 0.87));
+}
+.raceButton{
+    border-bottom: 4px solid $blue;
+    text-decoration: none;
+    height: 270px;
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    background:linear-gradient($dark,$dark2);
+    background-position: center;
+    background-size: cover;
+    transition: 0.5s;
+    &:hover{
+        box-shadow: inset -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
+        background-color: $dark;
+        cursor: pointer;
+        transform: scale(1.05);
+    }
+}
+.raceButtonComingSoon{
+    height: 270px;
+    padding: 10px;
+    border-radius: 15px;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    font-size: 20px;
+    font-weight: 700;
+    box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
+    background-position: center;
+    background-size: cover;
+    transition: 0.5s;
+    border-bottom: 4px solid gray;
+}
+.cms{
+    font-size: 12px;
+    text-align: end;
+    font-weight: 100;
+    color: gray;
+}
+.rbtnIn{
+    border: 1px solid red;
+    height:250px
+}
+.flag{
+    height:80px;
+    margin-bottom:10px;
+}
+.textButtonRace{
+    font-size:20px;
+    font-weight: 700;
+}

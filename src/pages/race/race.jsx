@@ -7,8 +7,12 @@ import axios from "axios";
 import NftCard from "../../components/nftCard/nftCard";
 import { Link } from "react-router-dom"
 import RaceUi from "../../components/raceui/raceui";
-
-import enviroment from "../../env";
+import "../../css/pages/games.scss"
+import enviroment from "../../env"
+import flag from '../../img/assets/icons/flag.png'
+import control from '../../img/assets/icons/control.png'
+import rank from '../../img/assets/icons/rank.png'
+import beats from '../../img/assets/icons/beats.png'
 const Race = () => {
     const _context = useContext(DataContext)
 
@@ -16,9 +20,9 @@ const Race = () => {
     const [modalRaceActive, setModalRaceActive] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
-    const [raceUi,setRaceUi] = useState(false)
-    const [places,setPlaces] = useState([])
-    const [position,setPosition] = useState([])
+    const [raceUi, setRaceUi] = useState(false)
+    const [places, setPlaces] = useState([])
+    const [position, setPosition] = useState([])
 
     const clickRun = async () => {
         const canId = selectedCan.id
@@ -34,7 +38,7 @@ const Race = () => {
         } catch (error) { alert(error.response.data.error) }
     }
 
-    const goRace = (_places)=>{
+    const goRace = (_places) => {
         let aux = []
         console.log("Generando array random")
         for (let i = 0; i <= 5; i++) {
@@ -70,11 +74,11 @@ const Race = () => {
     const rankRace = () => alert("Coming Soon!")
     const beatsRace = () => alert("Coming Soon!")
 
-  
 
-    return ( 
+
+    return (
         <div className="container">
-            {raceUi &&<RaceUi places={places} setRaceUi={setRaceUi} position={position}/>}
+            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} />}
             {_context.loading && <Loader />}
             {modalRace && <div className="cansSelection overflow">
                 <div className='selectTittle'>
@@ -178,25 +182,38 @@ const Race = () => {
                                 </div>
 
                             </div>
-                            <button  onClick={() => { clickRun() }} className="btn btn-success form-control"> Ready! </button>
+                            <button onClick={() => { clickRun() }} className="btn btn-success form-control"> Ready! </button>
                         </div>
                     </div>
                 </div>
             </div>}
             <div className="row racebg">
                 <div className="col-md-3 col-12">
-                    <div onClick={() => race(0)} className="raceButton rbtn1">
-                        SINGLE RACE
+                    <div onClick={() => race(0)} className="raceButton">
+                        <div className="text-center">
+                            <img className="flag" src={flag} alt="" />
+                        </div>
+                        <div className="textButtonRace">
+                            SINGLE RACE
+                        </div>
                     </div>
                 </div>
                 <div className="col-md-3 col-12">
                     <Link to="/minigame" className="raceButton rbtn4 t">
-                        TICKET MINIGAME
+                        <div className="text-center">
+                            <img className="flag" src={control} alt="" />
+                        </div>
+                        <div className="textButtonRace">
+                            TICKET MINIGAME
+                        </div>
                     </Link>
                 </div>
                 <div className="col-md-3 col-12">
                     <div className="raceButtonComingSoon rbtn2">
                         <div>
+                        <div className="text-center">
+                            <img className="flag" src={rank} alt="" />
+                        </div>
                             <div className="btn-gray">
                                 RANK MODE
                             </div>
@@ -209,6 +226,9 @@ const Race = () => {
                 <div className="col-md-3 col-12">
                     <div className="raceButtonComingSoon rbtn3">
                         <div>
+                        <div className="text-center">
+                            <img className="flag" src={beats} alt="" />
+                        </div>
                             <div className="btn-gray">
                                 RACE BEATS
                             </div>
