@@ -1,0 +1,44 @@
+$dark:rgba(16, 23, 29, 0.99);
+$dark2:rgba(12, 16, 23, 0.99);
+
+.container-card{
+    display: flex;
+    gap: 0 10px;
+}
+
+.nftCard{
+    border-radius: 8px;
+    background: linear-gradient($dark2,$dark);
+    border: 1px solid transparent;
+    transition: 0.3s;
+    width: 250px;
+    &:hover{
+        border: 1px solid rgba(255, 255, 255, 0.39);
+        cursor: pointer;
+        transform: scale(1.02);
+        background: linear-gradient($dark,$dark2);
+    }
+}
+
+.nftCard-header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.totalStatsCard{
+    display: flex;
+    justify-content: space-between;
+    background-color: #1f2933;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.lb-color{
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 12px;
+}
+
+.nftCard-img{
+    width: 100%;
+    height: auto;
+}

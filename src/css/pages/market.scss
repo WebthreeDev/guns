@@ -1,0 +1,25 @@
+.secondNav{
+    display: flex;
+    gap: 0 20px;
+   
+    a{
+        text-decoration: none;
+        color: #e0fbff;
+    }
+}
+
+.filter{
+    background: linear-gradient(rgba(12, 16, 23, 0.99), rgba(16, 23, 29, 0.99));
+    padding: 15px;
+    border-radius: 8px;
+    border-bottom: 4px solid #39f1f1
+}
+
+.canPhoto{
+    display: flex;
+    flex-direction: column;
+}
+
+.canInfo{
+    display: grid !important;
+}

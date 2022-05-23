@@ -73,33 +73,69 @@ const MarketItems = () => {
 
     return (<div>
         {_context.loading && <Loader />}
-        {confirmModal && <div className="modalX">
-            <div className="modalIn">
-                <div className="w-100">
-                    Esta seguro de comprar estos tickets
-                    <button className="btn btn-primary" onClick={buyTicket}> Confirm </button>
-                    <button className="btn btn-danger" onClick={() => setConfirmModal(false)}> Cancel </button>
+        {confirmModal && 
+        <div className='modalX'>
+            <div className='canModalIn'>
+                <div className="container-fluid">
+                    <div className="row gx-2">
+                        <div className="col-6">
+                            <div className='options'>
+                                <h4>You are buying:</h4>
+                            </div>
+                            <div className='canPhoto'> 
+                                {/* <div className='rarity'> */}
+                                  <img style={{width: '150px', margin: '0 auto'}} className="img-fluid" src={passTicket} alt="" />
+                                {/* </div> */}
+                            </div>
+                        </div>
+                        <div className="col-6">
+                            <div className='canInfo'>
+                                <div>
+                                    <div className='d-flex align-items-center justify-content-between'>
+                                        {/* <div className='text-warning'> Price: {canodrome && canodrome.onSale.price} BNB </div> */}
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-12 p-1">
+                            <div className='selectedCanHeading'> 
+                                <button className='btn btn-danger btnModal' onClick={() => setConfirmModal(false)}> Cancel </button>
+                                <button className='btn btn-warning btnModal' onClick={buyTicket}> Buy </button>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>}
+        </div>
+        // <div className="modalX">
+        //     <div className="modalIn">
+        //         <div className="w-100">
+        //             Esta seguro de comprar estos tickets
+        //             <button className="btn btn-primary" onClick={buyTicket}> Confirm </button>
+        //             <button className="btn btn-danger" onClick={() => setConfirmModal(false)}> Cancel </button>
+        //         </div>
+        //     </div>
+        // </div>
+        }
         <div className="container-fluid">
-            <div className="secondNav mt-50px mb-3">
-                <Link to="/market" className="secondNavButton">
+            <div className="secondNav mt-50px mb-3 item-bar">
+                <Link to="/market" className="secondNavButton btn-bar">
                     <div>
                         Cans
                     </div>
                 </Link>
-                <Link to="/marketcanodromes" className="secondNavButton">
+                <Link to="/marketcanodromes" className="secondNavButton btn-bar">
                     Canodromes
                 </Link>
-                <Link to="/marketItems" className="secondNavButton active">
+                <Link to="/marketItems" className="secondNavButton active btn-bar">
                     Items
                 </Link>
             </div>
-            <div className="container-fluid">
+            <div className="">
                 <div className="row">
                     <div className="col-3 sidebarx">
-                        <div className="sidebar-bg">
+                        <div className="filter">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
                                 <button className="btn btn-primary btn-sm" href="">Clear filter</button>
@@ -115,7 +151,7 @@ const MarketItems = () => {
                             </div>
 
                             <div className="mt-3">
-                                <div className=" mb-1 d-flex align-items-center justify-content-between">
+                                <div className="mb-1 d-flex align-items-center justify-content-between">
                                     <div className="sidebarText">
                                         Ammount
                                     </div>
@@ -142,7 +178,7 @@ const MarketItems = () => {
                         <div className="container-fluid">
                             <div className="row">
                                 {passMarket.length > 0 && <>
-                                    {passMarket.map((item, index) => <div className="col-2" key={index}>
+                                    {passMarket.map((item, index) => <div className="col-2 nftCard m-2" key={index} onClick={() => { setPassId(item._id); setConfirmModal(true) }}>
                                         <div className="pass mb-2">
                                             <div className="w-100 p-2">
                                                 <div className="wall">
@@ -159,7 +195,7 @@ const MarketItems = () => {
                                                         {item.price} Credits
                                                     </div>
                                                 </div>
-                                                <button onClick={() => { setPassId(item._id); setConfirmModal(true) }} className="btn btn-primary w-100"> Buy </button>
+                                                {/* <button onClick={() => { setPassId(item._id); setConfirmModal(true) }} className="btn btn-primary w-100"> Buy </button> */}
                                             </div>
                                         </div>
                                     </div>)
