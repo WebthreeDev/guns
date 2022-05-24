@@ -22,10 +22,16 @@ import logoCredit from '../../img/assets/icons/credit.png'
 import { Link } from 'react-router-dom'
 /* import NftCard from '../../components/nftCard/nftCard' */
 
+
+import perro from '../../img/nfts/common.png'
 import commonNft from '../../img/nfts/common.png'
 import rareNft from '../../img/nfts/rare.png'
 import epicNft from '../../img/nfts/epic.png'
 import legendaryNft from '../../img/nfts/legendary.png'
+
+import canodrome from '../../img/1.png'
+import energyLogo from '../../img/energy.png'
+
 
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
@@ -38,6 +44,7 @@ const Dashboard = () => {
     const { dayReset, cctAddress, tiket, pass, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice,
         getBnb, getCCT, claimPercent, poolContract, cct, balance, getRaces, race,
         cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+    const _context = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
     const [id, setId] = useState(false)
@@ -60,6 +67,17 @@ const Dashboard = () => {
     const reguardWallet = "0x9cc9cddf2ffaa5df08cf8ea2b7aaebaf40161b98"
 
     const [canModal, setCanModal] = useState(false)
+
+    const [menu, setMenu] = useState(false)
+
+    const baseUrl = enviroment().baseurl
+    const { nftContract } = useContext(DataContext)
+    const [selectCans, setSelectCans] = useState(false)
+    const [selectedCanodrome, setSelectedCanodrome] = useState(false)
+    const [filteredCans, setFilteredCans] = useState([])
+    const [sellingCanodrome, setSellingCanodrome] = useState(false)
+    const [canodromeOnSell, setCanodromeOnSell] = useState(false)
+    const [canodromePrice, setCanodromePrice] = useState(false)
 
     useEffect(() => {
         getRaces()
@@ -313,9 +331,160 @@ const Dashboard = () => {
 
 
     }
+    /********************************************** */
+    const addCan = async (canodromeId) => {
+
+        let _filteredCans = []
+        const canodromesAll = _context.canodromes.map((canodrome) => canodrome.cans);
+        const canodromesAllFlat = canodromesAll.flat();
+        const arrayCanInCanodromes = canodromesAllFlat.map(can => can.can.id);
+
+        _context.cans.map(item => {
+            let suma = 0
+            arrayCanInCanodromes.map(_item => { if (item.id == _item) suma++ })
+            if (suma == 0 && item.onSale.sale == false) _filteredCans.push(item)
+        })
+
+        setFilteredCans(_filteredCans)
+        setSelectedCanodrome(canodromeId)
+        setSelectCans(true)
+        _context.setLoading(false)
+    }
+
+    const setCan = async (can) => {
+        _context.setLoading(true)
+        const body = { can }
+        try {
+            console.log("poner un can en el canodromo")
+            const res = await axios.patch(enviroment().baseurl + "canodrome/" + selectedCanodrome, body)
+            //console.log(res.data.response)
+            await _context.getCanodromes(_context.wallet)
+            setSelectCans(false)
+            // getTakedCans()
+            _context.setLoading(false)
+        } catch (error) {
+            _context.setLoading(false)
+            if (error.response) {
+                console.log("Error Response")
+                console.log(error.response.data)
+                alert(error.response.data.error)
+            } else if (error.request) {
+                console.log("Error Request")
+                console.log(error.request);
+            } else {
+                console.log("Error Message")
+                console.log('Error', error.message);
+            }
+        }
+    }
+
+    const deleteCan = async (canodromeId, canId) => {
+        _context.setLoading(true)
+        await axios.delete(baseUrl + "canodrome/" + canodromeId + "/" + canId)
+        await _context.getCanodromes(_context.wallet)
+        // getTakedCans()
+        _context.setLoading(false)
+    }
+
+    const canodromeItemsAndButtons = [
+        [0, 1, 2],
+        [0, 1, 2, 3, 4, 5],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8],
+        [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
+    ]
+
+    const sellCanodrome = (canodrome) => {
+        setCanodromeOnSell(canodrome)
+        setSellingCanodrome(true)
+        console.log(canodrome)
+    }
+
+    const sendSell = async () => {
+        _context.setLoading(true)
+        setSellingCanodrome(false)
+        const _value = Number.parseFloat(canodromePrice / 100).toFixed(6)
+        const value = web3.utils.toWei(_value.toString(), "ether")
+        nftContract.methods.onSale().send({ from: _context.wallet, value, gas: _context.gas, gasPrice: _context.gasPrice }).then(async (res) => {
+            await sendCanodromeOnSellToDB()
+
+            _context.setLoading(false)
+        }).catch(error => {
+            console.log(error)
+            alert(error.message)
+            _context.setLoading(false)
+        })
+
+
+    }
+
+    const sendCanodromeOnSellToDB = async () => {
+        const body = { "canodrome": { "onSale": { "sale": true, "price": canodromePrice } } }
+        try {
+            console.log("sellin canodrome")
+            const res = await axios.patch(enviroment().baseurl + "canodrome/sell/" + canodromeOnSell._id, body)
+            console.log(res.data.response)
+            setSellingCanodrome(false)
+            _context.getCanodromes(_context.wallet)
+        } catch (error) {
+            errorManager(error)
+        }
+    }
+
+    const removeCanodrome = async (_id) => {
+        try {
+            const res = await axios.patch(enviroment().baseurl + "canodrome/remove/" + _id)
+            console.log(res.data.response)
+            _context.getCanodromes(_context.wallet)
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     return (
         <div className="">
+            {sellingCanodrome && <div className='modalX'>
+                <div className='modalInCanodrome'>
+                    <div>
+                        <h1>Selling Canodrome</h1>
+                        ID: {canodromeOnSell && canodromeOnSell._id}
+                        <div className='text-warning'>
+                            {canodromePrice && <>{canodromePrice}BNB</>}
+                        </div>
+                        <input onChange={(e) => setCanodromePrice(e.target.value)} className='form-control mt-3' type="text" />
+                        <button onClick={sendSell} className='btn btn-primary form-control mt-3'>Sell</button>
+                        <button onClick={() => setSellingCanodrome(false)} className='btn btn-danger mt-3'> Cancel </button>
+                    </div>
+                </div>
+            </div>}
+
+            {selectCans &&
+                <div className='modalX'>
+                    <div className='selectCansCanodrome'>
+                        <div className='selectTittle'>
+                            <div className='tittle'> Select your can </div>
+                            <button className='btn btn-danger' onClick={_ => setSelectCans(false)}> X </button>
+                        </div>
+
+                        <div className='container-fluid px-5 containerSelectCans'>
+                            <div className="row gx-4 px-5">
+                                {filteredCans.length == 0 && <div className='p-5'>
+                                    <h1>
+                                        No cans in your dashboard
+                                    </h1>
+                                    <Link to='/shop' className='btn btn-primary'> Buy Cans </Link>
+                                </div>}
+                                {filteredCans && filteredCans.map((canItem) => {
+                                    return !canItem.onSale.sale &&
+                                        <div key={canItem.id} className="col-lg-3 col-md-4 col-sm-6 col-12 p-2">
+                                            {canItem.id}
+                                            {/* <NftCard btnPrice={false} setRenderModal={setRenderModal} setModalText={setModalText} setCan={setCan} item={canItem} /> */}
+                                        </div>
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>}
+
             {canModal && <>
                 <div className='modalX'>
                     <div className='canModalIn'>
@@ -623,60 +792,138 @@ const Dashboard = () => {
                                         </div>
                                         <div className="col-md-6 col-12">
                                             <div className='item-bar'>
-                                                <button className='btn-bar'> Cans </button>
-                                                <button className='btn-bar'> Canodomes </button>
+                                                <button onClick={() => setMenu(true)} className='btn-bar'> Cans </button>
+                                                <button onClick={() => setMenu(false)} className='btn-bar'> Canodomes </button>
                                             </div>
-                                            <div className='container-fluid px-0 pt-3'>
-                                                <div className="row gx-2">
-                                                    <div className="col-12">
-                                                        {cans.length == 0 && <>
-                                                            You do not have dogs in your inventory please buy it in the store
-                                                        </>}
-                                                    </div>
-                                                    {cans && cans.map((i) => {
-                                                        return (
-                                                            <div key={i.id} className='col-md-4 col-6'>
-                                                                {/* <NftCard
-                                                                setRenderModal={setRenderModal}
-                                                                setModalText={setModalText}
-                                                                setCan={setCan}
-                                                                item={i}
-                                                                btnPrice={i.onSale.price}
-                                                            /> */}
-                                                                <div onClick={() => openCanModal(i)} className='bgNft'>
-                                                                    <div className='imgSection'>
-                                                                        {i.onSale.sale && <div className='onSale'>On sale</div>}
-                                                                        {i.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
-                                                                        {i.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
-                                                                        {i.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
-                                                                        {i.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+                                            <div className='container-fluid px-0 pt-0'>
+                                                {menu ?
+                                                    <div className="row gx-2">
+                                                        <div className="col-12">
+                                                            {cans.length == 0 && <>
+                                                                You do not have dogs in your inventory please buy it in the store
+                                                            </>}
+                                                        </div>
+                                                        {cans && cans.map((i) => {
+                                                            return (
+                                                                <div key={i.id} className='col-md-4 col-6'>
+                                                                    {/* <NftCard setRenderModal={setRenderModal}setModalText={setModalText}setCan={setCan}item={i}btnPrice={i.onSale.price}/> */}
+                                                                    <div onClick={() => openCanModal(i)} className='bgNft'>
+                                                                        <div className='imgSection'>
+                                                                            {i.onSale.sale && <div className='onSale'>On sale</div>}
+                                                                            {i.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
+                                                                            {i.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
+                                                                            {i.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
+                                                                            {i.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
 
-                                                                        <div className='stats'>
-                                                                            <div className='totalStats'>Total stats</div>
-                                                                            <div className='statsNumber'>{i.resistencia + i.aceleracion + i.aerodinamica}</div>
-                                                                        </div>
-                                                                        <div className='rarity'>
-                                                                            {rarity(i.rarity)}
-                                                                        </div>
-                                                                        <div className='nftId'>
-                                                                            # {i.id}
-                                                                        </div>
-                                                                    </div>
-                                                                    <div className='W-options'>
-                                                                        <div className='options'>
-                                                                            <div>
-                                                                                Spot A340
+                                                                            <div className='stats'>
+                                                                                <div className='totalStats'>Total stats</div>
+                                                                                <div className='statsNumber'>{i.resistencia + i.aceleracion + i.aerodinamica}</div>
                                                                             </div>
-                                                                            <div>
-                                                                                <img height={"16px"} src={burguer} alt="" />
+                                                                            <div className='rarity'>
+                                                                                {rarity(i.rarity)}
+                                                                            </div>
+                                                                            <div className='nftId'>
+                                                                                # {i.id}
                                                                             </div>
                                                                         </div>
+                                                                        <div className='W-options'>
+                                                                            <div className='options'>
+                                                                                <div>
+                                                                                    Spot A340
+                                                                                </div>
+                                                                                <div>
+                                                                                    <img height={"16px"} src={burguer} alt="" />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
+
                                                                 </div>
-                                                            </div>
-                                                        )
-                                                    })}
-                                                </div>
+                                                            )
+                                                        })}
+                                                    </div>
+                                                    :
+                                                    <div className='row gx-2'>
+
+                                                        {_context.canodromes && <div className="col-12">
+                                                            {_context.canodromes.length == 0 && <div className=''>
+                                                                <h1> Todavia no posees un canodromo</h1>
+                                                                <Link className='btn btn-primary' to='/shop'> Go to Shop </Link>
+                                                            </div>}
+                                                        </div>}
+
+                                                        <div className="col-12">
+                                                            {_context.canodromes && _context.canodromes.map((canodromeItem) => {
+                                                                return (
+                                                                    <div key={canodromeItem._id} className='row canodromeCard mt-4'>
+                                                                        <div className='col-md-5 col-12 bgBlackTrans'>
+                                                                            <div className='imgCanodromeBg'>
+                                                                                <img className='w-100' src={canodrome} alt="" />
+                                                                                <div className='canodromeId'>
+                                                                                    #{canodromeItem.id}
+                                                                                </div>
+                                                                                <div className='rarity'>
+                                                                                    {rarity(canodromeItem.type)}
+                                                                                </div>
+                                                                                {canodromeItem.onSale.sale && <>
+                                                                                    <div className='justify-content-between align-items-center d-flex p-2 w-100 text-center bg-warning text-dark '>
+                                                                                        <div className='text-dark'>
+                                                                                            On sale
+                                                                                        </div>
+                                                                                        <button onClick={() => removeCanodrome(canodromeItem._id)} className='btn btn-danger'> Remove </button>
+                                                                                    </div>
+                                                                                </>}
+                                                                                <div className='d-flex justify-content-center align-items-center energyCanodrome' >
+                                                                                    <img height={"20px"} src={energyLogo} className="mx-2" alt="" />
+                                                                                    <div className='energyCanodromeText'> {canodromeItem.energy} / {_context.converType(canodromeItem.type)} </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div>
+                                                                                <button onClick={() => sellCanodrome(canodromeItem)} className='btn btn-danger form-control mt-2'> Sell </button>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div className="col-7 p-1">
+                                                                            <div className="container-fluid">
+                                                                                <div className='mb-2'>
+                                                                                    Add can in your canodrome
+                                                                                </div>
+                                                                                <div className='row'>
+                                                                                    {canodromeItem.onSale.sale == false && <>
+                                                                                        {canodromeItemsAndButtons[canodromeItem.type - 1].map((index) => {
+                                                                                            return <div key={index} className="col-4">
+                                                                                                {canodromeItem.cans[index] ?
+                                                                                                    <div className='cardCanodrome mb-3'>
+                                                                                                        <div className='d-flex justify-content-between'>
+                                                                                                            <div>
+                                                                                                                # {canodromeItem.cans[index].can.id}
+                                                                                                            </div>
+                                                                                                            <div>
+                                                                                                                {canodromeItem.cans[index].can.energy} / 4
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                        <div className='text-center'>
+                                                                                                            <img height={"60px"} src={perro} alt="" />
+                                                                                                        </div>
+                                                                                                        <div>
+                                                                                                            <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>
+                                                                                                                Remove Can
+                                                                                                            </button>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    :
+                                                                                                    <button className='btnAddCan mb-3' onClick={_ => addCan(canodromeItem._id)}> + </button>
+                                                                                                }
+                                                                                            </div>
+                                                                                        })}</>}
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                )
+                                                            })}
+                                                        </div>
+                                                    </div>
+                                                }
                                             </div>
                                         </div>
                                     </div>
@@ -706,7 +953,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

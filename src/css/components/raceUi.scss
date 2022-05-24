@@ -1,0 +1,131 @@
+
+.raceUi{
+    background-size: cover;
+    height: 100vh;
+    width: 100vw;
+    background-color: rgb(255, 0, 0);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    padding-top: 0px;
+    z-index: 1;
+}
+
+.bg-gradas{
+    height: 60vh;
+    width: 100%;
+    background-image: url(../../img/raceui/g1065.png);
+    background-repeat:repeat-x;
+    background-position-x: right;
+    background-position-y:top;
+    background-size:200vw 100%;
+    animation-name: gradas;
+    animation-timing-function: linear;
+    animation-duration: 30s;
+    animation-iteration-count: infinite;
+}
+
+@keyframes gradas {
+    0%{
+        background-position-x: 0vw;
+    }
+    100%{
+        background-position-x: 200vw;
+    }
+}
+
+.bg-pista{
+    margin-top: -45px;
+    height: 50vh;
+    width: 100%;
+    background-image: url(../../img/raceui/rect843.png);
+    background-repeat:repeat-x;
+    background-position-x: right;
+    background-size: 100vw 50vh;
+    animation-name: pista;
+    animation-timing-function: linear;
+    animation-duration: 3s;
+    animation-iteration-count: infinite;
+    position: relative;
+    z-index: inherit;
+}
+
+@keyframes pista {
+    0%{
+        background-position-x: 100vw;
+    }
+    100%{
+        background-position-x: 0vw;
+    }
+}
+
+.dog1{
+    position: absolute;
+    left:0px;
+    top: -20px;
+    height: 120px;
+    z-index: 1;
+}
+.dog2{
+    position: absolute;
+    left: 0px;
+    top: 5px;
+    height: 125px;
+    z-index: 1;
+}
+.dog3{
+    position: absolute;
+    left: 0px;
+    top: 30px;
+    height: 140px;
+   z-index: 1;
+}
+.dog4{
+    position: absolute;
+    left: 0px;
+    top: 57px;
+    height: 150px;
+   z-index: 5;
+}
+.dog5{
+    position: absolute;
+    left: 0px;
+    top: 85px;
+    height: 158px;
+    z-index: 6;
+    
+}
+.dog6{
+    position: absolute;
+    top: 110px;
+    height: 170px;
+    z-index: 7;
+}
+.dogImg{
+    height: 100%;
+}
+.meta{
+    height: 60%;
+    background-color: rgba(255, 255, 255, 0.849);
+    width: 12px;
+    transform: skew(20deg);
+    left: 120vw;
+    top: 44px;
+    position: absolute;
+    animation-name: meta;
+    animation-duration: 4.2s;
+    animation-delay: 57s;
+    animation-timing-function: linear;
+    z-index: 0;
+}
+
+@keyframes meta {
+    0%{
+        left: 120vw;
+
+    }
+    100%{
+        left: -20vw;
+
+    }
+}

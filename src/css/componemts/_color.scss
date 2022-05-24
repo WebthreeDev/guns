@@ -345,32 +345,7 @@ progress{
     border: 1px solid rgba(255, 0, 0, 0.062);
     padding: 10px 0px;
 }
-.boxy{
-    background-color: #023315d7;
-    padding:5px 0px;
-    width: 5%;
-    font-size: 12px;
-    margin: 0px;
-    display: inline-block;
-    text-align: center;
-    border: 1px solid rgb(0, 29, 4);
-    
-}
-.boxy2{
-    background-color: #035322d7;
-    color: #fff;
-    padding:5px 0px;
-    width: 5%;
-    font-size: 12px;
-    margin: 0px;
-    display: inline-block;
-    text-align: center;
-    border: 1px solid rgb(0, 51, 7);
-    &:hover{
-        background-color: #006647;
-        cursor: pointer; 
-      }
-}
+
 .findTiket{
     background-color: #1d1d1d;
 }
@@ -408,23 +383,7 @@ progress{
     color: #fff;
     text-align: end;
 }
-.infoBtn{
-    border: 1px solid rgb(100,100,100);
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background-color: transparent;
-    color: rgb(100,100,100);
-    transition: 0.3s;
-    &:hover{
-        background-color: #9e9e9e28;
-        color: #fff;
-        border: 1px solid rgb(255, 255, 255);
-    }
-}
-.infoText{
-    text-align: justify;
-}
+
 .jcc{
     justify-content: center;
 }

@@ -86,7 +86,7 @@ const MintModal = ({ canMinted, setMinted }) => {
                         </div>
                         <div className="col-12 p-1">
                             <div className='selectedCanHeading'>
-                                <button className='btn btn-primary btnModal' nClick={_ => _continue()}> Continue </button>
+                                <button className='btn btn-primary btnModal' onClick={_ => _continue()}> Continue </button>
                             </div>
 
                         </div>

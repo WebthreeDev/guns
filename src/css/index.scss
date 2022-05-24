@@ -291,3 +291,117 @@ input{
 .modalButtons{
     display: inline-flex;
 }
+.modalInCanodrome{
+    background: linear-gradient($dark2,$dark);
+    width: 400px;
+    border-bottom: 4px solid $blue;
+    border-radius:8px;
+    padding: 5px 10px;
+}
+.canodromeCard{
+    background: linear-gradient($dark,$dark2);
+    border-radius:8px;
+    padding: 10px;
+}
+.imgCanodromeBg{
+    position: relative;
+}
+.bgBlackTrans{
+    padding: 0px 10px 10px 10px;
+    border-radius:8px;
+    background-color:rgba(0, 0, 0, 0.4);
+}
+.canodromeId{
+    position:absolute;
+    color: rgba(255, 255, 255, 0.6);
+    top: 5px;
+    left: 0px;
+    font-size:16px;
+}
+.energyCanodrome{
+    color: rgba(255, 255, 255, 0.6);
+    position: absolute;
+    right: 0px;
+    top: 5px;
+
+}
+.energyCanodromeText{
+    color:rgba(255, 255, 255, 0.6);
+}
+.btnAddCan{
+    color:rgb(255, 255, 255);
+    border-radius:5px;
+    border: 1px dotted rgba(255, 255, 255, 0.6);
+    color:rgba(255, 255, 255, 0.6);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    width: 100%;
+    height: 70px;
+    font-size:40px;
+    transition: 0.3s;
+    background-color:rgba(0,0,0, 0.1);
+    &:hover{
+        transform: scale(1.02);
+        background-color:rgba(255, 255, 255, 0.01);
+    }
+}
+
+.selectCansCanodrome{
+    background: linear-gradient($dark,$dark2);
+    padding: 10px;
+    height: 90%;
+    width: 90vw;
+    border-radius:8px;
+}
+.selectTittle{
+    width: 100%;
+    display: flex;
+    justify-content:space-between;
+    align-items: center;
+}
+.boxy{
+    background-color: #023315d7;
+    padding:5px 0px;
+    width: 5%;
+    font-size: 12px;
+    margin: 0px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid rgb(0, 29, 4);
+    
+}
+.boxy2{
+    background-color: #035322d7;
+    color: #fff;
+    padding:5px 0px;
+    width: 5%;
+    font-size: 12px;
+    margin: 0px;
+    display: inline-block;
+    text-align: center;
+    border: 1px solid rgb(0, 51, 7);
+    &:hover{
+        background-color: #006647;
+        cursor: pointer; 
+      }
+}
+.infoBtn{
+    border: 1px solid rgb(100,100,100);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: transparent;
+    color: rgb(100,100,100);
+    transition: 0.3s;
+    &:hover{
+        background-color: #9e9e9e28;
+        color: #fff;
+        border: 1px solid rgb(255, 255, 255);
+    }
+}
+.infoText{
+    text-align: justify;
+}

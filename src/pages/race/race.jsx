@@ -13,6 +13,7 @@ import flag from '../../img/assets/icons/flag.png'
 import control from '../../img/assets/icons/control.png'
 import rank from '../../img/assets/icons/rank.png'
 import beats from '../../img/assets/icons/beats.png'
+import '../../css/components/raceUi.scss';
 const Race = () => {
     const _context = useContext(DataContext)
 
@@ -20,7 +21,7 @@ const Race = () => {
     const [modalRaceActive, setModalRaceActive] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
-    const [raceUi, setRaceUi] = useState(false)
+    const [raceUi, setRaceUi] = useState(true)
     const [places, setPlaces] = useState([])
     const [position, setPosition] = useState([])
 
@@ -74,54 +75,54 @@ const Race = () => {
     const rankRace = () => alert("Coming Soon!")
     const beatsRace = () => alert("Coming Soon!")
 
-
-
     return (
         <div className="container">
             {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} />}
             {_context.loading && <Loader />}
-            {modalRace && <div className="cansSelection overflow">
-                <div className='selectTittle'>
-                    <div className='tittle'> Single Race </div>
-                    <button onClick={_ => setModalRace(false)}> X </button>
-                </div>
-                <div className="container py-4 ">
-                    {!_context.canodromes && "You need a canodrome to play race"}
-                    {_context.canodromes && _context.canodromes.map((canodrome, index) => {
-                        return (
-                            <div key={index} className="row raceCanodrome mb-2">
-                                <div className="col-md-2 col-12">
-                                    {canodrome.energy} / {_context.converType(canodrome.type)}
-                                    <img className="w-100" src={canodromeImg} alt="" />
-                                </div>
-                                <div className="col-md-10 col-12">
-                                    <div className="container-fluid">
-                                        <div className="row">
-                                            {canodrome.cans.length == 0 && <div className="h-100 text-center pt-3">
-                                                <h1 className="text-center"> Add cans in canodrome section</h1>
-                                                <Link className="btn btn-primary" to="/canodromes">
-                                                    Go to Canodromes
-                                                </Link>
-                                            </div>}
-                                            {canodrome.cans && canodrome.cans.map((can, index) => {
-                                                return (
-                                                    <div key={index} className="col-4" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
-                                                        <NftCard
-                                                            btnPrice={false}
-                                                            setRenderModal={setRenderModal}
-                                                            setModalText={setModalText}
-                                                            setCan={setCan}
-                                                            item={can.can} />
-                                                    </div>
-                                                )
-                                            })}
+            {modalRace && <div className="modalX">
+                <div className="modalInClaim">
+                    <div className='selectTittle'>
+                        <div className='tittle'> Single Race </div>
+                        <button className="btn btn-danger" onClick={_ => setModalRace(false)}> X </button>
+                    </div>
+                    <div className="container py-4 ">
+                        {!_context.canodromes && "You need a canodrome to play race"}
+                        {_context.canodromes && _context.canodromes.map((canodrome, index) => {
+                            return (
+                                <div key={index} className="row raceCanodrome mb-2">
+                                    <div className="col-md-2 col-12">
+                                        {canodrome.energy} / {_context.converType(canodrome.type)}
+                                        <img className="w-100" src={canodromeImg} alt="" />
+                                    </div>
+                                    <div className="col-md-10 col-12">
+                                        <div className="container-fluid">
+                                            <div className="row">
+                                                {canodrome.cans.length == 0 && <div className="h-100 text-center pt-3">
+                                                    <h1 className="text-center"> Add cans in canodrome section</h1>
+                                                    <Link className="btn btn-primary" to="/canodromes">
+                                                        Go to Canodromes
+                                                    </Link>
+                                                </div>}
+                                                {canodrome.cans && canodrome.cans.map((can, index) => {
+                                                    return (
+                                                        <div key={index} className="col-4" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
+                                                            <NftCard
+                                                                btnPrice={false}
+                                                                setRenderModal={setRenderModal}
+                                                                setModalText={setModalText}
+                                                                setCan={setCan}
+                                                                item={can.can} />
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        )
-                    })}
+                            )
+                        })}
 
+                    </div>
                 </div>
             </div>}
 
@@ -211,9 +212,9 @@ const Race = () => {
                 <div className="col-md-3 col-12">
                     <div className="raceButtonComingSoon rbtn2">
                         <div>
-                        <div className="text-center">
-                            <img className="flag" src={rank} alt="" />
-                        </div>
+                            <div className="text-center">
+                                <img className="flag" src={rank} alt="" />
+                            </div>
                             <div className="btn-gray">
                                 RANK MODE
                             </div>
@@ -226,9 +227,9 @@ const Race = () => {
                 <div className="col-md-3 col-12">
                     <div className="raceButtonComingSoon rbtn3">
                         <div>
-                        <div className="text-center">
-                            <img className="flag" src={beats} alt="" />
-                        </div>
+                            <div className="text-center">
+                                <img className="flag" src={beats} alt="" />
+                            </div>
                             <div className="btn-gray">
                                 RACE BEATS
                             </div>

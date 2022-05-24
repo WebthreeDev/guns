@@ -95,7 +95,7 @@ const Minigame = () => {
 
     return (<>
         {modalInfo && <div className="modalX">
-            <div className="modalIn">
+            <div className="modalInClaim">
                 <div>
                     <div className="infoText">
                         Participa junto con otros jugadores en la búsqueda de los trozos de tickets perdidos, busca dentro de todas las casillas y encuentra las cuatro partes de ticket y únelas para obtener un Pase de carrera con este Pase tendrás el derecho de participar en las carreras con tus canes en los distintos modos de juego o completa los pases para luego venderlos dentro del mercado a otros jugadores
@@ -108,7 +108,7 @@ const Minigame = () => {
             </div>
         </div>}
         {modalFinding && <div className="modalX">
-            <div className="modalIn">
+            <div className="modalInClaim">
                 <div className="w-100 text-center">
                     <h1>
                         {finding && finding}
@@ -117,9 +117,9 @@ const Minigame = () => {
                 </div>
             </div>
         </div>}
-        <div className="pt-5">
-            <div className="container-fluid findTiket">
-                <div className="text-center pt-3">
+        <div className="">
+            <div className="container-fluid">
+                <div className="text-center">
                     <h3>
                         find the hidden ticket
                     </h3>
@@ -154,11 +154,7 @@ const Minigame = () => {
                         </div>
                         <div className="pt-4 text-center">
                             <button onClick={() => setModalInfo(true)} className="infoBtn"> ! </button>
-
                         </div>
-
-
-
                     </div>
                     <div className="col-9">
                         <div className="">
