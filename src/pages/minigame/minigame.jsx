@@ -12,6 +12,8 @@ import { DataContext } from "../../context/DataContext"
 import w3S from "../../services/w3S"
 import service from "./service"
 import enviroment from "../../env"
+import '../../css/pages/minigame.scss'
+import Loader from '../../components/loader/loader'
 const Minigame = () => {
 
     const { wallet, tiket, pass, exectConnect } = useContext(DataContext)
@@ -24,6 +26,8 @@ const Minigame = () => {
     const [modalInfo, setModalInfo] = useState(false)
     const [finding, setFinding] = useState(false)
     const [finded, setFinded] = useState([])
+    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         generateCodes()
@@ -74,7 +78,8 @@ const Minigame = () => {
                 if (validate.key === "d") setTiket4(true)
                 renderBoxes(finding)
             } else {
-                alert("Mala suerte")
+                setLoading(false);
+                handlertAlert(true, "😬 Bab Luck" ,"Continue");
             }
         } catch (error) {
             console.log(error)
@@ -89,32 +94,55 @@ const Minigame = () => {
             setFinding(item)
             setModalFinding(true)
         } else {
-            alert("You don't have a ticket, buy in the shop")
+            setAlert(true, "You don't have a ticket, buy in the shop", "OK")
         }
     }
 
+    const handlertAlert = (status = false, title = "", btn = "") => {
+        setAlert({
+            status,
+            title,
+            btn
+        })
+    }
+
     return (<>
+        {loading && <Loader />}
+        {alert.status && <div className="modalX">
+            <div className="">
+                <div className="w-100 d-flex align-items-center justify-content-center h-100">
+                    <div className="text-center w-100">
+                        <h1>
+                            {alert.title}
+                        </h1>
+                        <button className="w-100 btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
+                    </div>
+                </div>
+            </div>
+        </div>}
+
         {modalInfo && <div className="modalX">
             <div className="modalInClaim">
-                <div>
-                    <div className="infoText">
-                        Participa junto con otros jugadores en la búsqueda de los trozos de tickets perdidos, busca dentro de todas las casillas y encuentra las cuatro partes de ticket y únelas para obtener un Pase de carrera con este Pase tendrás el derecho de participar en las carreras con tus canes en los distintos modos de juego o completa los pases para luego venderlos dentro del mercado a otros jugadores
+                <div className="text-center p-4">
+                    <img src="https://www.gitbook.com/cdn-cgi/image/width=40,height=40,fit=contain,dpr=1,format=auto/https%3A%2F%2F3560466799-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FvdVUvBGUcENGvjpmxl0I%252Ficon%252FsEeQ2Ok9hqgKz7s54DHm%252Flogo.png%3Falt%3Dmedia%26token%3D5aa3fb3c-cf78-4d0c-b397-c31cfd419ab9" />
+                    <div className="infoText p-4">
+                        <p>Participate together with other players in the search for the pieces of lost tickets.</p>
+                     <p>Search inside all the boxes and find the four parts of the ticket, join them to obtain a Race Pass and you will have the right to participate in the races with your dogs in the different game modes or you can also sell them in the market to other players.</p>
                     </div>
-                    <div className="pt-4 ">
-                        <button onClick={() => setModalInfo(false)} className="btn btn-primary"> Entendido! </button>
-
+                    <div className="pt-4">
+                        <button onClick={() => setModalInfo(false)} className="btn btn-primary">It is understood! </button>
                     </div>
                 </div>
             </div>
         </div>}
         {modalFinding && <div className="modalX">
-            <div className="modalInClaim">
+            <div className="">
                 <div className="w-100 d-flex align-items-center justify-content-center h-100">
                     <div className="text-center w-100">
                         <h1>
                             {finding && finding}
                         </h1>
-                        <button className="w-100 btn btn-primary" onClick={() => { find(finding); setModalFinding(false) }}> Good Look </button>
+                        <button className="w-100 btn btn-primary" onClick={() => { find(finding); setModalFinding(false); setLoading(true) }}> Good Look </button>
                     </div>
                 </div>
             </div>
@@ -126,8 +154,8 @@ const Minigame = () => {
                         find the hidden ticket
                     </h3>
                     <div>
-                        Tickets:{tiket && tiket} -
-                        Race Pass:{pass && pass}
+                        Tickets: {tiket && tiket} -
+                        Race Pass: {pass && pass}
                     </div>
                 </div>
                 <div className="row p-3">
@@ -155,6 +183,7 @@ const Minigame = () => {
                             }
                         </div>
                         <div className="pt-4 text-center">
+                            <span className="m-2">Info</span>
                             <button onClick={() => setModalInfo(true)} className="infoBtn"> ! </button>
                         </div>
                     </div>
