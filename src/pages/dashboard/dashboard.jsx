@@ -687,7 +687,7 @@ const Dashboard = () => {
                                     </h1>
                                 </div>
                                 <div className="col-md-4 col-12">
-                                    <div className='wplay '>
+                                    <div className='wplay'>
                                         <div className="bnbBalance">
                                             <img className="m-2" height="20px" src='https://upload.wikimedia.org/wikipedia/commons/f/fc/Binance-coin-bnb-logo.png' alt="" />
                                             <div className=''>

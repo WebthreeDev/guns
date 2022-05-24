@@ -10,6 +10,13 @@ import socket from '../../socket';
 import enviroment from "../../env"
 import { nftContractProd } from "../../tokensProd/canes/canes"
 import { testNftContract } from "../../tokensDev/canes/canes"
+import '../../css/pages/market.scss'
+
+import commonNft from '../../img/nfts/common.png'
+import rareNft from '../../img/nfts/rare.png'
+import epicNft from '../../img/nfts/epic.png'
+import legendaryNft from '../../img/nfts/legendary.png'
+
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
 if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
@@ -148,7 +155,7 @@ const Market = () => {
 
     const setRarity = (rarity) => {
         const r = ["common", "rare", "epic", "legendary"]
-        return r[rarity + 1]
+        return r[rarity]
     }
 
     const clear = () => {
@@ -160,49 +167,105 @@ const Market = () => {
         setRangoMin(200)
         setRangoMax(360)
     }
-
+   
     return (
         <div>
             {loading && <Loader />}
             {renderModal &&
-                <div className="modalX">
-                    <div className="modalIn">
-                        <div className="w-100">
-                            <div className="modalHeader">
-                                <h3>
-                                    Estas comprando:
-                                </h3>
-                                {can.name}
-                                <div>Rarity: {setRarity(can.rarity)}</div>
-                                <div>
-                                    precio <b className="text-warning">{can.onSale.price} BNB</b>
+             <div className='modalX'>
+                <div className='canModalIn'>
+                    <div className="container-fluid">
+                        <div className="row gx-2">
+                            <div className="col-6">
+                                <div className='options'>
+                                <h4>You are buying:</h4>
+                                </div>
+                                <div className='canPhoto'>
+                                    
+                                    <div className='stats'>
+                                        <div className='totalStats'>Total stats</div>
+                                        <div className='statsNumber'>{can.aceleracion + can.aerodinamica + can.resistencia}</div>
+                                    </div>
+                                    <div className='rarity'>
+                                        <p>{setRarity(Number(can.rarity) - 1)}</p>
+                                    </div>
+                                    <div className='nftId'>
+                                        # {can.id}
+                                    </div>
+                                    {can.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
+                                    {can.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
+                                    {can.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
+                                    {can.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+
+                                </div>
+                                
+                            </div>
+                            <div className="col-6">
+                                <div className='canInfo'>
+                                    <div className='w-energy'>
+                                        <div className='energy'>
+                                            <div>
+                                                Energy:
+                                            </div>
+                                            <div>
+                                                {can && can.energy}/4
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <progress value={can.energy - 1} min="0" max="4" className='progressEnergy'> </progress>
+                                        </div>
+                                    </div>
+                                    <div className='energy mt-3'>
+                                        <div>Aerodinamic:</div>
+                                        <div>{can && can.aerodinamica}</div>
+                                    </div>
+                                    <div className='energy mt-3'>
+                                        <div>Aceleration:</div>
+                                        <div>{can && can.aceleracion}</div>
+                                    </div>
+                                    <div className='energy mt-3'>
+                                        <div>Resistence:</div>
+                                        <div>{can && can.resistencia}</div>
+                                    </div>
+
+                                    <div>
+                                        {can.onSale.sale &&
+                                            <div className='d-flex align-items-center justify-content-between'>
+                                                <div className='text-warning'> Price: {Number.parseFloat(can.onSale.price)} BNB </div>
+                                            </div>
+                                        }
+                                    </div>
                                 </div>
                             </div>
-                            <div className="w-50 d-flex justify-content-around">
-                                <button onClick={_ => { setCan(false); setRenderModal(false) }} className="btn btn-danger mx-1"> Cancel </button>
-                                <button onClick={_ => confirmBuy()} className="btn btn-primary mx-1"> Confirm </button>
+                            <div className="col-12 p-1">
+                                <div className='selectedCanHeading'>
+                                    <button className='btn btn-danger btnModal' onClick={_ => { setCan(false); setRenderModal(false) }}> Cancel </button> 
+                                    <button className='btn btn-warning btnModal' onClick={_ => confirmBuy()}> Buy </button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
             }
             <div className="container-fluid">
-                <div className="secondNav mt-50px mb-3">
-                    <Link to="/market" className="secondNavButton active">
+                <div className="secondNav mt-50px mb-3 item-bar">
+                    <Link to="/market" className="secondNavButton active btn-bar">
                         <div>
                             Cans
                         </div>
                     </Link>
-                    <Link to="/marketcanodromes" className="secondNavButton">
+                    <Link to="/marketcanodromes" className="secondNavButton btn-bar">
                         Canodromes
                     </Link>
-                    <Link to="/marketItems" className="secondNavButton">
+                    <Link to="/marketItems" className="secondNavButton btn-bar">
                         Items
                     </Link>
                 </div>
                 <div className="row">
-                    <div className="col-3 sidebarx">
-                        <div className="sidebar-bg">
+                    <div className="col-3">
+                        <div className="filter">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
                                 <button onClick={clear} className="btn btn-primary btn-sm" href="">Clear filter</button>
@@ -241,8 +304,8 @@ const Market = () => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-3">
-                                <div className=" mb-1 d-flex align-items-center justify-content-between">
+                            <div className="">
+                                <div className="">
                                     <div className="sidebarText">
                                         Stats
                                     </div>
@@ -275,10 +338,10 @@ const Market = () => {
                             <div className="mb-2">
                                 <div>{canMarket.length} Cans Listed  </div>
                             </div>
-                            <div className="row gx-2 gy-2 pb-5">
+                            <div className="container-card">
                                 {canMarket.map((item) => {
                                     return (
-                                        <div key={item.id} className="col-4">
+                                        <div key={item.id}>
                                             <NftCard
                                                 setRenderModal={setRenderModal}
                                                 setModalText={setModalText}

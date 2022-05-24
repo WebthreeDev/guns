@@ -11,6 +11,13 @@ import errorManager from '../../services/errorManager'
 import enviroment from "../../env"
 import { nftContractProd } from "../../tokensProd/canes/canes"
 import { testNftContract } from "../../tokensDev/canes/canes"
+
+import commonCanodrome from '../../img/canodrome/common-canodrome.png'
+import rareCanodrome from '../../img/canodrome/rare-canodrome.png'
+import epicCanodrome from '../../img/canodrome/epic-canodrome.png'
+import legendaryCanodrome from '../../img/canodrome/legendary-canodrome.png'
+import '../../css/pages/marketCanodrome.scss'
+
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
 if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
@@ -141,10 +148,8 @@ const MarketCanodromes = () => {
     }
 
     const setRarity = (rarity) => {
-        if (rarity === "1") { return "common" }
-        if (rarity === "2") return "rare"
-        if (rarity === "3") return "epic"
-        if (rarity === "4") return "legendary"
+        const r = ["commonCanodrome", "rareCanodrome", "epicCanodrome", "legendaryCanodrome"]
+        return r[rarity]
     }
 
     const clear = () => {
@@ -159,48 +164,91 @@ const MarketCanodromes = () => {
         <div>
             {loading && <Loader />}
             {renderModal &&
-                <div className="modalX">
-                    <div className="modalIn">
-                        <div className="w-100">
-                            <div className="modalHeader">
-                                <h3>
-                                    Estas comprando:
-                                </h3>
-                                {console.log(canodrome)}
-                                <div> Canodrome
-                                    {canodrome.type == 1 && <div className="rarity common px-3"> Common </div>}
-                                    {canodrome.type == 2 && <div className="rarity rare px-3"> Rare </div>}
-                                    {canodrome.type == 3 && <div className="rarity epic px-3"> Epic </div>}
-                                    {canodrome.type == 4 && <div className="rarity legendary px-3"> Legendary </div>}
+            <div className='modalX'>
+                <div className='canModalIn'>
+                    <div className="container-fluid">
+                        <div className="row gx-2">
+                            <div className="col-6">
+                                <div className='options'>
+                                    <h4>You are buying:</h4>
                                 </div>
-                                <div>
-                                    precio <b className="text-warning">{canodrome && canodrome.onSale.price} BNB</b>
+                                <div className='canPhoto'> 
+                                    <div className='nftId'>
+                                        # {canodrome.id}
+                                        {canodrome.type == 1 && <img className='imgNft' src={commonCanodrome} alt="" />}
+                                        {canodrome.type == 2 && <img className='imgNft' src={rareCanodrome} alt="" />}
+                                        {canodrome.type == 3 && <img className='imgNft' src={epicCanodrome} alt="" />}
+                                        {canodrome.type == 4 && <img className='imgNft' src={legendaryCanodrome} alt="" />}
+                                    </div>
+                                    <div className='rarity'>
+                                        {canodrome.type == 1 && <div className="rarity common px-3"> Common </div>}
+                                        {canodrome.type == 2 && <div className="rarity rare px-3"> Rare </div>}
+                                        {canodrome.type == 3 && <div className="rarity epic px-3"> Epic </div>}
+                                        {canodrome.type == 4 && <div className="rarity legendary px-3"> Legendary </div>}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="w-50 d-flex justify-content-around">
-                                <button onClick={_ => { setCanodrome(false); setRenderModal(false) }} className="btn btn-danger mx-1"> Cancel </button>
-                                <button onClick={_ => confirmBuy()} className="btn btn-primary mx-1"> Confirm </button>
+                            <div className="col-6">
+                                <div className='canInfo'>
+                                    <div>
+                                        <div className='d-flex align-items-center justify-content-between'>
+                                            <div className='text-warning'> Price: {canodrome && canodrome.onSale.price} BNB </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="col-12 p-1">
+                                <div className='selectedCanHeading'> 
+                                    <button className='btn btn-danger btnModal' onClick={_ => { setCanodrome(false); setRenderModal(false) }}> Cancel </button>
+                                    <button className='btn btn-warning btnModal' onClick={_ => confirmBuy()} > Buy </button>
+                                </div>
+
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+                // <div className="modalX">
+                //     <div className="modalIn">
+                //         <div className="w-100">
+                //             <div className="modalHeader">
+                //                 <h3>
+                //                     Estas comprando:
+                //                 </h3>
+                //                 <div> Canodrome
+                //                     {canodrome.type == 1 && <div className="rarity common px-3"> Common </div>}
+                //                     {canodrome.type == 2 && <div className="rarity rare px-3"> Rare </div>}
+                //                     {canodrome.type == 3 && <div className="rarity epic px-3"> Epic </div>}
+                //                     {canodrome.type == 4 && <div className="rarity legendary px-3"> Legendary </div>}
+                //                 </div>
+                //                 <div>
+                //                     precio <b className="text-warning">{canodrome && canodrome.onSale.price} BNB</b>
+                //                 </div>
+                //             </div>
+                //             <div className="w-50 d-flex justify-content-around">
+                //                 <button onClick={_ => { setCanodrome(false); setRenderModal(false) }} className="btn btn-danger mx-1"> Cancel </button>
+                //                 <button onClick={_ => confirmBuy()} className="btn btn-primary mx-1"> Confirm </button>
+                //             </div>
+                //         </div>
+                //     </div>
+                // </div>
             }
             <div className="container-fluid">
-                <div className="secondNav mt-50px mb-3 ">
-                    <Link to="/market" className="secondNavButton">
+                <div className="secondNav mt-50px mb-3 item-bar">
+                    <Link to="/market" className="secondNavButton btn-bar">
                         Cans
                     </Link>
-                    <Link to="/marketcanodromes" className="secondNavButton active">
+                    <Link to="/marketcanodromes" className="secondNavButton active btn-bar">
                         Canodromes
                     </Link>
-                    <Link to="/marketItems" className="secondNavButton">
+                    <Link to="/marketItems" className="secondNavButton btn-bar">
                         Items
                     </Link>
                 </div>
 
                 <div className="row">
                     <div className="col-3">
-                        <div className="sidebar-bg">
+                        <div className="filter">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
                                 <button onClick={clear} className="btn btn-primary btn-sm" href="">Clear filter</button>
@@ -255,12 +303,22 @@ const MarketCanodromes = () => {
                                 <div className="row">
                                     {canodromesMarket.length != 0 && canodromesMarket.map((item) => {
                                         return (
-                                            <div key={item._id} className="col-4 p-2">
+                                            <div key={item._id} onClick={() => { setCanodrome(item); setRenderModal(true) }} className="col-3 p-2 nftCard">
                                                 <div className="canodromeCardMarket">
-                                                    <div className="d-flex justify-content-between align-items-center">
-                                                        <div>#{item.id}</div>
-                                                        <div>{_context.lastForWallet(item.wallet)} </div>
-                                                        <div>
+                                                    <div className="">
+                                                        <div className="nftCard-header">
+                                                            <div>{item.onSale.price} BNB </div>                
+                                                            <div className="button-market px-1 lb-color item-id">#{item.id} {_context.lastForWallet(item.wallet)}</div>
+                                                        </div>
+                                                    </div>
+                                                    <div>    
+                                                        {item.type == 1 && <img className="w-100" src={commonCanodrome} alt="" />}
+                                                        {item.type == 2 && <img className="w-100" src={rareCanodrome} alt="" />}
+                                                        {item.type == 3 && <img className="w-100" src={epicCanodrome} alt="" />}
+                                                        {item.type == 4 && <img className="w-100" src={legendaryCanodrome} alt="" />}
+                                                    </div>
+                                                    <div className=''>
+                                                        <div className="lb-color"> 
                                                             {item.type == 1 && <div className="rarity common px-3"> Common </div>}
                                                             {item.type == 2 && <div className="rarity rare px-3"> Rare </div>}
                                                             {item.type == 3 && <div className="rarity epic px-3"> Epic </div>}
@@ -268,13 +326,7 @@ const MarketCanodromes = () => {
                                                         </div>
                                                     </div>
                                                     <div>
-                                                        <img className="w-100" src={canodromo} alt="" />
-                                                    </div>
-                                                    <div className="price-canodrome text-warning text-center">
-                                                        {item.onSale.price} BNB
-                                                    </div>
-                                                    <div>
-                                                        <button onClick={() => { setCanodrome(item); setRenderModal(true) }} className="btn btn-primary form-control"> Buy </button>
+                                                        {/* <button onClick={() => { setCanodrome(item); setRenderModal(true) }} className="btn btn-primary form-control"> Buy </button> */}
                                                     </div>
                                                 </div>
                                             </div>
