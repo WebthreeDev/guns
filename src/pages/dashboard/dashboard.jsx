@@ -34,6 +34,7 @@ import legendaryCanodrome from '../../img/canodromes/legendary.png'
 import canodrome from '../../img/1.png'
 import energyLogo from '../../img/energy.png'
 
+import MiniLoader from '../../components/miniLoader/MiniLoader';
 
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
@@ -456,14 +457,17 @@ const Dashboard = () => {
                                 {canodromeOnSell.type == 2 && <img height="100px" src={rareCanodrome} />}
                                 {canodromeOnSell.type == 3 && <img height="100px" src={epicCanodrome} />}
                                 {canodromeOnSell.type == 4 && <img height="100px" src={legendaryCanodrome} />}
+                                
                             </div>
                         </div>
                         <div className='text-warning'>
                             {canodromePrice && <>{canodromePrice}BNB</>}
                         </div>
                         <input onChange={(e) => setCanodromePrice(e.target.value)} className='mt-3 inputClaim' type="text" />
-                        <button onClick={sendSell} className='btn btn-primary form-control mt-3'>Sell</button>
-                        <button onClick={() => setSellingCanodrome(false)} className='btn btn-danger mt-3'> Cancel </button>
+                        <div className='d-flex'>
+                            <button onClick={sendSell} className='btn btn-primary form-control mt-3'>Sell</button>
+                            <button onClick={() => setSellingCanodrome(false)} className='btn btn-danger form-control mt-3'> Cancel </button>
+                        </div>
                     </div>
                 </div>
             </div>}
@@ -532,7 +536,6 @@ const Dashboard = () => {
                             <div className="row gx-2">
                                 <div className="col-6">
                                     <div className='canPhoto'>
-
                                         <div className='stats'>
                                             <div className='totalStats'>Total stats</div>
                                             <div className='statsNumber'>{selectedCan.resistencia + selectedCan.aceleracion + selectedCan.aerodinamica}</div>
@@ -836,6 +839,7 @@ const Dashboard = () => {
                                                 <button onClick={() => setMenu(false)} className='btn-bar'> Canodomes </button>
                                             </div>
                                             <div className='container-fluid px-0 pt-0'>
+                                                {menu && <MiniLoader />}
                                                 {menu ?
                                                     <div className="row gx-2">
                                                         <div className="col-12">
@@ -884,10 +888,9 @@ const Dashboard = () => {
                                                     </div>
                                                     :
                                                     <div className='row gx-2'>
-
                                                         {_context.canodromes && <div className="col-12">
                                                             {_context.canodromes.length == 0 && <div className=''>
-                                                                <h1> Todavia no posees un canodromo</h1>
+                                                                <h1>You still do not own a canodrome</h1>
                                                                 <Link className='btn btn-primary' to='/shop'> Go to Shop </Link>
                                                             </div>}
                                                         </div>}
