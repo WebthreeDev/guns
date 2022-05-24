@@ -5,7 +5,6 @@ import Market from "./pages/market/market"
 import Shop from "./pages/shop/shop"
 import Race from "./pages/race/race"
 import Admin from "./pages/admin/admin";
-import Canodromes from "./pages/canodromes/canodromes";
 import MarketCanodromes from "./pages/marketCanodromes/marketCanodromes";
 import Minigame from "./pages/minigame/minigame";
 import MarketItems from "./pages/marketItems/marketItems";
@@ -25,9 +24,7 @@ const Router = () => {
             <Route path="/marketcanodromes">
                 <MarketCanodromes />
             </Route>
-            <Route path="/canodromes">
-                <Canodromes />
-            </Route>
+            
             <Route path="/admin">
                 <Admin />
             </Route>

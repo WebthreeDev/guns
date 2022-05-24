@@ -109,11 +109,13 @@ const Minigame = () => {
         </div>}
         {modalFinding && <div className="modalX">
             <div className="modalInClaim">
-                <div className="w-100 text-center">
-                    <h1>
-                        {finding && finding}
-                    </h1>
-                    <button className="w-100 btn btn-primary" onClick={() => { find(finding); setModalFinding(false) }}> Good Look </button>
+                <div className="w-100 d-flex align-items-center justify-content-center h-100">
+                    <div className="text-center w-100">
+                        <h1>
+                            {finding && finding}
+                        </h1>
+                        <button className="w-100 btn btn-primary" onClick={() => { find(finding); setModalFinding(false) }}> Good Look </button>
+                    </div>
                 </div>
             </div>
         </div>}

@@ -476,7 +476,36 @@ const Dashboard = () => {
                                 {filteredCans && filteredCans.map((canItem) => {
                                     return !canItem.onSale.sale &&
                                         <div key={canItem.id} className="col-lg-3 col-md-4 col-sm-6 col-12 p-2">
-                                            {canItem.id}
+                                            
+                                            <div onClick={() => setCan(canItem)} className='bgNft'>
+                                                <div className='imgSection'>
+                                                    {canItem.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
+                                                    {canItem.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
+                                                    {canItem.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
+                                                    {canItem.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+
+                                                    <div className='stats'>
+                                                        <div className='totalStats'>Total stats</div>
+                                                        <div className='statsNumber'>{canItem.resistencia + canItem.aceleracion + canItem.aerodinamica}</div>
+                                                    </div>
+                                                    <div className='rarity'>
+                                                        {rarity(canItem.rarity)}
+                                                    </div>
+                                                    <div className='nftId'>
+                                                        # {canItem.id}
+                                                    </div>
+                                                </div>
+                                                <div className='W-options'>
+                                                    <div className='options'>
+                                                        <div>
+                                                            Spot A340
+                                                        </div>
+                                                        <div>
+                                                            <img height={"16px"} src={burguer} alt="" />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             {/* <NftCard btnPrice={false} setRenderModal={setRenderModal} setModalText={setModalText} setCan={setCan} item={canItem} /> */}
                                         </div>
                                 })}

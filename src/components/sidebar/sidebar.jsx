@@ -3,7 +3,6 @@ import discord from '../../img/assets/social/discord.svg'
 import twitter from '../../img/assets/social/twitter.svg'
 import icon from '../../img/assets/icons/icon.png'
 import marketIcon from '../../img/assets/icons/market.png'
-import canodromesIcon from '../../img/assets/icons/canodromes.png'
 import playIcon from '../../img/assets/icons/play.png'
 import shopIcon from '../../img/assets/icons/shop.png'
 import { Link } from 'react-router-dom'
@@ -28,16 +27,6 @@ const Sidebar = () => {
                         </div>
                         <div className='text-sidebar'>
                             Market
-                        </div>
-                    </div>
-                </Link>
-                <Link to='/canodromes' className='btnSidebar'>
-                    <div>
-                        <div>
-                            <img className='icon' src={canodromesIcon} alt="" />
-                        </div>
-                        <div className='text-sidebar'>
-                            Canodromes
                         </div>
                     </div>
                 </Link>

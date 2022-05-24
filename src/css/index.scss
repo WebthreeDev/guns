@@ -355,6 +355,7 @@ input{
     height: 90%;
     width: 90vw;
     border-radius:8px;
+    
 }
 .selectTittle{
     width: 100%;
@@ -404,4 +405,9 @@ input{
 }
 .infoText{
     text-align: justify;
+}
+.containerSelectCans{
+    overflow-y: scroll;
+    height: 80vh;
+    padding-bottom: 50px;
 }
