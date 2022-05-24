@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import sobre1 from "../../img/perro.png"
-import common from "../../img/common.png"
-import canodrome from "../../img/1.png"
-import canodromeLegendary from "../../img/4.png"
-import sobre2 from "../../img/rare.png"
-import sobre3 from "../../img/legendary.png"
+import canodrome from "../../img/canodromes/common.png"
+import canodromeLegendary from "../../img/canodromes/legendary.png"
+import sobre1 from "../../img/nfts/common.png"
+import sobre2 from "../../img/nfts/rare.png"
+import sobre3 from "../../img/nfts/legendary.png"
 import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios"

@@ -1,4 +1,3 @@
-import perro from '../../img/perro.png'
 import { useContext } from 'react';
 import { DataContext } from '../../context/DataContext';
 import commonNft from '../../img/nfts/common.png'

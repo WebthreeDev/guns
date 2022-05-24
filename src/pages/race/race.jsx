@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
 import canodromeImg from '../../img/canodrome.png'
-import runDog from '../../img/rundog.gif'
 import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios";

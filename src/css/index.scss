@@ -157,6 +157,7 @@ h1,h2,h3,h4,h5,h6,button,div{
     display: flex;
     align-items: center;
 }
+
 .logoClaim{
     height: 40px;
 }
@@ -410,4 +411,12 @@ input{
     overflow-y: scroll;
     height: 80vh;
     padding-bottom: 50px;
+}
+.idSmall{
+    color: gray;
+    font-size:10px
+}
+.energySmall{
+    color: gray;
+    font-size:10px
 }
