@@ -31,16 +31,15 @@ import rareCanodrome from '../../img/canodromes/rare.png'
 import epicCanodrome from '../../img/canodromes/epic.png'
 import legendaryCanodrome from '../../img/canodromes/legendary.png'
 
-import canodrome from '../../img/1.png'
 import energyLogo from '../../img/energy.png'
 
 
 let nftContract
-if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
-if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
+if (process.env.REACT_APP_ENVIROMENT === "prod") nftContract = nftContractProd()
+if (process.env.REACT_APP_ENVIROMENT === "dev") nftContract = testNftContract()
 let cctContract
-if (process.env.REACT_APP_ENVIROMENT == "prod") cctContract = cctContractProd()
-if (process.env.REACT_APP_ENVIROMENT == "dev") cctContract = cctContractDev()
+if (process.env.REACT_APP_ENVIROMENT === "prod") cctContract = cctContractProd()
+if (process.env.REACT_APP_ENVIROMENT === "dev") cctContract = cctContractDev()
 
 const Dashboard = () => {
     const { dayReset, cctAddress, tiket, pass, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice,
@@ -70,10 +69,10 @@ const Dashboard = () => {
 
     const [canModal, setCanModal] = useState(false)
 
-    const [menu, setMenu] = useState(false)
+    const [menu, setMenu] = useState(true)
 
     const baseUrl = enviroment().baseurl
-    const { nftContract } = useContext(DataContext)
+    //const { nftContract } = useContext(DataContext)
     const [selectCans, setSelectCans] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
     const [filteredCans, setFilteredCans] = useState([])
@@ -90,7 +89,7 @@ const Dashboard = () => {
 
     useEffect(() => {
         filterPass()
-        if (passOnSell.length == 0) fetch(enviroment().baseurl + "pass")
+        if (passOnSell.length === 0) fetch(enviroment().baseurl + "pass")
     }, [passOnSell]);
 
     socket.on('passData', async passData => {
@@ -109,7 +108,7 @@ const Dashboard = () => {
     }
 
     const onlyUserPass = (pass) => {
-        if (pass.wallet == wallet) return pass
+        if (pass.wallet === wallet) return pass
     }
 
     const getClaimPercent = () => {
@@ -341,8 +340,8 @@ const Dashboard = () => {
 
         _context.cans.map(item => {
             let suma = 0
-            arrayCanInCanodromes.map(_item => { if (item.id == _item) suma++ })
-            if (suma == 0 && item.onSale.sale == false) _filteredCans.push(item)
+            arrayCanInCanodromes.map(_item => { if (item.id === _item) suma++ })
+            if (suma === 0 && item.onSale.sale === false) _filteredCans.push(item)
         })
 
         setFilteredCans(_filteredCans)
@@ -452,10 +451,10 @@ const Dashboard = () => {
                                 {canodromeOnSell && rarity(canodromeOnSell.type)}
                             </div>
                             <div>
-                                {canodromeOnSell.type == 1 && <img height="100px" src={commonCanodrome} />}
-                                {canodromeOnSell.type == 2 && <img height="100px" src={rareCanodrome} />}
-                                {canodromeOnSell.type == 3 && <img height="100px" src={epicCanodrome} />}
-                                {canodromeOnSell.type == 4 && <img height="100px" src={legendaryCanodrome} />}
+                                {canodromeOnSell.type === 1 && <img height="100px" src={commonCanodrome} />}
+                                {canodromeOnSell.type === 2 && <img height="100px" src={rareCanodrome} />}
+                                {canodromeOnSell.type === 3 && <img height="100px" src={epicCanodrome} />}
+                                {canodromeOnSell.type === 4 && <img height="100px" src={legendaryCanodrome} />}
                             </div>
                         </div>
                         <div className='text-warning'>
@@ -478,7 +477,7 @@ const Dashboard = () => {
 
                         <div className='container-fluid px-5 containerSelectCans'>
                             <div className="row gx-4 px-5">
-                                {filteredCans.length == 0 && <div className='p-5'>
+                                {filteredCans.length === 0 && <div className='p-5'>
                                     <h1>
                                         No cans in your dashboard
                                     </h1>
@@ -486,14 +485,14 @@ const Dashboard = () => {
                                 </div>}
                                 {filteredCans && filteredCans.map((canItem) => {
                                     return !canItem.onSale.sale &&
-                                        <div key={canItem.id} className="col-lg-3 col-md-4 col-sm-6 col-12 p-2">
+                                        <div key={canItem.id} className="col-lg-3 col-md-4 col-sm-6 p-2">
 
                                             <div onClick={() => setCan(canItem)} className='bgNft'>
                                                 <div className='imgSection'>
-                                                    {canItem.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
-                                                    {canItem.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
-                                                    {canItem.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
-                                                    {canItem.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+                                                    {canItem.rarity === "1" && <img className='imgNft' src={commonNft} alt="" />}
+                                                    {canItem.rarity === "2" && <img className='imgNft' src={rareNft} alt="" />}
+                                                    {canItem.rarity === "3" && <img className='imgNft' src={epicNft} alt="" />}
+                                                    {canItem.rarity === "4" && <img className='imgNft' src={legendaryNft} alt="" />}
 
                                                     <div className='stats'>
                                                         <div className='totalStats'>Total stats</div>
@@ -543,10 +542,10 @@ const Dashboard = () => {
                                         <div className='nftId'>
                                             # {selectedCan.id}
                                         </div>
-                                        {selectedCan.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
-                                        {selectedCan.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
-                                        {selectedCan.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
-                                        {selectedCan.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+                                        {selectedCan.rarity === "1" && <img className='imgNft' src={commonNft} alt="" />}
+                                        {selectedCan.rarity === "2" && <img className='imgNft' src={rareNft} alt="" />}
+                                        {selectedCan.rarity === "3" && <img className='imgNft' src={epicNft} alt="" />}
+                                        {selectedCan.rarity === "4" && <img className='imgNft' src={legendaryNft} alt="" />}
 
                                     </div>
                                     <div className='options'>
@@ -565,7 +564,7 @@ const Dashboard = () => {
                                                 </div>
                                             </div>
                                             <div>
-                                                <progress value={selectedCan.energy - 1} min="0" max="4" className='progressEnergy'> </progress>
+                                                <progress value={selectedCan.energy } min="0" max="4" className='progressEnergy'> </progress>
                                             </div>
                                         </div>
                                         <div className='energy mt-3'>
@@ -660,7 +659,7 @@ const Dashboard = () => {
                                                 <th scope="row">{index + 1}</th>
                                                 <td> {item.place} </td>
                                                 <td> # {item.canId} </td>
-                                                <td> {item.gainToken == 0 ? <div className='text-danger'>Lose</div> : <div className='text-success' >Win: +{item.gainToken}</div>} </td>
+                                                <td> {item.gainToken === 0 ? <div className='text-danger'>Lose</div> : <div className='text-success' >Win: +{item.gainToken}</div>} </td>
                                                 <td> {item.balancePrev} | {item.balanceAfter} </td>
                                             </tr>
                                         })}
@@ -756,7 +755,7 @@ const Dashboard = () => {
                                                         <div className='itemSection'>
                                                             <div className='inItem'>
                                                                 <img height={"40px"} src={passTicket} alt="" />
-                                                                <div className='numberItem'> {myPass & myPass} </div>
+                                                                <div className='numberItem'> {pass & pass} </div>
                                                                 <button onClick={() => { setModalSellTicket(true); fetch(enviroment().baseurl + "pass") }} className='btn btn-warning mx-2'> <b>Sell</b> </button>
                                                             </div>
                                                         </div>
@@ -814,7 +813,7 @@ const Dashboard = () => {
                                                                 {approved == 0 ? <>
                                                                     <button onClick={() => setClaiming(true)} className="btn btn-danger"> Claim </button>
                                                                 </> : <>
-                                                                    <button onClick={() => claimExcect()} className="claimBTN"> Claim </button>
+                                                                    <button onClick={() => claimExcect()} className="btn btn-primary"> Claim </button>
                                                                 </>}
                                                             </div>
                                                         </div>
@@ -837,10 +836,10 @@ const Dashboard = () => {
                                             </div>
                                             <div className='container-fluid px-0 pt-0'>
                                                 {menu ?
-                                                    <div className="row gx-2">
+                                                    <div className="row gx-2 mt-4">
                                                         <div className="col-12">
-                                                            {cans.length == 0 && <>
-                                                                You do not have dogs in your inventory please buy it in the store
+                                                            {cans.length === 0 && <>
+                                                                You do not have cans in your inventory please buy it in the store
                                                             </>}
                                                         </div>
                                                         {cans && cans.map((i) => {
@@ -850,10 +849,10 @@ const Dashboard = () => {
                                                                     <div onClick={() => openCanModal(i)} className='bgNft'>
                                                                         <div className='imgSection'>
                                                                             {i.onSale.sale && <div className='onSale'>On sale</div>}
-                                                                            {i.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
-                                                                            {i.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
-                                                                            {i.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
-                                                                            {i.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+                                                                            {i.rarity === "1" && <img className='imgNft' src={commonNft} alt="" />}
+                                                                            {i.rarity === "2" && <img className='imgNft' src={rareNft} alt="" />}
+                                                                            {i.rarity === "3" && <img className='imgNft' src={epicNft} alt="" />}
+                                                                            {i.rarity === "4" && <img className='imgNft' src={legendaryNft} alt="" />}
 
                                                                             <div className='stats'>
                                                                                 <div className='totalStats'>Total stats</div>
@@ -886,7 +885,7 @@ const Dashboard = () => {
                                                     <div className='row gx-2'>
 
                                                         {_context.canodromes && <div className="col-12">
-                                                            {_context.canodromes.length == 0 && <div className=''>
+                                                            {_context.canodromes.length === 0 && <div className=''>
                                                                 <h1> Todavia no posees un canodromo</h1>
                                                                 <Link className='btn btn-primary' to='/shop'> Go to Shop </Link>
                                                             </div>}
@@ -898,10 +897,10 @@ const Dashboard = () => {
                                                                     <div key={canodromeItem._id} className='row canodromeCard mt-4'>
                                                                         <div className='col-md-5 col-12 bgBlackTrans'>
                                                                             <div className='imgCanodromeBg'>
-                                                                                {canodromeItem.type == 1 && <img className="img-fluid" src={commonCanodrome} />}
-                                                                                {canodromeItem.type == 2 && <img className="img-fluid" src={rareCanodrome} />}
-                                                                                {canodromeItem.type == 3 && <img className="img-fluid" src={epicCanodrome} />}
-                                                                                {canodromeItem.type == 4 && <img className="img-fluid" src={legendaryCanodrome} />}
+                                                                                {canodromeItem.type === 1 && <img className="img-fluid" src={commonCanodrome} />}
+                                                                                {canodromeItem.type === 2 && <img className="img-fluid" src={rareCanodrome} />}
+                                                                                {canodromeItem.type === 3 && <img className="img-fluid" src={epicCanodrome} />}
+                                                                                {canodromeItem.type === 4 && <img className="img-fluid" src={legendaryCanodrome} />}
                                                                                 <div className='canodromeId'>
                                                                                     #{canodromeItem.id}
                                                                                 </div>
@@ -931,7 +930,7 @@ const Dashboard = () => {
                                                                                     Add can in your canodrome
                                                                                 </div>
                                                                                 <div className='row'>
-                                                                                    {canodromeItem.onSale.sale == false && <>
+                                                                                    {canodromeItem.onSale.sale === false && <>
                                                                                         {canodromeItemsAndButtons[canodromeItem.type - 1].map((index) => {
                                                                                             return <div key={index} className="col-4">
                                                                                                 {canodromeItem.cans[index] ?
@@ -945,11 +944,10 @@ const Dashboard = () => {
                                                                                                             </div>
                                                                                                         </div>
                                                                                                         <div className='text-center'>
-                                                                                                            {canodromeItem.cans[index].can.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
-                                                                                                            {canodromeItem.cans[index].can.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
-                                                                                                            {canodromeItem.cans[index].can.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
-                                                                                                            {canodromeItem.cans[index].can.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
-                                                                                                            {/*  <img height={"60px"} src={perro} alt="" /> */}
+                                                                                                            {canodromeItem.cans[index].can.rarity === "1" && <img className='imgNft' src={commonNft} alt="" />}
+                                                                                                            {canodromeItem.cans[index].can.rarity === "2" && <img className='imgNft' src={rareNft} alt="" />}
+                                                                                                            {canodromeItem.cans[index].can.rarity === "3" && <img className='imgNft' src={epicNft} alt="" />}
+                                                                                                            {canodromeItem.cans[index].can.rarity === "4" && <img className='imgNft' src={legendaryNft} alt="" />}
                                                                                                         </div>
                                                                                                         <div>
                                                                                                             <button onClick={_ => deleteCan(canodromeItem._id, canodromeItem.cans[0].can.id)} className='btn btn-sm btn-danger form-control'>

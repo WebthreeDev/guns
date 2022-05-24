@@ -13,6 +13,10 @@ import control from '../../img/assets/icons/control.png'
 import rank from '../../img/assets/icons/rank.png'
 import beats from '../../img/assets/icons/beats.png'
 import '../../css/components/raceUi.scss';
+import commonCanodrome from '../../img/canodromes/common.png'
+import rareCanodrome from '../../img/canodromes/rare.png'
+import epicCanodrome from '../../img/canodromes/epic.png'
+import legendaryCanodrome from '../../img/canodromes/legendary.png'
 const Race = () => {
     const _context = useContext(DataContext)
 
@@ -79,21 +83,24 @@ const Race = () => {
             {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} />}
             {_context.loading && <Loader />}
             {modalRace && <div className="modalX">
-                <div className="modalInClaim">
+                <div className="modalRace ">
                     <div className='selectTittle'>
-                        <div className='tittle'> Single Race </div>
+                        <div className='tittle'> Select your can</div>
                         <button className="btn btn-danger" onClick={_ => setModalRace(false)}> X </button>
                     </div>
                     <div className="container py-4 ">
                         {!_context.canodromes && "You need a canodrome to play race"}
                         {_context.canodromes && _context.canodromes.map((canodrome, index) => {
                             return (
-                                <div key={index} className="row raceCanodrome mb-2">
-                                    <div className="col-md-2 col-12">
+                                <div key={index} className="row raceCanodrome mb-2 ">
+                                    <div className="col-md-3 col-12">
                                         {canodrome.energy} / {_context.converType(canodrome.type)}
-                                        <img className="w-100" src={canodromeImg} alt="" />
+                                        {canodrome.type === 1 && <img className="w-100" src={commonCanodrome} alt="" />}
+                                        {canodrome.type === 2 && <img className="w-100" src={rareCanodrome} alt="" />}
+                                        {canodrome.type === 3 && <img className="w-100" src={epicCanodrome} alt="" />}
+                                        {canodrome.type === 4 && <img className="w-100" src={legendaryCanodrome} alt="" />}
                                     </div>
-                                    <div className="col-md-10 col-12">
+                                    <div className="col-md-9 col-12">
                                         <div className="container-fluid">
                                             <div className="row">
                                                 {canodrome.cans.length == 0 && <div className="h-100 text-center pt-3">

@@ -110,12 +110,12 @@ const RaceUi = ({ setRaceUi, places, position }) => {
             </div>
             <div className="bg-pista">
                 <div className="rundog">
-                    {position[0] == 0 ? <div ref={item1} className='dog1'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item1} className='dog1'> <img className='dogImg' src={dogCommon} alt="" /> </div>}
-                    {position[1] == 0 ? <div ref={item2} className='dog2'><div className='guia2'> </div> <img className='dogImg' src={dogEpic} alt="" /> </div> : <div ref={item2} className='dog2'><img className='dogImg' src={dogEpic} alt="" /></div>}
-                    {position[2] == 0 ? <div ref={item3} className='dog3'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item3} className='dog3'><img className='dogImg' src={dogLegendary} alt="" /></div>}
-                    {position[3] == 0 ? <div ref={item4} className='dog4'><div className='guia2'> </div> <img className='dogImg' src={dogLegendary} alt="" /> </div> : <div ref={item4} className='dog4'><img className='dogImg' src={dogCommon} alt="" /></div>}
-                    {position[4] == 0 ? <div ref={item5} className='dog5'><div className='guia2'> </div> <img className='dogImg' src={dogRare} alt="" /> </div> : <div ref={item5} className='dog5'><img className='dogImg' src={dogLegendary} alt="" /></div>}
-                    {position[5] == 0 ? <div ref={item6} className='dog6'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item6} className='dog6'><img className='dogImg' src={dogRare} alt="" /></div>}
+                    {position[0] === 0 ? <div ref={item1} className='dog1'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item1} className='dog1'> <img className='dogImg' src={dogCommon} alt="" /> </div>}
+                    {position[1] === 0 ? <div ref={item2} className='dog2'><div className='guia2'> </div> <img className='dogImg' src={dogEpic} alt="" /> </div> : <div ref={item2} className='dog2'><img className='dogImg' src={dogEpic} alt="" /></div>}
+                    {position[2] === 0 ? <div ref={item3} className='dog3'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item3} className='dog3'><img className='dogImg' src={dogLegendary} alt="" /></div>}
+                    {position[3] === 0 ? <div ref={item4} className='dog4'><div className='guia2'> </div> <img className='dogImg' src={dogLegendary} alt="" /> </div> : <div ref={item4} className='dog4'><img className='dogImg' src={dogCommon} alt="" /></div>}
+                    {position[4] === 0 ? <div ref={item5} className='dog5'><div className='guia2'> </div> <img className='dogImg' src={dogRare} alt="" /> </div> : <div ref={item5} className='dog5'><img className='dogImg' src={dogLegendary} alt="" /></div>}
+                    {position[5] === 0 ? <div ref={item6} className='dog6'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item6} className='dog6'><img className='dogImg' src={dogRare} alt="" /></div>}
                 </div>
                 <div className='meta'> </div>
             </div>

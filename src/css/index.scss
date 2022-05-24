@@ -72,7 +72,15 @@ h1,h2,h3,h4,h5,h6,button,div{
     border-radius:8px;
     border-bottom: 4px solid $blue;
     padding: 10px;
-
+}
+.modalRace{
+    width:90%;
+    background:linear-gradient($dark,$dark2);
+    border-radius:8px;
+    border-bottom: 4px solid $blue;
+    padding: 10px;
+    max-height: 90vh;
+    overflow-y: scroll;
 }
 .modalInPass{
     width: 90%;
@@ -360,6 +368,8 @@ input{
 }
 .selectTittle{
     width: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
     display: flex;
     justify-content:space-between;
     align-items: center;
@@ -419,4 +429,10 @@ input{
 .energySmall{
     color: gray;
     font-size:10px
+}
+.raceCanodrome{
+    background: linear-gradient(rgba(0, 0, 0, 0.205),rgba(17, 18, 19, 0.247));
+    box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
+    padding: 15px;
+    border-radius: 15px;
 }

@@ -45,10 +45,10 @@ const MintModal = ({ canMinted, setMinted }) => {
                                 <div className='nftId'>
                                     # {canMinted.id}
                                 </div>
-                                {canMinted.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
-                                {canMinted.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
-                                {canMinted.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
-                                {canMinted.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+                                {canMinted.rarity === "1" && <img className='imgNft' src={commonNft} alt="" />}
+                                {canMinted.rarity === "2" && <img className='imgNft' src={rareNft} alt="" />}
+                                {canMinted.rarity === "3" && <img className='imgNft' src={epicNft} alt="" />}
+                                {canMinted.rarity === "4" && <img className='imgNft' src={legendaryNft} alt="" />}
 
                             </div>
                             <div className='options'>

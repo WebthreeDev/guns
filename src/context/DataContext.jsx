@@ -14,8 +14,8 @@ import { nftContractProd } from '../tokensProd/canes/canes'
 import { testNftContract } from '../tokensDev/canes/canes'
 
 let cctContract
-if (process.env.REACT_APP_ENVIROMENT == "prod") cctContract = cctContractProd()
-if (process.env.REACT_APP_ENVIROMENT == "dev") cctContract = cctContractDev()
+if (process.env.REACT_APP_ENVIROMENT === "prod") cctContract = cctContractProd()
+if (process.env.REACT_APP_ENVIROMENT === "dev") cctContract = cctContractDev()
 
 export const DataContext = createContext()
 export const DataProvider = ({ children }) => {
@@ -62,8 +62,8 @@ export const DataProvider = ({ children }) => {
     const exectConnect = async () => {
 
         let _chainId
-        if (process.env.REACT_APP_ENVIROMENT == "dev") _chainId = 97
-        if (process.env.REACT_APP_ENVIROMENT == "prod") _chainId = 56
+        if (process.env.REACT_APP_ENVIROMENT === "dev") _chainId = 97
+        if (process.env.REACT_APP_ENVIROMENT === "prod") _chainId = 56
 
         setLoading(true)
         const storageCanId = JSON.parse(localStorage.getItem('windowsData')) || null
@@ -80,7 +80,7 @@ export const DataProvider = ({ children }) => {
             .then(async accounts => {
 
                 const chainId = await w3S.chainId()
-                if (chainId == _chainId) {
+                if (chainId === _chainId) {
                     const wallet = accounts[0]
                     console.log(enviroment().baseurl)
 
@@ -160,7 +160,7 @@ export const DataProvider = ({ children }) => {
             let newCansList = []
             canodrome.cans.map((can, index) => {
                 canes.map(allCans => {
-                    if (can.can.id == allCans.id) {
+                    if (can.can.id === allCans.id) {
                         newCansList.push(allCans)
                     }
                 })
@@ -175,12 +175,12 @@ export const DataProvider = ({ children }) => {
     const getCCT = async (wallet) => {
         let _cct
         let address
-        if (process.env.REACT_APP_ENVIROMENT == "dev") {
+        if (process.env.REACT_APP_ENVIROMENT === "dev") {
             _cct = await cctContract.methods.balanceOf(wallet).call()
             address = _cctContractDev.address
         }
 
-        if (process.env.REACT_APP_ENVIROMENT == "prod") {
+        if (process.env.REACT_APP_ENVIROMENT === "prod") {
             _cct = await cctContractProd.methods.balanceOf(wallet).call()
             address = _cctContractProd.address
         }
@@ -208,8 +208,8 @@ export const DataProvider = ({ children }) => {
 
     let nftContract
     const getERC721Contract = () => {
-        if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
-        if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
+        if (process.env.REACT_APP_ENVIROMENT === "prod") nftContract = nftContractProd()
+        if (process.env.REACT_APP_ENVIROMENT === "dev") nftContract = testNftContract()
         console.log("Nft contract: ", nftContract)
 
 
