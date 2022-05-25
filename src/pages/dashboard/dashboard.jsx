@@ -20,6 +20,7 @@ import logoCCT from '../../img/assets/icons/logoCCT.png'
 import logoCredit from '../../img/assets/icons/credit.png'
 import { Link } from 'react-router-dom'
 /* import NftCard from '../../components/nftCard/nftCard' */
+import Card from '../../components/card/card'
 
 import commonNft from '../../img/nfts/common.png'
 import rareNft from '../../img/nfts/rare.png'
@@ -53,7 +54,6 @@ const Dashboard = () => {
     const [ammountToClaim, setAmmountToClaim] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
     const [renderModal, setRenderModal] = useState(false)//viene true
-    const [modalText, setModalText] = useState(false)////viene texto confirm
     const [raceModal, setRaceModal] = useState(false)
     const [approved, setApproved] = useState(false)
 
@@ -78,6 +78,8 @@ const Dashboard = () => {
     const [sellingCanodrome, setSellingCanodrome] = useState(false)
     const [canodromeOnSell, setCanodromeOnSell] = useState(false)
     const [canodromePrice, setCanodromePrice] = useState(false)
+    const [alertStatus,setAlertStatus] = useState(false)
+    const [alertText,setAlertText] = useState("")
 
     useEffect(() => {
         getRaces()
@@ -287,7 +289,9 @@ const Dashboard = () => {
         } catch (error) {
             setLoading(false)
             errorManager(error)
-            alert(error.response.data.error)
+
+            setAlertStatus(true)
+            setAlertText(error.response.data.error)
         }
     }
 
@@ -322,12 +326,9 @@ const Dashboard = () => {
     }
 
     const openCanModal = (can) => {
+        setCanModal(true)
         setSelectedCan(can)
         setId(can.id)
-
-        setCanModal(true)
-
-
     }
     /********************************************** */
     const addCan = async (canodromeId) => {
@@ -487,37 +488,9 @@ const Dashboard = () => {
                                 {filteredCans && filteredCans.map((canItem) => {
                                     return !canItem.onSale.sale &&
                                         <div key={canItem.id} className="col-lg-3 col-md-4 col-sm-6 p-2">
-
-                                            <div onClick={() => setCan(canItem)} className='bgNft'>
-                                                <div className='imgSection'>
-                                                    {canItem.rarity === "1" && <img className='imgNft' src={commonNft} alt="" />}
-                                                    {canItem.rarity === "2" && <img className='imgNft' src={rareNft} alt="" />}
-                                                    {canItem.rarity === "3" && <img className='imgNft' src={epicNft} alt="" />}
-                                                    {canItem.rarity === "4" && <img className='imgNft' src={legendaryNft} alt="" />}
-
-                                                    <div className='stats'>
-                                                        <div className='totalStats'>Total stats</div>
-                                                        <div className='statsNumber'>{canItem.resistencia + canItem.aceleracion + canItem.aerodinamica}</div>
-                                                    </div>
-                                                    <div className='rarity'>
-                                                        {rarity(canItem.rarity)}
-                                                    </div>
-                                                    <div className='nftId'>
-                                                        # {canItem.id}
-                                                    </div>
-                                                </div>
-                                                <div className='W-options'>
-                                                    <div className='options'>
-                                                        <div>
-                                                            Spot A340
-                                                        </div>
-                                                        <div>
-                                                            <img height={"16px"} src={burguer} alt="" />
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <div className="bgNft">
+                                                <Card openCanModal={setCan} sale={false} can={canItem} />
                                             </div>
-                                            {/* <NftCard btnPrice={false} setRenderModal={setRenderModal} setModalText={setModalText} setCan={setCan} item={canItem} /> */}
                                         </div>
                                 })}
                             </div>
@@ -564,7 +537,7 @@ const Dashboard = () => {
                                                 </div>
                                             </div>
                                             <div>
-                                                <progress value={selectedCan.energy } min="0" max="4" className='progressEnergy'> </progress>
+                                                <progress value={selectedCan.energy} min="0" max="4" className='progressEnergy'> </progress>
                                             </div>
                                         </div>
                                         <div className='energy mt-3'>
@@ -670,7 +643,7 @@ const Dashboard = () => {
                     </div>
                 </div>
             </>}
-            <Alert text="Alert Text" />
+            <Alert text={alertText} status={alertStatus} setAlertStatus={setAlertStatus} />
             {loading && <Loader />}
             {claiming && <ClaimModal minimunToClaim={minimunToClaim} claimPercent={claimPercent} oracule={oracule} setClaiming={setClaiming} claim={claim} ammountToClaim={ammountToClaim} _setAmmountToClaim={_setAmmountToClaim} />}
             {remove &&
@@ -835,7 +808,7 @@ const Dashboard = () => {
                                                 <button onClick={() => setMenu(false)} className='btn-bar'> Canodomes </button>
                                             </div>
                                             <div className='container-fluid px-0 pt-0'>
-                                               
+
                                                 {menu ?
                                                     <div className="row gx-2 mt-4">
                                                         <div className="col-12">
@@ -846,38 +819,8 @@ const Dashboard = () => {
                                                         {cans && cans.map((i) => {
                                                             return (
                                                                 <div key={i.id} className='col-md-4 col-6'>
-                                                                    {/* <NftCard setRenderModal={setRenderModal}setModalText={setModalText}setCan={setCan}item={i}btnPrice={i.onSale.price}/> */}
-                                                                    <div onClick={() => openCanModal(i)} className='bgNft'>
-                                                                        <div className='imgSection'>
-                                                                            {i.onSale.sale && <div className='onSale'>On sale</div>}
-                                                                            {i.rarity === "1" && <img className='imgNft' src={commonNft} alt="" />}
-                                                                            {i.rarity === "2" && <img className='imgNft' src={rareNft} alt="" />}
-                                                                            {i.rarity === "3" && <img className='imgNft' src={epicNft} alt="" />}
-                                                                            {i.rarity === "4" && <img className='imgNft' src={legendaryNft} alt="" />}
-
-                                                                            <div className='stats'>
-                                                                                <div className='totalStats'>Total stats</div>
-                                                                                <div className='statsNumber'>{i.resistencia + i.aceleracion + i.aerodinamica}</div>
-                                                                            </div>
-                                                                            <div className='rarity'>
-                                                                                {rarity(i.rarity)}
-                                                                            </div>
-                                                                            <div className='nftId'>
-                                                                                # {i.id}
-                                                                            </div>
-                                                                        </div>
-                                                                        <div className='W-options'>
-                                                                            <div className='options'>
-                                                                                <div>
-                                                                                    Spot A340
-                                                                                </div>
-                                                                                <div>
-                                                                                    <img height={"16px"} src={burguer} alt="" />
-                                                                                </div>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-
+                                                                    
+                                                                    <Card openCanModal={openCanModal} sale={true} can={i} />
                                                                 </div>
                                                             )
                                                         })}

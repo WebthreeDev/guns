@@ -22,6 +22,7 @@ import commonNft from '../../img/nfts/common.png'
 import rareNft from '../../img/nfts/rare.png'
 import epicNft from '../../img/nfts/epic.png'
 import legendaryNft from '../../img/nfts/legendary.png'
+import Card from "../../components/card/card";
 
 const Race = () => {
     const _context = useContext(DataContext)
@@ -43,7 +44,8 @@ const Race = () => {
         try {
             const res = await axios.post(enviroment().baseurl + "race", body)
             const _places = res.data.response.places
-            console.log(_places)
+            //actualizar estado energy
+            await _context.exectConnect()
             setModalRaceActive(false)
             goRace(_places)
         } catch (error) { alert(error.response.data.error) }
@@ -51,10 +53,8 @@ const Race = () => {
 
     const goRace = (_places) => {
         let aux = []
-        console.log("Generando array random")
         for (let i = 0; i <= 5; i++) {
             let randomPosition = Math.round(Math.random() * (5 - 0) + 0)
-            //console.log(randomPosition)
             if (aux.includes(randomPosition)) {
                 i--
             } else {
@@ -67,8 +67,6 @@ const Race = () => {
         _context.setLoading(false)
     }
 
-    const setRenderModal = _ => { }
-    const setModalText = _ => { }
     const setCan = can => {
         setSelectedCan(can)
         setModalRace(false)
@@ -84,6 +82,10 @@ const Race = () => {
     const singleRace = () => setModalRace(true)
     const rankRace = () => alert("Coming Soon!")
     const beatsRace = () => alert("Coming Soon!")
+
+    const openCanModal = (can)=>{
+        setCan(can)
+    }
 
     return (
         <div className="container">
@@ -119,12 +121,7 @@ const Race = () => {
                                                 {canodrome.cans && canodrome.cans.map((can, index) => {
                                                     return (
                                                         <div key={index} className="col-4" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
-                                                            <NftCard
-                                                                btnPrice={false}
-                                                                setRenderModal={setRenderModal}
-                                                                setModalText={setModalText}
-                                                                setCan={setCan}
-                                                                item={can.can} />
+                                                                <Card openCanModal={openCanModal} sale={true} can={can.can} />
                                                         </div>
                                                     )
                                                 })}

@@ -17,6 +17,8 @@ import rareNft from '../../img/nfts/rare.png'
 import epicNft from '../../img/nfts/epic.png'
 import legendaryNft from '../../img/nfts/legendary.png'
 
+import Card from '../../components/card/card'
+
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
 if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
@@ -47,7 +49,7 @@ const Market = () => {
     useEffect(() => {
         if (cans.length == 0) fetch(apiMarket)
         filterCans()
-        console.log("socket del market",apiMarket)
+        console.log("socket del market", apiMarket)
     }, [cans]);
 
     socket.on('data', async cansData => {
@@ -167,87 +169,90 @@ const Market = () => {
         setRangoMin(200)
         setRangoMax(360)
     }
-   
+    const openCanModal = (can) => {
+        setRenderModal(true)
+        setCan(can)
+    }
     return (
         <div>
             {loading && <Loader />}
             {renderModal &&
-             <div className='modalX'>
-                <div className='canModalIn'>
-                    <div className="container-fluid">
-                        <div className="row gx-2">
-                            <div className="col-6">
-                                <div className='options'>
-                                <h4>You are buying:</h4>
-                                </div>
-                                <div className='canPhoto'>
-                                    
-                                    <div className='stats'>
-                                        <div className='totalStats'>Total stats</div>
-                                        <div className='statsNumber'>{can.aceleracion + can.aerodinamica + can.resistencia}</div>
+                <div className='modalX'>
+                    <div className='canModalIn'>
+                        <div className="container-fluid">
+                            <div className="row gx-2">
+                                <div className="col-6">
+                                    <div className='options'>
+                                        <h4>You are buying:</h4>
                                     </div>
-                                    <div className='rarity'>
-                                        <p>{setRarity(Number(can.rarity) - 1)}</p>
+                                    <div className='canPhoto'>
+
+                                        <div className='stats'>
+                                            <div className='totalStats'>Total stats</div>
+                                            <div className='statsNumber'>{can.aceleracion + can.aerodinamica + can.resistencia}</div>
+                                        </div>
+                                        <div className='rarity'>
+                                            <p>{setRarity(Number(can.rarity) - 1)}</p>
+                                        </div>
+                                        <div className='nftId'>
+                                            # {can.id}
+                                        </div>
+                                        {can.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
+                                        {can.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
+                                        {can.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
+                                        {can.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
+
                                     </div>
-                                    <div className='nftId'>
-                                        # {can.id}
-                                    </div>
-                                    {can.rarity == 1 && <img className='imgNft' src={commonNft} alt="" />}
-                                    {can.rarity == 2 && <img className='imgNft' src={rareNft} alt="" />}
-                                    {can.rarity == 3 && <img className='imgNft' src={epicNft} alt="" />}
-                                    {can.rarity == 4 && <img className='imgNft' src={legendaryNft} alt="" />}
 
                                 </div>
-                                
-                            </div>
-                            <div className="col-6">
-                                <div className='canInfo'>
-                                    <div className='w-energy'>
-                                        <div className='energy'>
-                                            <div>
-                                                Energy:
+                                <div className="col-6">
+                                    <div className='canInfo'>
+                                        <div className='w-energy'>
+                                            <div className='energy'>
+                                                <div>
+                                                    Energy:
+                                                </div>
+                                                <div>
+                                                    {can && can.energy}/4
+                                                </div>
                                             </div>
                                             <div>
-                                                {can && can.energy}/4
+                                                <progress value={can.energy - 1} min="0" max="4" className='progressEnergy'> </progress>
                                             </div>
                                         </div>
+                                        <div className='energy mt-3'>
+                                            <div>Aerodinamic:</div>
+                                            <div>{can && can.aerodinamica}</div>
+                                        </div>
+                                        <div className='energy mt-3'>
+                                            <div>Aceleration:</div>
+                                            <div>{can && can.aceleracion}</div>
+                                        </div>
+                                        <div className='energy mt-3'>
+                                            <div>Resistence:</div>
+                                            <div>{can && can.resistencia}</div>
+                                        </div>
+
                                         <div>
-                                            <progress value={can.energy - 1} min="0" max="4" className='progressEnergy'> </progress>
+                                            {can.onSale.sale &&
+                                                <div className='d-flex align-items-center justify-content-between'>
+                                                    <div className='text-warning'> Price: {Number.parseFloat(can.onSale.price)} BNB </div>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
-                                    <div className='energy mt-3'>
-                                        <div>Aerodinamic:</div>
-                                        <div>{can && can.aerodinamica}</div>
-                                    </div>
-                                    <div className='energy mt-3'>
-                                        <div>Aceleration:</div>
-                                        <div>{can && can.aceleracion}</div>
-                                    </div>
-                                    <div className='energy mt-3'>
-                                        <div>Resistence:</div>
-                                        <div>{can && can.resistencia}</div>
+                                </div>
+                                <div className="col-12 p-1">
+                                    <div className='selectedCanHeading'>
+                                        <button className='btn btn-danger btnModal' onClick={_ => { setCan(false); setRenderModal(false) }}> Cancel </button>
+                                        <button className='btn btn-warning btnModal' onClick={_ => confirmBuy()}> Buy </button>
                                     </div>
 
-                                    <div>
-                                        {can.onSale.sale &&
-                                            <div className='d-flex align-items-center justify-content-between'>
-                                                <div className='text-warning'> Price: {Number.parseFloat(can.onSale.price)} BNB </div>
-                                            </div>
-                                        }
-                                    </div>
                                 </div>
-                            </div>
-                            <div className="col-12 p-1">
-                                <div className='selectedCanHeading'>
-                                    <button className='btn btn-danger btnModal' onClick={_ => { setCan(false); setRenderModal(false) }}> Cancel </button> 
-                                    <button className='btn btn-warning btnModal' onClick={_ => confirmBuy()}> Buy </button>
-                                </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
             }
             <div className="container-fluid">
                 <div className="secondNav mt-50px mb-3 item-bar">
@@ -341,14 +346,8 @@ const Market = () => {
                             <div className="container-card">
                                 {canMarket.map((item) => {
                                     return (
-                                        <div key={item.id}>
-                                            <NftCard
-                                                setRenderModal={setRenderModal}
-                                                setModalText={setModalText}
-                                                setCan={setCan}
-                                                item={item}
-                                                btnPrice={true}
-                                            />
+                                        <div key={item.id} className="col-6 col-md-3">
+                                            <Card openCanModal={openCanModal} sale={false} can={item} btnPrice={true} />
                                         </div>
                                     )
                                 })
