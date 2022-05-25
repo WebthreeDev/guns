@@ -33,8 +33,6 @@ import legendaryCanodrome from '../../img/canodromes/legendary.png'
 
 import energyLogo from '../../img/energy.png'
 
-import MiniLoader from '../../components/miniLoader/MiniLoader';
-
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT === "prod") nftContract = nftContractProd()
 if (process.env.REACT_APP_ENVIROMENT === "dev") nftContract = testNftContract()
@@ -837,7 +835,7 @@ const Dashboard = () => {
                                                 <button onClick={() => setMenu(false)} className='btn-bar'> Canodomes </button>
                                             </div>
                                             <div className='container-fluid px-0 pt-0'>
-                                                {menu && <MiniLoader />}
+                                               
                                                 {menu ?
                                                     <div className="row gx-2 mt-4">
                                                         <div className="col-12">
