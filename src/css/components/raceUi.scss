@@ -3,22 +3,22 @@
     background-size: cover;
     height: 100vh;
     width: 100vw;
-    background-color: rgb(255, 0, 0);
+    background-color: rgb(2, 5, 8);
     position: fixed;
     top: 0px;
     left: 0px;
     padding-top: 0px;
     z-index: 1;
 }
-
+$gradas:200vw;
 .bg-gradas{
     height: 60vh;
     width: 100%;
-    background-image: url(../../img/raceui/g1065.png);
+    background-image: url(../../img/raceui/gradas.png);
     background-repeat:repeat-x;
     background-position-x: right;
     background-position-y:top;
-    background-size:200vw 100%;
+    background-size:$gradas 100%;
     animation-name: gradas;
     animation-timing-function: linear;
     animation-duration: 30s;
@@ -27,10 +27,10 @@
 
 @keyframes gradas {
     0%{
-        background-position-x: 0vw;
+        background-position-x: $gradas;
     }
     100%{
-        background-position-x: 200vw;
+        background-position-x: 0vw;
     }
 }
 
@@ -105,7 +105,7 @@
     height: 100%;
 }
 .meta{
-    height: 60%;
+    height: 70%;
     background-color: rgba(255, 255, 255, 0.849);
     width: 12px;
     transform: skew(20deg);
@@ -127,5 +127,34 @@
     100%{
         left: -20vw;
 
+    }
+}
+
+.guia2{
+    width: 15px;
+    height: 20px;
+    border-top: 20px solid rgba(190, 253, 206, 0.863);
+    border-left: 20px solid transparent;
+    border-right: 20px solid transparent;
+    top: 20px;
+    left: 55%;
+    position: absolute;
+    animation: selectorX 1s infinite;
+}
+@keyframes selectorX {
+    0% {
+        border-top: 20px solid rgba(86, 230, 122, 0.938);
+        transform: scale(1);
+        top: 20px;
+    }
+    50%{
+        border-top: 20px solid rgba(190, 253, 206, 0.507);
+        transform: scale(0.9);
+        top: 0px; 
+    }
+    100%{
+        border-top: 20px solid rgba(64, 231, 106, 0.863);
+        top: 20px;
+        transform: scale(1);
     }
 }

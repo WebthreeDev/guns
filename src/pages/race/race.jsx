@@ -17,8 +17,15 @@ import commonCanodrome from '../../img/canodromes/common.png'
 import rareCanodrome from '../../img/canodromes/rare.png'
 import epicCanodrome from '../../img/canodromes/epic.png'
 import legendaryCanodrome from '../../img/canodromes/legendary.png'
+
+import commonNft from '../../img/nfts/common.png'
+import rareNft from '../../img/nfts/rare.png'
+import epicNft from '../../img/nfts/epic.png'
+import legendaryNft from '../../img/nfts/legendary.png'
+
 const Race = () => {
     const _context = useContext(DataContext)
+    const { rarity } = useContext(DataContext)
 
     const [modalRace, setModalRace] = useState(false)
     const [modalRaceActive, setModalRaceActive] = useState(false)
@@ -80,7 +87,7 @@ const Race = () => {
 
     return (
         <div className="container">
-            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} />}
+            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} selectedCan={selectedCan} />}
             {_context.loading && <Loader />}
             {modalRace && <div className="modalX">
                 <div className="modalRace ">
@@ -132,7 +139,77 @@ const Race = () => {
                 </div>
             </div>}
 
-            {modalRaceActive && <div className="cansSelection">
+
+            {modalRaceActive && <>
+                <div className='modalX'>
+                    <div className='canModalIn'>
+                        <div className='px-4 d-flex pt-3 align-items-center justify-content-between'>
+                            <div>Are you readi?</div>
+                            <button className='btn btn-danger' onClick={() => setModalRaceActive(false)}> X </button>
+                        </div>
+                        <div className="container-fluid">
+                            <div className="row gx-2">
+                                <div className="col-6">
+                                    <div className='canPhoto'>
+                                        <div className='stats'>
+                                            <div className='totalStats'>Total stats</div>
+                                            <div className='statsNumber'>{selectedCan.resistencia + selectedCan.aceleracion + selectedCan.aerodinamica}</div>
+                                        </div>
+                                        <div className='rarity'>
+                                            {rarity(selectedCan.rarity)}
+                                        </div>
+                                        <div className='nftId'>
+                                            # {selectedCan.id}
+                                        </div>
+                                        {selectedCan.rarity === "1" && <img className='imgNft' src={commonNft} alt="" />}
+                                        {selectedCan.rarity === "2" && <img className='imgNft' src={rareNft} alt="" />}
+                                        {selectedCan.rarity === "3" && <img className='imgNft' src={epicNft} alt="" />}
+                                        {selectedCan.rarity === "4" && <img className='imgNft' src={legendaryNft} alt="" />}
+
+                                    </div>
+                                    <div className='options'>
+                                        {selectedCan.name}
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className='canInfo'>
+                                        <div className='w-energy'>
+                                            <div className='energy'>
+                                                <div>
+                                                    Energy:
+                                                </div>
+                                                <div>
+                                                    {selectedCan && selectedCan.energy}/4
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <progress value={selectedCan.energy} min="0" max="4" className='progressEnergy'> </progress>
+                                            </div>
+                                        </div>
+                                        <div className='energy mt-3'>
+                                            <div>Aerodinamic:</div>
+                                            <div>{selectedCan && selectedCan.aerodinamica}</div>
+                                        </div>
+                                        <div className='energy mt-3'>
+                                            <div>Aceleration:</div>
+                                            <div>{selectedCan && selectedCan.aceleracion}</div>
+                                        </div>
+                                        <div className='energy mt-3'>
+                                            <div>Resistence:</div>
+                                            <div>{selectedCan && selectedCan.resistencia}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-12 pt-4 pb-3">
+                                    <button onClick={() => { clickRun() }} className="btn btn-success form-control"> Ready! </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </>}
+            {/* /********** */}
+            {/* {modalRaceActive && <div className="modalX">
                 <div className='selectTittle'>
                     <div className='tittle'> Single Race </div>
                     <button onClick={_ => setModalRaceActive(false)}> X </button>
@@ -149,51 +226,12 @@ const Race = () => {
                                     item={selectedCan} />
                             }
                         </div>
-                        <div className="col-9">
-                            <div className="pista">
-                                <div className="carril">
-                                    <div className="canInCarril">
-                                    </div>
-                                    <div className="runCarril">
-                                    </div>
-                                </div>
-                                <div className="carril">
-                                    <div className="canInCarril">
-                                    </div>
-                                    <div className="runCarril">
-                                    </div>
-                                </div>
-                                <div className="carril">
-                                    <div className="canInCarril">
-                                    </div>
-                                    <div className="runCarril">
-                                    </div>
-                                </div>
-                                <div className="carril">
-                                    <div className="canInCarril">
-                                    </div>
-                                    <div className="runCarril">
-                                    </div>
-                                </div>
-                                <div className="carril">
-                                    <div className="canInCarril">
-                                    </div>
-                                    <div className="runCarril">
-                                    </div>
-                                </div>
-                                <div className="carril">
-                                    <div className="canInCarril">
-                                    </div>
-                                    <div className="runCarril">
-                                    </div>
-                                </div>
-
-                            </div>
-                            <button onClick={() => { clickRun() }} className="btn btn-success form-control"> Ready! </button>
-                        </div>
+                        
+                            
                     </div>
                 </div>
-            </div>}
+            </div>} */}
+            {/* /********************************** */}
             <div className="row racebg">
                 <div className="col-md-3 col-12">
                     <div onClick={() => race(0)} className="raceButton">

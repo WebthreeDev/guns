@@ -59,6 +59,16 @@ export const DataProvider = ({ children }) => {
         console.log("Enviroment: ", process.env.REACT_APP_ENVIROMENT)
     }
 
+    const rarity = (r) => {
+        const rarityObj = {
+            1: <div className='rarityText'>Common</div>,
+            2: <div className='rarityText'>Rare</div>,
+            3: <div className='rarityText'>Epic</div>,
+            4: <div className='rarityText'>Legendary</div>
+        }
+        return rarityObj[r]
+    }
+
     const exectConnect = async () => {
 
         let _chainId
@@ -275,7 +285,7 @@ export const DataProvider = ({ children }) => {
         getCanodromeState, poolContract,
         oracule, minimunToClaim, dayReset,
         _cctContractDev, _cctContractProd,
-        tiket, pass, cctAddress
+        tiket, pass, cctAddress,rarity
     }
 
     return (

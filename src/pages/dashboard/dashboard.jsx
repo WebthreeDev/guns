@@ -821,9 +821,9 @@ const Dashboard = () => {
                                                             <div className='w-50 px-2'>
                                                                 <button onClick={() => setRaceModal(true)} className='playBTN w-100'> Races History </button>
                                                             </div>
-                                                            <div className='w-50 px-2'>
+                                                            {/* <div className='w-50 px-2'>
                                                                 <button onClick={() => setRaceModal(true)} className='playBTN w-100'> Blockchain Activity </button>
-                                                            </div>
+                                                            </div> */}
                                                         </div>
                                                     </div>
                                                 </div>
