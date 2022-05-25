@@ -8,6 +8,7 @@ import Loader from '../../components/loader/loader'
 import lastForWallet from "../../context/services/lastForWallet";
 import errorManager from "../../services/errorManager";
 import enviroment from "../../env";
+import '../../css/pages/marketItem.scss'
 const MarketItems = () => {
     const _context = useContext(DataContext)
 
@@ -15,7 +16,7 @@ const MarketItems = () => {
     const [passMarket, setPassMarket] = useState([])
     const [confirmModal, setConfirmModal] = useState(false)
     const [passId, setPassId] = useState(false)
-
+    console.log('ok:', passMarket)
     //filters
     const [order, setOrder] = useState(1)
     const [rangoMin, setRangoMin] = useState(1)
@@ -75,33 +76,32 @@ const MarketItems = () => {
         {_context.loading && <Loader />}
         {confirmModal && 
         <div className='modalX'>
-            <div className='canModalIn'>
+            <div className='canModalIn modal-item'>
                 <div className="container-fluid">
                     <div className="row gx-2">
                         <div className="col-6">
                             <div className='options'>
                                 <h4>You are buying:</h4>
                             </div>
-                            <div className='canPhoto'> 
-                                {/* <div className='rarity'> */}
-                                  <img style={{width: '150px', margin: '0 auto'}} className="img-fluid" src={passTicket} alt="" />
-                                {/* </div> */}
+                            <div className='canInfo'>
+                                    {/* <div className='d-flex'> */}
+                                        <div> Price: {passMarket[0].amount} Tickets </div>
+                                        <div className='text-warning'> Price: {passMarket[0].price} BNB </div>
+                                    {/* </div>  */}
                             </div>
                         </div>
                         <div className="col-6">
-                            <div className='canInfo'>
-                                <div>
-                                    <div className='d-flex align-items-center justify-content-between'>
-                                        {/* <div className='text-warning'> Price: {canodrome && canodrome.onSale.price} BNB </div> */}
-                                    </div> 
+                            <div className='canPhoto'> 
+                                    {/* <div className='rarity'> */}
+                                    <img style={{width: '150px', margin: '0 auto'}} className="img-fluid" src={passTicket} alt="" />
+                                    {/* </div> */}
                                 </div>
                             </div>
-                        </div>
-                        <div className="col-12 p-1">
-                            <div className='selectedCanHeading'> 
-                                <button className='btn btn-danger btnModal' onClick={() => setConfirmModal(false)}> Cancel </button>
-                                <button className='btn btn-warning btnModal' onClick={buyTicket}> Buy </button>
-                            </div>
+                        <div className="col-12 p-1 d-flex">
+                            {/* <div className='selectedCanHeading'>  */}
+                                <button className='btn btn-danger form-control btnModal' onClick={() => setConfirmModal(false)}> Cancel </button>
+                                <button className='btn btn-warning form-control btnModal' onClick={buyTicket}> Buy </button>
+                            {/* </div> */}
 
                         </div>
                     </div>

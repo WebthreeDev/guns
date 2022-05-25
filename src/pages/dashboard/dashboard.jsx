@@ -839,7 +839,7 @@ const Dashboard = () => {
                                                 <button onClick={() => setMenu(false)} className='btn-bar'> Canodomes </button>
                                             </div>
                                             <div className='container-fluid px-0 pt-0'>
-                                                {menu && <MiniLoader />}
+                                                {/* {menu && <MiniLoader />} */}
                                                 {menu ?
                                                     <div className="row gx-2">
                                                         <div className="col-12">

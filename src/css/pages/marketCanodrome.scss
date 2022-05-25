@@ -1,8 +1,33 @@
-.nftId{
-    position: relative;
+.canodrome .nftId{
+    position: absolute;
 }
 
-.canInfo{
+.canodrome .canInfo{
+    display: flex !important;
+    background-color: transparent;
+}
+
+.canodrome .nftId{
+    position: relative;
+    align-self: flex-end;
+}
+
+.canodrome .imgNft{
+    max-width: 100px;
+}
+
+.modal-canodrome{
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
+}
+
+.canodrome .price{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.canodrome .text-warning{
+    margin-top: -10px;
+    margin-left: 10px;
 }
