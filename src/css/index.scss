@@ -169,6 +169,11 @@ h1,h2,h3,h4,h5,h6,button,div{
     font-family: 'Courier New', Courier, monospace;
     color: rgba(255, 255, 255, 0.418);
 }
+.alertText{
+    font-size: 16px;
+    font-family: 'Courier New', Courier, monospace;
+    color: rgba(255, 255, 255, 0.418);
+}
 
 
 .textClaim{
@@ -462,4 +467,44 @@ input{
     box-shadow: -6px -6px 12px hsl(0deg 0% 100% / 5%), 6px 6px 12px rgb(0 0 0 / 25%);
     padding: 15px;
     border-radius: 15px;
+}
+.cardEnergy{
+    height:20px;
+    width:40px;
+    border:1px solid rgba(255, 255, 255, 0.144);
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+    padding:1px;
+}
+.pointEnergy{
+    background-color:green;
+    height:15.5px;
+    border: 1px solid transparent;
+    width:8px;
+    top:1px;
+    left: 1px;
+}
+.pointEnergyFree{
+    background-color:rgba(126, 126, 126, 0.178);
+    height:15.5px;
+    border: 1px solid transparent;
+    width:8px;
+    top:1px;
+    left: 1px;
+}
+.btnPrice{
+    position: absolute;
+    top:10px;
+    right: 10px;
+    background-color:rgba(17, 17, 17, 0.534);
+    border-radius: 3px;
+    padding:1px 2px;
+    color: rgb(175, 140, 25);
+}
+.alertWrap{
+    height:100%;
+    display: flex;
+    align-items:center;
+    padding:0px 100px;
 }
