@@ -4,6 +4,13 @@ $blue:rgb(57, 241, 241);
 $light:rgb(31,41,51);
 $radius:20px;
 $lineHeight:3px;
+
+.item-bar .active{
+    // border: none;
+    border-bottom: 4px solid #39f1f1 !important;
+    background-color: transparent;
+}
+
 .sidebar{
     height: 92vh;
     padding-bottom: 20px;
@@ -43,6 +50,9 @@ $lineHeight:3px;
         border-bottom: 4px solid transparent;
     }
 }
+
+
+
 .text-sidebar{
     font-size: 10px;
     margin-top: 5px;
