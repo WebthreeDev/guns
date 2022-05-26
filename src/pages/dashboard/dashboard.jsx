@@ -804,10 +804,12 @@ const Dashboard = () => {
                                         </div>
                                         <div className="col-md-6 col-12">
                                             <div className='item-bar'>
-                                                <button onClick={() => setMenu(true)} className='btn-bar'> Cans </button>
-                                                <button onClick={() => setMenu(false)} className='btn-bar'> Canodomes </button>
+                                                <button onClick={() => setMenu(true)} className={menu ? 'btn-bar active' : 'btn-bar'}> Cans </button>
+                                                <button onClick={() => setMenu(false)} className={!menu ? 'btn-bar active' : 'btn-bar'}> Canodomes </button>
                                             </div>
                                             <div className='container-fluid px-0 pt-0'>
+
+                                                {/* {menu && <MiniLoader />} */}
 
                                                 {menu ?
                                                     <div className="row gx-2 mt-4">

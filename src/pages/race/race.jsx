@@ -141,7 +141,7 @@ const Race = () => {
                 <div className='modalX'>
                     <div className='canModalIn'>
                         <div className='px-4 d-flex pt-3 align-items-center justify-content-between'>
-                            <div>Are you readi?</div>
+                            <div>Are you ready?</div>
                             <button className='btn btn-danger' onClick={() => setModalRaceActive(false)}> X </button>
                         </div>
                         <div className="container-fluid">

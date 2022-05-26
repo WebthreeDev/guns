@@ -5,12 +5,14 @@ import icon from '../../img/assets/icons/icon.png'
 import marketIcon from '../../img/assets/icons/market.png'
 import playIcon from '../../img/assets/icons/play.png'
 import shopIcon from '../../img/assets/icons/shop.png'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+import './sidebar.css'
 const Sidebar = () => {
+
     return (<div className="sidebar">
         <div className='sidebarWrap'>
             <div className='w-100'>
-                <Link to='/dashboard' className='btnSidebar'>
+                <NavLink to='/dashboard' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={icon} alt="" />
@@ -19,8 +21,8 @@ const Sidebar = () => {
                             Dashboard
                         </div>
                     </div>
-                </Link>
-                <Link to='/market' className='btnSidebar'>
+                </NavLink>
+                <NavLink to='/market' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={marketIcon} alt="" />
@@ -29,8 +31,8 @@ const Sidebar = () => {
                             Market
                         </div>
                     </div>
-                </Link>
-                <Link to='/race' className='btnSidebar'>
+                </NavLink>
+                <NavLink to='/race' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={playIcon} alt="" />
@@ -39,8 +41,8 @@ const Sidebar = () => {
                             Games
                         </div>
                     </div>
-                </Link>
-                <Link to='/shop' className='btnSidebar'>
+                </NavLink>
+                <NavLink to='/shop' className='btnSidebar'>
                     <div>
                         <div>
                             <img className='icon' src={shopIcon} alt="" />
@@ -49,7 +51,7 @@ const Sidebar = () => {
                             Shop
                         </div>
                     </div>
-                </Link>
+                </NavLink>
             </div>
             <div>
                 <div>
