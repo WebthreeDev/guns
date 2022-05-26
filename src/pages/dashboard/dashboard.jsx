@@ -155,7 +155,7 @@ const Dashboard = () => {
                 setLoading(false)
             })
         } else {
-            alert("No puede vender un can agregado a un canodromo")
+            alert("A dog added to a canodrome cannot be sold")
             setLoading(false)
         }
         console.log(res.data.response)

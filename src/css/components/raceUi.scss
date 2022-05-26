@@ -10,7 +10,7 @@
     padding-top: 0px;
     z-index: 1;
 }
-$gradas:200vw;
+$gradas:100vw;
 .bg-gradas{
     height: 60vh;
     width: 100%;
@@ -106,15 +106,15 @@ $gradas:200vw;
 }
 .meta{
     height: 70%;
-    background-color: rgba(255, 255, 255, 0.849);
+    background-color: rgba(115, 246, 255, 0.664);
     width: 12px;
     transform: skew(20deg);
     left: 120vw;
-    top: 44px;
+    top: 47px;
     position: absolute;
     animation-name: meta;
     animation-duration: 4.2s;
-    animation-delay: 57s;
+    animation-delay: 7s;
     animation-timing-function: linear;
     z-index: 0;
 }
