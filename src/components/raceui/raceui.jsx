@@ -2,8 +2,10 @@ import dogCommon from '../../img/nftRace/dogCommon.gif'
 import dogRare from '../../img/nftRace/dogRare.gif'
 import dogEpic from '../../img/nftRace/dogEpic.gif'
 import dogLegendary from '../../img/nftRace/dogLegendary.gif'
+
 import { useState, useEffect, useRef } from "react";
-const RaceUi = ({ setRaceUi, places, position }) => {
+
+const RaceUi = ({ setRaceUi, places, position,selectedCan }) => {
 
     const [position1, setPosition1] = useState(0)
     const [position2, setPosition2] = useState(0)
@@ -104,18 +106,37 @@ const RaceUi = ({ setRaceUi, places, position }) => {
 
     }
 
+    const canSelection = (can)=>{
+        if(can != false){
+            if(can.rarity == 1) {
+               return dogCommon
+            }
+            if(can.rarity == 2) { 
+                return dogRare
+            }
+            if(can.rarity == 3) {
+                return dogEpic
+            }
+            if(can.rarity == 4) {
+                return dogLegendary
+            } 
+        }else{
+            return dogCommon
+        }
+    }
+
     return (
         <div className="raceUi">
             <div className="bg-gradas">
             </div>
             <div className="bg-pista">
                 <div className="rundog">
-                    {position[0] == 0 ? <div ref={item1} className='dog1'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item1} className='dog1'> <img className='dogImg' src={dogCommon} alt="" /> </div>}
-                    {position[1] == 0 ? <div ref={item2} className='dog2'><div className='guia2'> </div> <img className='dogImg' src={dogEpic} alt="" /> </div> : <div ref={item2} className='dog2'><img className='dogImg' src={dogEpic} alt="" /></div>}
-                    {position[2] == 0 ? <div ref={item3} className='dog3'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item3} className='dog3'><img className='dogImg' src={dogLegendary} alt="" /></div>}
-                    {position[3] == 0 ? <div ref={item4} className='dog4'><div className='guia2'> </div> <img className='dogImg' src={dogLegendary} alt="" /> </div> : <div ref={item4} className='dog4'><img className='dogImg' src={dogCommon} alt="" /></div>}
-                    {position[4] == 0 ? <div ref={item5} className='dog5'><div className='guia2'> </div> <img className='dogImg' src={dogRare} alt="" /> </div> : <div ref={item5} className='dog5'><img className='dogImg' src={dogLegendary} alt="" /></div>}
-                    {position[5] == 0 ? <div ref={item6} className='dog6'><div className='guia2'> </div> <img className='dogImg' src={dogCommon} alt="" /> </div> : <div ref={item6} className='dog6'><img className='dogImg' src={dogRare} alt="" /></div>}
+                    {position[0] === 0 ? <div ref={item1} className='dog1'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item1} className='dog1'> <img className='dogImg' src={dogCommon} alt="" /> </div>}
+                    {position[1] === 0 ? <div ref={item2} className='dog2'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item2} className='dog2'><img className='dogImg' src={dogCommon} alt="" /></div>}
+                    {position[2] === 0 ? <div ref={item3} className='dog3'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item3} className='dog3'><img className='dogImg' src={dogCommon} alt="" /></div>}
+                    {position[3] === 0 ? <div ref={item4} className='dog4'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item4} className='dog4'><img className='dogImg' src={dogCommon} alt="" /></div>}
+                    {position[4] === 0 ? <div ref={item5} className='dog5'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item5} className='dog5'><img className='dogImg' src={dogCommon} alt="" /></div>}
+                    {position[5] === 0 ? <div ref={item6} className='dog6'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item6} className='dog6'><img className='dogImg' src={dogCommon} alt="" /></div>}
                 </div>
                 <div className='meta'> </div>
             </div>

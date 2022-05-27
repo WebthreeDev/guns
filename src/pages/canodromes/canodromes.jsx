@@ -30,8 +30,8 @@ const Canodromes = () => {
 
         _context.cans.map(item => {
             let suma = 0
-            arrayCanInCanodromes.map(_item => { if (item.id == _item) suma++ })
-            if (suma == 0 && item.onSale.sale == false) _filteredCans.push(item)
+            arrayCanInCanodromes.map(_item => { if (item.id === _item) suma++ })
+            if (suma === 0 && item.onSale.sale === false) _filteredCans.push(item)
         })
 
         setFilteredCans(_filteredCans)
@@ -157,7 +157,7 @@ const Canodromes = () => {
                 </div>
                 <div className='container-fluid px-5 containerSelectCans'>
                     <div className="row gx-4 px-5">
-                        {filteredCans.length == 0 && <div className='p-5'>
+                        {filteredCans.length === 0 && <div className='p-5'>
                             <h1>
                                 No cans in your dashboard
                             </h1>
@@ -173,7 +173,7 @@ const Canodromes = () => {
                 </div>
             </div>}
         {_context.canodromes && <>
-            {_context.canodromes.length == 0 && <div className='my-5'>
+            {_context.canodromes.length === 0 && <div className='my-5'>
                 <h1> Todavia no posees un canodromo</h1>
                 <Link className='btn btn-primary' to='/shop'> Go to Shop </Link>
             </div>}

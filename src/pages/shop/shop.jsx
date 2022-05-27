@@ -204,7 +204,7 @@ const Shop = () => {
             {minted && <MintModal getCans={getCans} wallet={wallet} canMinted={canMinted} setMinted={setMinted} />}
             {loading && <Loader />}
             <div className="container">
-                <div>
+                <div className="mb-4">
                     <h1> Need Ticket for the minigame? </h1>
                     <p> In this section you will buy the ticket to play in the ticket search minigame </p>
                     <div className="ticket-buy">

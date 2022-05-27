@@ -17,8 +17,8 @@ const Admin = () => {
     }, [])
 
     let nftContract
-    if (process.env.REACT_APP_ENVIROMENT == "prod") nftContract = nftContractProd()
-    if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
+    if (process.env.REACT_APP_ENVIROMENT === "prod") nftContract = nftContractProd()
+    if (process.env.REACT_APP_ENVIROMENT === "dev") nftContract = testNftContract()
     
     const contractAdminSection = async () => {
 

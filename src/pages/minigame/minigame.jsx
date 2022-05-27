@@ -77,6 +77,7 @@ const Minigame = () => {
                 if (validate.key === "c") setTiket3(true)
                 if (validate.key === "d") setTiket4(true)
                 renderBoxes(finding)
+                setLoading(false);
             } else {
                 setLoading(false);
                 handlertAlert(true, "😬 Bab Luck" ,"Continue");
