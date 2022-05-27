@@ -67,7 +67,7 @@ const MintModal = ({ canMinted, setMinted }) => {
                                         </div>
                                     </div>
                                     <div>
-                                        <progress value={canMinted.energy - 1} min="0" max="4" className='progressEnergy'> </progress>
+                                        <progress value={canMinted.energy} min="0" max="4" className='progressEnergy'> </progress>
                                     </div>
                                 </div>
                                 <div className='energy mt-3'>
