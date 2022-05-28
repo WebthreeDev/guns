@@ -39,12 +39,18 @@ export const DataProvider = ({ children }) => {
     const [canodromes, setCanodromes] = useState(false)
     const [claimPercent, setClaimPersent] = useState(false)
     const [minimunToClaim, setMinimunToClaim] = useState(false)
-    const gas = web3.utils.toWei("0.0002", "gwei")
-    const gasPrice = web3.eth.getGasPrice()
+    const gas = web3.utils.toWei("0.0001", "gwei")
     const ownerWallet = _poolContract.address
     const [tiket, setTiket] = useState(false)
     const [pass, setPass] = useState(false)
     const [cctAddress, setCctAddress] = useState(false)
+    
+    const gasPrice = web3.eth.getGasPrice()
+
+    const getGasPrice = async ()=>{
+        let gas = await web3.eth.getGasPrice()
+        return gas
+    }
 
     useEffect(() => {
         exectConnect()
@@ -285,7 +291,8 @@ export const DataProvider = ({ children }) => {
         getCanodromeState, poolContract,
         oracule, minimunToClaim, dayReset,
         _cctContractDev, _cctContractProd,
-        tiket, pass, cctAddress,rarity
+        tiket, pass, cctAddress,rarity, 
+        getGasPrice
     }
 
     return (

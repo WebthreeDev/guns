@@ -43,9 +43,9 @@ if (process.env.REACT_APP_ENVIROMENT === "prod") cctContract = cctContractProd()
 if (process.env.REACT_APP_ENVIROMENT === "dev") cctContract = cctContractDev()
 
 const Dashboard = () => {
-    const { dayReset, cctAddress, tiket, pass, minimunToClaim, oracule, exectConnect, ownerWallet, gas, gasPrice,
+    const { dayReset, cctAddress, tiket, pass, minimunToClaim, oracule, exectConnect, ownerWallet, gas,
         getBnb, getCCT, claimPercent, poolContract, cct, balance, getRaces, race,
-        cans, bnb, loading, setLoading, getCans, wallet } = useContext(DataContext)
+        cans, bnb,getGasPrice, loading, setLoading, getCans, wallet } = useContext(DataContext)
     const _context = useContext(DataContext)
 
     const [price, setPrice] = useState(0)
@@ -402,11 +402,13 @@ const Dashboard = () => {
     }
 
     const sendSell = async () => {
+        
         _context.setLoading(true)
         setSellingCanodrome(false)
         const _value = Number.parseFloat(canodromePrice / 100).toFixed(6)
         const value = web3.utils.toWei(_value.toString(), "ether")
-        nftContract.methods.onSale().send({ from: _context.wallet, value, gas: _context.gas, gasPrice: _context.gasPrice }).then(async (res) => {
+        let gasPrice = await getGasPrice()
+        nftContract.methods.onSale().send({ from: _context.wallet, value, gas, gasPrice}).then(async (res) => {
             await sendCanodromeOnSellToDB()
 
             _context.setLoading(false)
@@ -875,7 +877,7 @@ const Dashboard = () => {
                                                                                     {rarity(canodromeItem.type)}
                                                                                 </div>
                                                                                 {canodromeItem.onSale.sale && <>
-                                                                                    <div className='justify-content-between align-items-center d-flex p-2 w-100 text-center bg-warning text-dark '>
+                                                                                    <div className='justify-content-between saleCanodrome align-items-center d-flex p-2'>
                                                                                         <div className='text-dark'>
                                                                                             On sale
                                                                                         </div>
