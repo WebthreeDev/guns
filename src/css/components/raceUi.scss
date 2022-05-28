@@ -3,14 +3,18 @@
     background-size: cover;
     height: 100vh;
     width: 100vw;
-    background-color: rgb(2, 5, 8);
+    background:linear-gradient(rgba(0, 0, 0, 0.212),rgba(13, 13, 22, 0.219)), url(../../img/raceui/bgGradas.png);
     position: fixed;
     top: 0px;
     left: 0px;
     padding-top: 0px;
     z-index: 1;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: bottom;
+    
 }
-$gradas:100vw;
+$gradas:130vw;
 .bg-gradas{
     height: 60vh;
     width: 100%;
@@ -114,7 +118,7 @@ $gradas:100vw;
     position: absolute;
     animation-name: meta;
     animation-duration: 4.2s;
-    animation-delay: 7s;
+    animation-delay: 57s;
     animation-timing-function: linear;
     z-index: 0;
 }

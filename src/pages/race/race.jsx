@@ -51,7 +51,7 @@ const Race = () => {
         } catch (error) { alert(error.response.data.error) }
     }
 
-    const goRace = (_places) => {
+    const goRace = (_places) => { 
         let aux = []
         for (let i = 0; i <= 5; i++) {
             let randomPosition = Math.round(Math.random() * (5 - 0) + 0)
