@@ -35,6 +35,7 @@ const Race = () => {
     const [raceUi, setRaceUi] = useState(false)
     const [places, setPlaces] = useState([])
     const [position, setPosition] = useState([])
+    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
 
     const clickRun = async () => {
         const canId = selectedCan.id
@@ -48,7 +49,7 @@ const Race = () => {
             await _context.exectConnect()
             setModalRaceActive(false)
             goRace(_places)
-        } catch (error) { alert(error.response.data.error) }
+        } catch (error) { handlertAlert(true, JSON.stringify(error.response.data.error), "Continue") }
     }
 
     const goRace = (_places) => {
@@ -80,17 +81,37 @@ const Race = () => {
     }
 
     const singleRace = () => setModalRace(true)
-    const rankRace = () => alert("Coming Soon!")
-    const beatsRace = () => alert("Coming Soon!")
+    const rankRace = () => handlertAlert(true, "Coming Soon!", "Continue")
+    const beatsRace = () => handlertAlert(true, "Coming Soon!", "Continue")
 
     const openCanModal = (can)=>{
         setCan(can)
     }
 
+    const handlertAlert = (status = false, title = "", btn = "") => {
+        setAlert({
+            status,
+            title,
+            btn
+        })
+    }
+
     return (
         <div className="container">
-            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} selectedCan={selectedCan} />}
             {_context.loading && <Loader />}
+            {alert.status && <div className="modalX index-10">
+                <div className="">
+                    <div className="w-100 d-flex align-items-center justify-content-center h-100">
+                        <div className="text-center w-100">
+                            <h5 className="">
+                                {alert.title}
+                            </h5>
+                            <button className="btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
+                        </div>
+                    </div>
+                </div>
+            </div>}
+            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} selectedCan={selectedCan} />}
             {modalRace && <div className="modalX">
                 <div className="modalRace ">
                     <div className='selectTittle'>
@@ -114,7 +135,7 @@ const Race = () => {
                                             <div className="row">
                                                 {canodrome.cans.length == 0 && <div className="h-100 text-center pt-3">
                                                     <h1 className="text-center"> Add cans in canodrome section</h1>
-                                                    <Link className="btn btn-primary" to="/canodromes">
+                                                    <Link className="btn btn-primary" to="/dashboard">
                                                         Go to Canodromes
                                                     </Link>
                                                 </div>}

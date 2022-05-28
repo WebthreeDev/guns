@@ -52,10 +52,10 @@ const Minigame = () => {
             setTiket2(false)
             setTiket3(false)
             setTiket4(false)
-            alert("Pase conseguido")
+            alert("Got pass")
             exectConnect(_wallet)
         } else {
-            alert("Error al obtener el pase")
+            alert("Failed to get pass")
         }
     }
 

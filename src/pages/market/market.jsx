@@ -43,13 +43,14 @@ const Market = () => {
     const [rangoMax, setRangoMax] = useState(360)
     const [canMarket, setCanMarket] = useState([])
     const [cans, setCans] = useState([]);
+    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
 
     const setModalText = () => { }
 
     useEffect(() => {
         if (cans.length == 0) fetch(apiMarket)
-        filterCans()
         console.log("socket del market", apiMarket)
+        filterCans()
     }, [cans]);
 
     socket.on('data', async cansData => {
@@ -109,13 +110,16 @@ const Market = () => {
                             hash: blockchainRes.transactionHash
                         })
                         setLoading(false)
+                        // await _context.getCans(_context.wallet)
+                        await filterCans()
+                        // console.log(envio.data.response)
+                        console.log("aqui actualizar el estado...")
+                        setCans([])
                     } catch (error) {
                         console.log("error: " + error)
                         console.log(error)
                     }
-                    filterCans()
-                    _context.getCans(_context.wallet)
-                    //console.log(envio.data.response)
+                   
                 }).catch(async error => {
                     console.log("Rechazo la transaccion")
                     console.log(error)
@@ -127,7 +131,8 @@ const Market = () => {
                 console.log(error)
             }
         } else {
-            alert("Usted tiene una transaccion pendiente por favor espere 3 minutos")
+            setLoading(false)
+            handlertAlert(true, "You have a pending transaction please wait 3 minutes", "Continue")
         }
     }
 
@@ -173,9 +178,30 @@ const Market = () => {
         setRenderModal(true)
         setCan(can)
     }
+
+    
+    const handlertAlert = (status = false, title = "", btn = "") => {
+        setAlert({
+            status,
+            title,
+            btn
+        })
+    }
     return (
         <div>
             {loading && <Loader />}
+            {alert.status && <div className="modalX">
+                <div className="">
+                    <div className="w-100 d-flex align-items-center justify-content-center h-100">
+                        <div className="text-center w-100">
+                            <h5 className="">
+                                {alert.title}
+                            </h5>
+                            <button className="btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
+                        </div>
+                    </div>
+                </div>
+            </div>}
             {renderModal &&
                 <div className='modalX'>
                     <div className='canModalIn'>
@@ -217,7 +243,7 @@ const Market = () => {
                                                 </div>
                                             </div>
                                             <div>
-                                                <progress value={can.energy - 1} min="0" max="4" className='progressEnergy'> </progress>
+                                                <progress value={can.energy} min="0" max="4" className='progressEnergy'> </progress>
                                             </div>
                                         </div>
                                         <div className='energy mt-3'>
