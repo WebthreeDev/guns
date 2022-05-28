@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import canodrome from "../../img/canodromes/common.png"
 import canodromeLegendary from "../../img/canodromes/legendary.png"
 import sobre1 from "../../img/nfts/common.png"
@@ -46,6 +46,7 @@ const Shop = () => {
     const [ticketModal, setTicketModal] = useState(false)
     const [ticketAmmount, setTicketAmmount] = useState(false)
     const [ticketPrice, setTicketPrice] = useState(false)
+    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
 
     useEffect(_ => {
         erc721()
@@ -135,309 +136,334 @@ const Shop = () => {
             }
 
         } catch (error) {
-            alert("Error")
-            console.log(error)
+            setLoading(false);
+            let message = `{"code: ${error.code} message: ${error.message}"}`;
+            handlertAlert(true, message, "Continue")
+            // alert("Error")
+            console.log(error);      
         }
         //save the hash
         //send ammout tiket for this user
     }
 
+    const handlertAlert = (status = false, title = "", btn = "") => {
+        setAlert({
+            status,
+            title,
+            btn
+        })
+    }
+
     return (
-        <div className="bg1 unikeRouter">
-            {ticketModal && <div className='modalX'>
-            <div className="modalInClaim">
-                <div>
-                    <div className=" mb-3 d-flex justify-content-between align-items-center">
-                        <div className="textClaim">Buy Ticket</div>
-                        <div>
-                            <div className="w-50 p-2 ">
-                                <button className="btn btn-danger btn-sm" onClick={() => setTicketModal(false)}> X </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="textClaim">1 ticket = {ticketPrice && ticketPrice} CCT </div>
-                    <div className='textClaim2'>
-                        Amount to buy
-                    </div>
-                    <div className='container-fluid p-0 mt-3'>
-                        <div className="row gx-0">
-                            <div className='col-2'>
-                                <img className='logoClaim' src={logoCCT} alt=""  />
-                            </div>
-                            <div className='col-10'>
-                                <input className="inputClaim" onChange={(e) => { setTicketAmmount(e.target.value) }} type="text" />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="mt-2 mb-2 text-center">
-                        ↑↓
-                    </div>
-                    <div className='container-fluid p-0'>
-                        <div className="row">
-                            <div className='col-2'>
-                                <img className='logoClaim' src={ticket} alt="" />
-                            </div>
-                            <div className='col-10'>
-                                <div className="inputClaim">
-                                    {ticketAmmount && <input className="inputClaim" value={ticketAmmount} type="text" />}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="w-100 d-flex mt-5 px-4">
-                        <div className="w-100">
-                            <button className="btn btn-primary w-100" onClick={buyTicket}> Confirm </button>
+        <Fragment>
+            {alert.status && <div className="modalX">
+                <div className="">
+                    <div className="w-100 d-flex align-items-center justify-content-center h-100">
+                        <div className="text-center w-100">
+                            <h5 className="">
+                                {alert.title}
+                            </h5>
+                            <button className="btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
                         </div>
                     </div>
                 </div>
-            </div>
             </div>}
-            {canodromeMinted && <>
-                <div className='modalX'>
-                    <div className='modalIn'>
-                        <h5>Congratulations!</h5>
-                        <button onClick={() => setCanodromeMinted(false)} className="btn btn-primary"> Continue </button>
-                    </div>
-                </div>
-            </>
-            }
-            {minted && <MintModal getCans={getCans} wallet={wallet} canMinted={canMinted} setMinted={setMinted} />}
-            {loading && <Loader />}
-            <div className="container">
-                <div className="mb-4">
-                    <h1> Need Ticket for the minigame? </h1>
-                    <p> In this section you will buy the ticket to play in the ticket search minigame </p>
-                    <div className="ticket-buy">
-                        <h3 className="text-warning">Price: {ticketPrice && ticketPrice} CCT</h3>
-                        {ticketPrice ? <button onClick={() => setTicketModal(true)} className="btn btn-danger"> Buy </button> :
-                            <button className="btn btn-secondary" disabled> Loading </button>
-                        }
-                    </div>   
-                </div>
-                <div className="w-100">
-                    <div className="row card-container">
-                        <div className="card mb-3 col-3">
-                            <div className="card-header">
-                                <div>
-                                    <img height="24px" src={bnbLogo} alt="" />
-                                    <b className="mx-1">
-                                        {commonPackagePrice} BNB
-                                    </b>
-                                </div>
-                                <div className="card-mint">
-                                    {commonPackagePrice == false ? <button>Loading</button> : <>
-                                        {wallet ?
-                                            <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-mint btn btn btn-warning"> MINT </button>
-                                            :
-                                            <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
-                                    </>}
-                                </div>
-                            </div>
-                            <div className="card-body">
-                                <Package className="nft-img" img={sobre1} />
-                                <div className="card-text-footer">
-                                    <div>
-                                        <div className="card-text-item">
-                                            <p>Common</p>
-                                            <h6> 65%</h6>
-                                        </div>
-                                        <div className="card-text-item">
-                                            <p>Epic</p>
-                                            <h6>4.9%</h6>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="card-text-item">
-                                            <p>Rare</p>
-                                            <h6>30%</h6>
-                                        </div>
-                                        <div className="card-text-item">
-                                            <p>Legendary</p>
-                                            <h6>0.1%</h6>
-                                        </div>
-                                    </div>                    
+            <div className="bg1 unikeRouter">
+                {ticketModal && <div className='modalX'>
+                <div className="modalInClaim">
+                    <div>
+                        <div className=" mb-3 d-flex justify-content-between align-items-center">
+                            <div className="textClaim">Buy Ticket</div>
+                            <div>
+                                <div className="w-50 p-2 ">
+                                    <button className="btn btn-danger btn-sm" onClick={() => setTicketModal(false)}> X </button>
                                 </div>
                             </div>
                         </div>
-                        <div className="card mb-3 col-3">
-                            <div className="card-header">
-                                <div>
-                                    <img height="24px" src={bnbLogo} alt="" />
-                                    <b className="mx-1">
-                                        {epicPackagePrice} BNB
-                                    </b>
+                        <div className="textClaim">1 ticket = {ticketPrice && ticketPrice} CCT </div>
+                        <div className='textClaim2'>
+                            Amount to buy
+                        </div>
+                        <div className='container-fluid p-0 mt-3'>
+                            <div className="row gx-0">
+                                <div className='col-2'>
+                                    <img className='logoClaim' src={logoCCT} alt=""  />
                                 </div>
-                                <div className="card-mint">
-                                    {epicPackagePrice == false ? <button>Loading</button> : <>
-                                        {wallet ?
-                                            <button onClick={() => buyPackage("2", wallet, epicPackagePrice)} className="btn-mint btn btn btn-warning"> MINT </button>
-                                            :
-                                            <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
-                                    </>}
-                                </div>
-                            </div>
-                            <div className="card-body">
-                                <Package className="nft-img" img={sobre2} />
-                                <div className="card-text-footer">
-                                    <div>
-                                        <div className="card-text-item">
-                                            <p>Common</p>
-                                            <h6>40%</h6>
-                                        </div>
-                                        <div className="card-text-item">
-                                            <p>Epic</p>
-                                            <h6>19%</h6>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="card-text-item">
-                                            <p>Rare</p>
-                                            <h6>40%</h6>
-                                        </div>
-                                        <div className="card-text-item">
-                                            <p>Legendary</p>
-                                            <h6>1%</h6>
-                                        </div>
-                                    </div> 
+                                <div className='col-10'>
+                                    <input className="inputClaim" onChange={(e) => { setTicketAmmount(e.target.value) }} type="text" />
                                 </div>
                             </div>
                         </div>
-                        <div className="card mb-3 col-3">
-                            <div className="card-header">
-                                <div>
-                                    <img height="24px" src={bnbLogo} alt="" />
-                                    <b className="mx-1">
-                                    {legendaryPackagePrice} BNB
-                                    </b>
+                        <div className="mt-2 mb-2 text-center">
+                            ↑↓
+                        </div>
+                        <div className='container-fluid p-0'>
+                            <div className="row">
+                                <div className='col-2'>
+                                    <img className='logoClaim' src={ticket} alt="" />
                                 </div>
-                                <div className="card-mint">
-                                    {legendaryPackagePrice == false ? <button className="btn-mint">Loading</button> : <>
-                                        {wallet ?
-                                            <button onClick={() => buyPackage("3", wallet, legendaryPackagePrice)}  className="btn-mint btn btn btn-warning"> MINT </button>
-                                            :
-                                            <button onClick={exectConnect}  className="btn-mint btn btn btn-warning"> Connect </button>}
-                                    </>}
+                                <div className='col-10'>
+                                    <div className="inputClaim">
+                                        {ticketAmmount && <input className="inputClaim" value={ticketAmmount} type="text" />}
+                                    </div>
                                 </div>
                             </div>
-                            <div className="card-body">
-                                <Package className="nft-img" img={sobre3} />
-                                <div className="card-text-footer">
-                                    <div>
-                                        <div className="card-text-item">
-                                            <p>Common</p>
-                                            <h6> 0%</h6>
-                                        </div>
-                                        <div className="card-text-item">
-                                            <p>Epic</p>
-                                            <h6>60%</h6>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div className="card-text-item">
-                                            <p>Rare</p>
-                                            <h6>35%</h6>
-                                        </div>
-                                        <div className="card-text-item">
-                                            <p>Legendary</p>
-                                            <h6>5%</h6>
-                                        </div>
-                                    </div>                    
-                                </div>
+                        </div>
+                        <div className="w-100 d-flex mt-5 px-4">
+                            <div className="w-100">
+                                <button className="btn btn-primary w-100" onClick={buyTicket}> Confirm </button>
                             </div>
                         </div>
                     </div>
-                        
-                    <div className="row card-container">
-                        <div className="card mb-3 col-3">
-                            <div className="card-header">
-                                <div>
-                                    <img height="24px" src={bnbLogo} alt="" />
-                                    <b className="mx-1">
-                                    {canodromeCommonPrice} BNB
-                                    </b>
+                </div>
+                </div>}
+                {canodromeMinted && <>
+                    <div className='modalX'>
+                        <div className='modalIn'>
+                            <h5>Congratulations!</h5>
+                            <button onClick={() => setCanodromeMinted(false)} className="btn btn-primary"> Continue </button>
+                        </div>
+                    </div>
+                </>
+                }
+                {minted && <MintModal getCans={getCans} wallet={wallet} canMinted={canMinted} setMinted={setMinted} />}
+                {loading && <Loader />}
+                <div className="container">
+                    <div className="mb-4">
+                        <h1> Need Ticket for the minigame? </h1>
+                        <p> In this section you will buy the ticket to play in the ticket search minigame </p>
+                        <div className="ticket-buy">
+                            <h3 className="text-warning">Price: {ticketPrice && ticketPrice} CCT</h3>
+                            {ticketPrice ? <button onClick={() => setTicketModal(true)} className="btn btn-danger"> Buy </button> :
+                                <button className="btn btn-secondary" disabled> Loading </button>
+                            }
+                        </div>   
+                    </div>
+                    <div className="w-100">
+                        <div className="row card-container">
+                            <div className="card mb-3 col-3">
+                                <div className="card-header">
+                                    <div>
+                                        <img height="24px" src={bnbLogo} alt="" />
+                                        <b className="mx-1">
+                                            {commonPackagePrice} BNB
+                                        </b>
+                                    </div>
+                                    <div className="card-mint">
+                                        {commonPackagePrice == false ? <button>Loading</button> : <>
+                                            {wallet ?
+                                                <button onClick={() => buyPackage("1", wallet, commonPackagePrice)} className="btn-mint btn btn btn-warning"> MINT </button>
+                                                :
+                                                <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
+                                        </>}
+                                    </div>
                                 </div>
-                                <div className="card-mint">
-                                    {canodromeCommonPrice === false ? <button>Loading</button> : <>
-                                        {wallet ?
-                                            <button onClick={() => buyPackage("4", wallet, canodromeCommonPrice)} className="btn-mint btn btn btn-warning"> MINT </button>
-                                            :
-                                            <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
-                                    </>}
+                                <div className="card-body">
+                                    <Package className="nft-img" img={sobre1} />
+                                    <div className="card-text-footer">
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Common</p>
+                                                <h6> 65%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Epic</p>
+                                                <h6>4.9%</h6>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Rare</p>
+                                                <h6>30%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Legendary</p>
+                                                <h6>0.1%</h6>
+                                            </div>
+                                        </div>                    
+                                    </div>
                                 </div>
                             </div>
-                            <div className="card-body">
-                                <Package className="nft-img" img={canodrome} />
-                                <div className="card-text-footer">
+                            <div className="card mb-3 col-3">
+                                <div className="card-header">
                                     <div>
-                                        <div className="card-text-item">
-                                            <p>Common</p>
-                                            <h6> 65%</h6>
-                                        </div>
-                                        <div className="card-text-item">
-                                            <p>Epic</p>
-                                            <h6>4.9%</h6>
-                                        </div>
+                                        <img height="24px" src={bnbLogo} alt="" />
+                                        <b className="mx-1">
+                                            {epicPackagePrice} BNB
+                                        </b>
                                     </div>
+                                    <div className="card-mint">
+                                        {epicPackagePrice == false ? <button>Loading</button> : <>
+                                            {wallet ?
+                                                <button onClick={() => buyPackage("2", wallet, epicPackagePrice)} className="btn-mint btn btn btn-warning"> MINT </button>
+                                                :
+                                                <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
+                                        </>}
+                                    </div>
+                                </div>
+                                <div className="card-body">
+                                    <Package className="nft-img" img={sobre2} />
+                                    <div className="card-text-footer">
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Common</p>
+                                                <h6>40%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Epic</p>
+                                                <h6>19%</h6>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Rare</p>
+                                                <h6>40%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Legendary</p>
+                                                <h6>1%</h6>
+                                            </div>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="card mb-3 col-3">
+                                <div className="card-header">
                                     <div>
-                                        <div className="card-text-item">
-                                            <p>Rare</p>
-                                            <h6>30%</h6>
+                                        <img height="24px" src={bnbLogo} alt="" />
+                                        <b className="mx-1">
+                                        {legendaryPackagePrice} BNB
+                                        </b>
+                                    </div>
+                                    <div className="card-mint">
+                                        {legendaryPackagePrice == false ? <button className="btn-mint">Loading</button> : <>
+                                            {wallet ?
+                                                <button onClick={() => buyPackage("3", wallet, legendaryPackagePrice)}  className="btn-mint btn btn btn-warning"> MINT </button>
+                                                :
+                                                <button onClick={exectConnect}  className="btn-mint btn btn btn-warning"> Connect </button>}
+                                        </>}
+                                    </div>
+                                </div>
+                                <div className="card-body">
+                                    <Package className="nft-img" img={sobre3} />
+                                    <div className="card-text-footer">
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Common</p>
+                                                <h6> 0%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Epic</p>
+                                                <h6>60%</h6>
+                                            </div>
                                         </div>
-                                        <div className="card-text-item">
-                                            <p>Legendary</p>
-                                            <h6>0.1%</h6>
-                                        </div>
-                                    </div>                    
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Rare</p>
+                                                <h6>35%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Legendary</p>
+                                                <h6>5%</h6>
+                                            </div>
+                                        </div>                    
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div className="card mb-3 col-3">
-                            <div className="card-header">
-                                <div>
-                                    <img height="24px" src={bnbLogo} alt="" />
-                                    <b className="mx-1">
-                                    {canodromeLegendaryPrice} BNB
-                                    </b>
+                            
+                        <div className="row card-container">
+                            <div className="card mb-3 col-3">
+                                <div className="card-header">
+                                    <div>
+                                        <img height="24px" src={bnbLogo} alt="" />
+                                        <b className="mx-1">
+                                        {canodromeCommonPrice} BNB
+                                        </b>
+                                    </div>
+                                    <div className="card-mint">
+                                        {canodromeCommonPrice === false ? <button>Loading</button> : <>
+                                            {wallet ?
+                                                <button onClick={() => buyPackage("4", wallet, canodromeCommonPrice)} className="btn-mint btn btn btn-warning"> MINT </button>
+                                                :
+                                                <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
+                                        </>}
+                                    </div>
                                 </div>
-                                <div className="card-mint">
-                                    {canodromeLegendaryPrice == false ? <button>Loading</button> : <>
-                                        {wallet ?
-                                            <button onClick={() => buyPackage("5", wallet, canodromeLegendaryPrice)} className="btn-mint btn btn btn-warning"> MINT </button>
-                                            :
-                                            <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
-                                    </>}
+                                <div className="card-body">
+                                    <Package className="nft-img" img={canodrome} />
+                                    <div className="card-text-footer">
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Common</p>
+                                                <h6> 65%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Epic</p>
+                                                <h6>4.9%</h6>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Rare</p>
+                                                <h6>30%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Legendary</p>
+                                                <h6>0.1%</h6>
+                                            </div>
+                                        </div>                    
+                                    </div>
                                 </div>
                             </div>
-                            <div className="card-body">
-                                <Package className="nft-img" img={canodromeLegendary}/>
-                                <div className="card-text-footer">
+                            <div className="card mb-3 col-3">
+                                <div className="card-header">
                                     <div>
-                                        <div className="card-text-item">
-                                            <p>Common</p>
-                                            <h6> 0%</h6>
-                                        </div>
-                                        <div className="card-text-item">
-                                            <p>Epic</p>
-                                            <h6>60%</h6>
-                                        </div>
+                                        <img height="24px" src={bnbLogo} alt="" />
+                                        <b className="mx-1">
+                                        {canodromeLegendaryPrice} BNB
+                                        </b>
                                     </div>
-                                    <div>
-                                        <div className="card-text-item">
-                                            <p>Rare</p>
-                                            <h6>35%</h6>
+                                    <div className="card-mint">
+                                        {canodromeLegendaryPrice == false ? <button>Loading</button> : <>
+                                            {wallet ?
+                                                <button onClick={() => buyPackage("5", wallet, canodromeLegendaryPrice)} className="btn-mint btn btn btn-warning"> MINT </button>
+                                                :
+                                                <button onClick={exectConnect} className="btn-mint btn btn btn-warning"> Connect </button>}
+                                        </>}
+                                    </div>
+                                </div>
+                                <div className="card-body">
+                                    <Package className="nft-img" img={canodromeLegendary}/>
+                                    <div className="card-text-footer">
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Common</p>
+                                                <h6> 0%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Epic</p>
+                                                <h6>60%</h6>
+                                            </div>
                                         </div>
-                                        <div className="card-text-item">
-                                            <p>Legendary</p>
-                                            <h6>5%</h6>
-                                        </div>
-                                    </div>                    
+                                        <div>
+                                            <div className="card-text-item">
+                                                <p>Rare</p>
+                                                <h6>35%</h6>
+                                            </div>
+                                            <div className="card-text-item">
+                                                <p>Legendary</p>
+                                                <h6>5%</h6>
+                                            </div>
+                                        </div>                    
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </Fragment>
     )
 }
 export default Shop

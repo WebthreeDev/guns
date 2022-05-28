@@ -73,7 +73,7 @@ const Card = ({ can, sale, openCanModal,btnPrice }) => {
         <div className='W-options'>
             <div className='options'>
                 <div>
-                    Spot A340
+                    {can.name}
                 </div>
                 <div className="cardEnergy">
                     {energy(can.energy)}

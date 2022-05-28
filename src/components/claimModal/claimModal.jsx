@@ -3,9 +3,10 @@ import logoCredit from '../../img/assets/icons/credit.png'
 const ClaimModal = ({ minimunToClaim, claimPercent, claim, ammountToClaim, _setAmmountToClaim, setClaiming, oracule }) => {
     
     const totalValueToClaim = ()=>{
-        const value = Number.parseFloat(((ammountToClaim / oracule) - (((ammountToClaim / oracule) * claimPercent) / 100))).toFixed(2)
+        let value = Number.parseFloat(((ammountToClaim / oracule) - (((ammountToClaim / oracule) * claimPercent) / 100))).toFixed(2)
+        value = Number.parseFloat(value);
         if (!value){
-            return 0
+            return 0    
         } else{
             return value
         }
@@ -31,7 +32,7 @@ const ClaimModal = ({ minimunToClaim, claimPercent, claim, ammountToClaim, _setA
 
                     <div className="textClaim text-center">
                         {ammountToClaim && ammountToClaim < minimunToClaim &&
-                            <i className="text-danger">minimun ammount {minimunToClaim} Credits </i>
+                            <i className="text-danger">minimun amount {minimunToClaim} Credits </i>
                         }
                     </div>
                     <div className='container-fluid p-0 mt-3'>

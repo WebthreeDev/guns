@@ -33,6 +33,7 @@ import epicCanodrome from '../../img/canodromes/epic.png'
 import legendaryCanodrome from '../../img/canodromes/legendary.png'
 
 import energyLogo from '../../img/energy.png'
+import { soloNumeros } from '../../services/number';
 
 let nftContract
 if (process.env.REACT_APP_ENVIROMENT === "prod") nftContract = nftContractProd()
@@ -80,6 +81,8 @@ const Dashboard = () => {
     const [canodromePrice, setCanodromePrice] = useState(false)
     const [alertStatus,setAlertStatus] = useState(false)
     const [alertText,setAlertText] = useState("")
+    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
+
 
     useEffect(() => {
         getRaces()
@@ -155,8 +158,8 @@ const Dashboard = () => {
                 setLoading(false)
             })
         } else {
-            alert("A dog added to a canodrome cannot be sold")
             setLoading(false)
+            handlertAlert(true, "You cannot sell a dog attached to a track", "Continue")
         }
         console.log(res.data.response)
     }
@@ -194,7 +197,7 @@ const Dashboard = () => {
     }
 
     const claim = async () => {
-        if (balance < ammountToClaim) return alert("You don't have enough credit")
+        if (balance < ammountToClaim) return handlertAlert(true, "You don't have enough credit", "Continue")
 
         setLoading(true)
         setClaiming(false)
@@ -229,7 +232,7 @@ const Dashboard = () => {
                 setLoading(false)
                 if (error.response) {
                     console.log(error.response);
-                    alert(error.response)
+                    alert(true, JSON.stringify(error.response), "Continue")
                 } else if (error.request) {
                     console.log("Error request: ", error.request)
                 } else {
@@ -270,8 +273,8 @@ const Dashboard = () => {
     ]
 
     const sellTicket = async () => {
-        if (ticketAmmount <= 0) return alert("Incorrect Amount")
-        if (ticketPrice <= 0) return alert("Incorrect Price")
+        if (ticketAmmount <= 0) return handlertAlert(true, "Incorrect Amount", "Continue")
+        if (ticketPrice <= 0) return handlertAlert(true, "Incorrect Price", "Continue")
         setLoading(true)
         setModalSellTicket(false)
         const body = {
@@ -285,7 +288,7 @@ const Dashboard = () => {
             console.log(res)
             await exectConnect()
             setLoading(false)
-            alert("Your pass is on sell")
+            handlertAlert(true, "Your pass is on sell", "Continue")
         } catch (error) {
             setLoading(false)
             errorManager(error)
@@ -305,13 +308,13 @@ const Dashboard = () => {
                 .then(res => {
                     console.log(res)
                     setLoading(false)
-                    alert("Removed Pass")
+                    handlertAlert(true, "Removed Pass", "Continue")
                 }
                 )
         } catch (error) {
             errorManager(error)
             setLoading(false)
-            alert("Error")
+            handlertAlert(true, "Error", "Continue")
         }
     }
 
@@ -366,7 +369,7 @@ const Dashboard = () => {
             if (error.response) {
                 console.log("Error Response")
                 console.log(error.response.data)
-                alert(error.response.data.error)
+                handlertAlert(true, JSON.stringify(error.response.data.error), "Continue")
             } else if (error.request) {
                 console.log("Error Request")
                 console.log(error.request);
@@ -409,7 +412,7 @@ const Dashboard = () => {
             _context.setLoading(false)
         }).catch(error => {
             console.log(error)
-            alert(error.message)
+            handlertAlert(true, JSON.stringify(error.message), "Continue")
             _context.setLoading(false)
         })
 
@@ -439,8 +442,28 @@ const Dashboard = () => {
         }
     }
 
+    const handlertAlert = (status = false, title = "", btn = "") => {
+        setAlert({
+            status,
+            title,
+            btn
+        })
+    }
+
     return (
         <div className="">
+            {alert.status && <div className="modalX index-10">
+                <div className="">
+                    <div className="w-100 d-flex align-items-center justify-content-center h-100">
+                        <div className="text-center w-100">
+                            <h5 className="">
+                                {alert.title}
+                            </h5>
+                            <button className="btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
+                        </div>
+                    </div>
+                </div>
+            </div>}
             {sellingCanodrome && <div className='modalX'>
                 <div className='modalInCanodrome'>
                     <div className="p-2">
@@ -568,7 +591,6 @@ const Dashboard = () => {
                                         <button className='btn btn-danger btnModal' onClick={() => setCanModal(false)}> Cancel </button>
                                         {!selectedCan.onSale.sale && <button className='btn btn-warning btnModal' onClick={() => setRenderModal(true)}> Sell </button>}
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -585,9 +607,9 @@ const Dashboard = () => {
                                     <button className='btn btn-danger btn-sm' onClick={_ => setModalSellTicket(false)}> X </button>
                                 </div>
                                 <span className='textClaim'> Pass Price </span>
-                                <input onChange={(e) => setTicketPrice(e.target.value)} className='inputClaim w-100 mb-3' type="text" />
+                                <input onChange={(e) => setTicketPrice(e.target.value)} className='inputClaim w-100 mb-3' type="number"/>
                                 <span className='textClaim'> Amount </span>
-                                <input className='inputClaim' onChange={(e) => setTicketAmmount(e.target.value)} type="text" />
+                                <input className='inputClaim' onChange={(e) => setTicketAmmount(e.target.value)} type="number" />
                                 <button className='w-100 btn btn-primary mt-4' onClick={sellTicket}> Sell </button>
                             </div>
                             <div className="col-md-8 col-12 max80">
@@ -649,9 +671,9 @@ const Dashboard = () => {
             {remove &&
                 <div className='modalX'>
                     <div className='modalIn'>
-                        <h5>¿Esta seguro que desea remover este can del mercado?</h5>
+                        <h5>¿Are you sure you want remover this can from the market?</h5>
                         <div className='d-flex justify-content-center'>
-                            <button onClick={_ => setRemove(false)} className='btn btn-danger'>Cancelar</button>
+                            <button onClick={_ => setRemove(false)} className='btn btn-danger'>Cancel</button>
                             <button onClick={_ => _remove(id)} className='btn btn-primary mx-2'>Remove</button>
                         </div>
                     </div>

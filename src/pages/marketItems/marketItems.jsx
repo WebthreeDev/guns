@@ -21,6 +21,7 @@ const MarketItems = () => {
     const [order, setOrder] = useState(1)
     const [rangoMin, setRangoMin] = useState(1)
     const [rangoMax, setRangoMax] = useState(200)
+    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
 
     useEffect(() => {
         if (pass.length == 0) fetch(enviroment().baseurl + "pass")
@@ -64,16 +65,36 @@ const MarketItems = () => {
             console.log(res)
             await _context.exectConnect()
             _context.setLoading(false)
-            alert("Yo have a new pass")
+            handlertAlert(true, "Yo have a new pass", "Continue")
         } catch (error) {
             _context.setLoading(false)
             errorManager(error)
-            alert(error.response.data.error)
+            handlertAlert(true, JSON.stringify(error.response.data.error), "Continue")
         }
+    }
+
+    const handlertAlert = (status = false, title = "", btn = "") => {
+        setAlert({
+            status,
+            title,
+            btn
+        })
     }
 
     return (<div>
         {_context.loading && <Loader />}
+        {alert.status && <div className="modalX">
+                <div className="">
+                    <div className="w-100 d-flex align-items-center justify-content-center h-100">
+                        <div className="text-center w-100">
+                            <h5 className="">
+                                {alert.title}
+                            </h5>
+                            <button className="btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
+                        </div>
+                    </div>
+                </div>
+            </div>}
         {confirmModal && 
         <div className='modalX'>
             <div className='canModalIn modal-item'>
