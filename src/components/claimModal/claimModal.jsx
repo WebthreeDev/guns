@@ -3,9 +3,9 @@ import logoCredit from '../../img/assets/icons/credit.png'
 const ClaimModal = ({ minimunToClaim, claimPercent, claim, ammountToClaim, _setAmmountToClaim, setClaiming, oracule }) => {
     
     const totalValueToClaim = ()=>{
-        const value = Number.parseFloat(((ammountToClaim / oracule) - (((ammountToClaim / oracule) * claimPercent) / 100))).toFixed(2)
-        console.log(typeof value)
-        if (!value || typeof(value) == 'string'){
+        let value = Number.parseFloat(((ammountToClaim / oracule) - (((ammountToClaim / oracule) * claimPercent) / 100))).toFixed(2)
+        value = Number.parseFloat(value);
+        if (!value){
             return 0    
         } else{
             return value
