@@ -1,4 +1,3 @@
-
 .raceUi{
     background-size: cover;
     height: 100vh;
@@ -7,12 +6,13 @@
     position: fixed;
     top: 0px;
     left: 0px;
+    bottom: 0px;
+    right: 0px;
     padding-top: 0px;
     z-index: 1;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: bottom;
-    
 }
 $gradas:130vw;
 .bg-gradas{
@@ -106,6 +106,7 @@ $gradas:130vw;
     z-index: 7;
 }
 .dogImg{
+    // width: 350px;
     height: 100%;
 }
 .meta{
@@ -162,3 +163,68 @@ $gradas:130vw;
         transform: scale(1);
     }
 }
+
+.modalX .modal{
+    width: 31%;
+    height: 60%;
+    border-radius: 8px 8px 40px 40px;
+    background-color: #0f161c;
+    display: flex;
+    align-items: center;
+    /* justify-content: center; */
+    flex-direction: column;
+    color: #fffc4f;
+    position: relative;
+    z-index: 1;
+    font-weight: 600;
+    overflow: visible;
+}
+
+.modalX .modal h2 {
+    margin-top: 50px;
+    font-size: 90px;
+}
+  
+.modalX .modal .modal-body {
+// position: relative;
+text-align: center;
+}
+.modalX .modal .place {
+    // position: absolute;
+    top: 170px;
+    left: 20px;
+    font-size: 30px;
+    width: 300px;
+    text-align: center;
+  }
+  
+  .modalX .modal button {
+    background-color: #c9c041 !important;
+    border-bottom: 4px solid #fffc4f !important;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    font-weight: 700;
+    font-size: 20px;
+    cursor: pointer;
+    margin-top: 20px;
+  }
+  
+  .modalX .modal .circle {
+    position: absolute;
+    width: 150px;
+    height: 150px;
+    background-color: #0f161c;
+    top: -50px;
+    z-index: 0;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+  }
+  
+  .modalX .modal .trofeo {
+    z-index: 1;
+    width: 100%;
+    max-width: 80px;
+  }
+  

@@ -2,10 +2,11 @@ import dogCommon from '../../img/nftRace/dogCommon.gif'
 import dogRare from '../../img/nftRace/dogRare.gif'
 import dogEpic from '../../img/nftRace/dogEpic.gif'
 import dogLegendary from '../../img/nftRace/dogLegendary.gif'
+import trofeo from '../../img/trofeo.png'
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, Fragment } from "react";
 
-const RaceUi = ({ setRaceUi, places, position,selectedCan }) => {
+const RaceUi = ({ setRaceUi, places, position,selectedCan, credits }) => {
 
     const [position1, setPosition1] = useState(0)
     const [position2, setPosition2] = useState(0)
@@ -13,6 +14,7 @@ const RaceUi = ({ setRaceUi, places, position,selectedCan }) => {
     const [position4, setPosition4] = useState(0)
     const [position5, setPosition5] = useState(0)
     const [position6, setPosition6] = useState(0)
+    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
 
     useEffect(() => {
         item1.current.style.left = `${position1}px`
@@ -39,13 +41,12 @@ const RaceUi = ({ setRaceUi, places, position,selectedCan }) => {
         console.log("array result:", position)
         console.log(position[5])
 
-        let _place = places.indexOf(1)
+        let _place = places.indexOf(1) +1;
 
         setTimeout(() => {
-            setRaceUi(false)
             let lugar = ["er", "do", "er", "to", "to", "to"]
             let er = lugar[_place]
-            alert("Llegaste de " + (_place + 1) + er + " lugar")
+            handlertAlert(true, _place)
         }, 60000)
 
         let contador1 = 0
@@ -125,22 +126,49 @@ const RaceUi = ({ setRaceUi, places, position,selectedCan }) => {
         }
     }
 
+    const handlertAlert = (status, place) => {
+        setAlert({
+            status,
+            place,
+        })
+    }
+    const visible = {
+        display: alert.status ? 'none' : "grid" 
+    }
+
     return (
-        <div className="raceUi">
-            <div className="bg-gradas">
-            </div>
-            <div className="bg-pista">
-                <div className="rundog">
-                    {position[0] === 0 ? <div ref={item1} className='dog1'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item1} className='dog1'> <img className='dogImg' src={dogCommon} alt="" /> </div>}
-                    {position[1] === 0 ? <div ref={item2} className='dog2'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item2} className='dog2'><img className='dogImg' src={dogCommon} alt="" /></div>}
-                    {position[2] === 0 ? <div ref={item3} className='dog3'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item3} className='dog3'><img className='dogImg' src={dogCommon} alt="" /></div>}
-                    {position[3] === 0 ? <div ref={item4} className='dog4'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item4} className='dog4'><img className='dogImg' src={dogCommon} alt="" /></div>}
-                    {position[4] === 0 ? <div ref={item5} className='dog5'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item5} className='dog5'><img className='dogImg' src={dogCommon} alt="" /></div>}
-                    {position[5] === 0 ? <div ref={item6} className='dog6'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item6} className='dog6'><img className='dogImg' src={dogCommon} alt="" /></div>}
+        <Fragment>
+            {alert.status && <div className="modalX">
+                <div className="modal">
+                    <div className="circle">
+                        <img className="trofeo" src={trofeo} alt="" />
+                    </div>
+                    <div className="modal-body">
+                        <h2>{alert.place}st</h2>
+                        <p className="place">PLACE</p>
+                        {/* <p>Credits: {alert.credit}</p> */}
+                    </div>
+                    <div><p>Reward credits: {credits}</p></div>
+                    <button onClick={() => setRaceUi(false)} className='btn btn-primary'>Continue</button>
                 </div>
-                <div className='meta'> </div>
-            </div>
-        </div>
+            </div>}
+            <div className="raceUi">
+                    <div className="bg-gradas">
+                    </div>
+                    <div className="bg-pista">
+                        <div className="rundog" style={visible}>
+                            {position[0] === 0 ? <div ref={item1} className='dog1'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item1} className='dog1'> <img draggable="false" className='dogImg' src={dogCommon} alt="" /> </div>}
+                            {position[1] === 0 ? <div ref={item2} className='dog2'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item2} className='dog2'><img draggable="false" className='dogImg' src={dogCommon} alt="" /></div>}
+                            {position[2] === 0 ? <div ref={item3} className='dog3'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item3} className='dog3'><img draggable="false" className='dogImg' src={dogCommon} alt="" /></div>}
+                            {position[3] === 0 ? <div ref={item4} className='dog4'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item4} className='dog4'><img draggable="false" className='dogImg' src={dogCommon} alt="" /></div>}
+                            {position[4] === 0 ? <div ref={item5} className='dog5'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item5} className='dog5'><img draggable="false" className='dogImg' src={dogCommon} alt="" /></div>}
+                            {position[5] === 0 ? <div ref={item6} className='dog6'><div className='guia2'> </div> <img className='dogImg' src={canSelection(selectedCan)} alt="" /> </div> : <div ref={item6} className='dog6'><img draggable="false" className='dogImg' src={dogCommon} alt="" /></div>}
+                        </div>
+                        <div className='meta'> </div>
+                    </div>
+  
+            </div>  
+        </Fragment>
     )
 }
 export default RaceUi

@@ -33,6 +33,7 @@ const Race = () => {
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
     const [raceUi, setRaceUi] = useState(false)
     const [places, setPlaces] = useState([])
+    const [credits, setCredits] = useState(0)
     const [position, setPosition] = useState([])
     const [alert, setAlert] = useState({ status: false, title: "", btn: "" })
 
@@ -44,14 +45,15 @@ const Race = () => {
         try {
             const res = await axios.post(enviroment().baseurl + "race", body)
             const _places = res.data.response.places
+            const credits = res.data.response.career.balanceAfter - res.data.response.career.balancePrev
             //actualizar estado energy
             await _context.exectConnect()
             setModalRaceActive(false)
-            goRace(_places)
+            goRace(_places, credits)
         } catch (error) { handlertAlert(true, JSON.stringify(error.response.data.error), "Continue") }
     }
 
-    const goRace = (_places) => {
+    const goRace = (_places, credits) => { 
         let aux = []
         for (let i = 0; i <= 5; i++) {
             let randomPosition = Math.round(Math.random() * (5 - 0) + 0)
@@ -61,6 +63,7 @@ const Race = () => {
                 aux[i] = randomPosition
             }
         }
+        setCredits(credits)
         setPosition(aux)
         setPlaces(_places)
         setRaceUi(true)
@@ -110,7 +113,7 @@ const Race = () => {
                     </div>
                 </div>
             </div>}
-            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} selectedCan={selectedCan} />}
+            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} selectedCan={selectedCan} credits={credits} />}
             {modalRace && <div className="modalX">
                 <div className="modalRace ">
                     <div className='selectTittle'>
