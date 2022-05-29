@@ -122,7 +122,10 @@ const Dashboard = () => {
     }
 
     const _setPrice = (ammount) => {
-        const _ammount = Number.parseFloat(ammount).toFixed(6);
+        let _ammount = Number.parseFloat(ammount).toFixed(6);
+        
+       
+        console.log(_ammount);
         setPrice(_ammount)
     }
 
@@ -416,6 +419,7 @@ const Dashboard = () => {
             console.log(error)
             handlertAlert(true, JSON.stringify(error.message), "Continue")
             _context.setLoading(false)
+            setCanodromePrice(0);
         })
 
 
@@ -452,6 +456,14 @@ const Dashboard = () => {
         })
     }
 
+    const handleCanodromePrice = (value) => {
+        value = Number(value);
+        if(typeof(value) != 'number' || value < 0){
+            value = 0;
+        }
+        setCanodromePrice(value);
+    }
+
     return (
         <div className="">
             {alert.status && <div className="modalX index-10">
@@ -485,10 +497,16 @@ const Dashboard = () => {
                         <div className='text-warning'>
                             {canodromePrice && <>{canodromePrice}BNB</>}
                         </div>
-                        <input onChange={(e) => setCanodromePrice(e.target.value)} className='mt-3 inputClaim' type="text" />
+                        <input onChange={(e) => handleCanodromePrice(e.target.value)} className='mt-3 inputClaim' type="number" />
                         <div className='d-flex'>
-                            <button onClick={sendSell} className='btn btn-primary form-control mt-3'>Sell</button>
-                            <button onClick={() => setSellingCanodrome(false)} className='btn btn-danger form-control mt-3'> Cancel </button>
+                            <button onClick={() => {
+                                canodromePrice && sendSell()                              
+                            }}
+                            className='btn btn-primary form-control mt-3'>Sell</button>
+                            <button onClick={() => {
+                                setCanodromePrice(0);
+                                setSellingCanodrome(false)
+                            }} className='btn btn-danger form-control mt-3'> Cancel </button>
                         </div>
                     </div>
                 </div>
@@ -703,7 +721,9 @@ const Dashboard = () => {
                                     <button onClick={_ => { setRenderModal(false); setPrice(0) }} className='btn mx-1 col btn-danger w-100'> Cancel </button>
                                 </div>
                                 <div className="w-50 p-1">
-                                    <button onClick={_ => sell(id)} className='btn mx-1 col btn-primary w-100'> Continue </button>
+                                    <button onClick={_ => {
+                                        price > 0 && sell(id)
+                                    }} className='btn mx-1 col btn-primary w-100'> Continue </button>
                                 </div>
                             </div>
 
