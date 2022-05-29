@@ -516,3 +516,39 @@ input{
     background-color: $dark;
     border-radius:8px;
 }
+.regresive3{
+    font-size: 1px;
+    animation-name: reg3;
+    animation-duration:2s;
+    color: transparent;
+}
+@keyframes reg3 {
+    0%{transform: scale(1);color: transparent;}
+    50%{transform: scale(200) rotateY(360deg);color: white;}
+    100%{color: transparent;transform: scale(1);}
+}
+
+.regresive2{
+    font-size: 1px;
+    animation-name: reg2;
+    animation-duration:2s;
+    color: transparent;
+    animation-delay: 2s;
+}
+@keyframes reg2 {
+    0%{transform: scale(1);color: transparent;}
+    50%{transform: scale(200) rotateY(360deg);color: white;}
+    100%{color: transparent;transform: scale(1);}
+}
+.regresive1{
+    font-size: 1px;
+    animation-name: reg1;
+    animation-duration:2s;
+    color: transparent;
+    animation-delay: 4s;
+}
+@keyframes reg1 {
+    0%{transform: scale(1);color: transparent;}
+    50%{transform: scale(200) rotateY(360deg);color: white;}
+    100%{color: transparent;transform: scale(1);}
+}

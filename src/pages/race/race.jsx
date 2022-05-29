@@ -36,8 +36,26 @@ const Race = () => {
     const [credits, setCredits] = useState(0)
     const [position, setPosition] = useState([])
     const [alert, setAlert] = useState({ status: false, title: "", btn: "" })
+    const [arrayDogs, setArrayDogs] = useState([])
+    const [regresive, setRegresive] = useState(false)
 
+    useEffect(() => {
+        calculateDogsImg()
+    }, [])
+
+    const calculateDogsImg = () => {
+        let aux = []
+        for (let i = 0; i < 6; i++) {
+            let num = Math.round(Math.random() * 3)
+            aux.push(num)
+            console.log(aux)
+        }
+        setArrayDogs(aux)
+    }
+    
     const clickRun = async () => {
+        setModalRaceActive(false)
+        _context.setLoading(true)
         const canId = selectedCan.id
         const canodromeId = selectedCanodrome._id
         const body = { canId, wallet: _context.wallet, canodromeId }
@@ -48,12 +66,17 @@ const Race = () => {
             const credits = res.data.response.career.balanceAfter - res.data.response.career.balancePrev
             //actualizar estado energy
             await _context.exectConnect()
-            setModalRaceActive(false)
-            goRace(_places, credits)
+            setRegresive(true)
+            setTimeout(() => {
+                goRace(_places, credits)
+                setRegresive(false)
+            },6000)
+            _context.setLoading(false)
         } catch (error) { handlertAlert(true, JSON.stringify(error.response.data.error), "Continue") }
+        
     }
 
-    const goRace = (_places, credits) => { 
+    const goRace = (_places, credits) => {
         let aux = []
         for (let i = 0; i <= 5; i++) {
             let randomPosition = Math.round(Math.random() * (5 - 0) + 0)
@@ -100,6 +123,13 @@ const Race = () => {
 
     return (
         <div className="container">
+            {regresive && <>
+                <div className="modalX">
+                    <h1 className="regresive3">3</h1>
+                    <h1 className="regresive2">2</h1>
+                    <h1 className="regresive1">1</h1>
+                </div>
+            </>}
             {_context.loading && <Loader />}
             {alert.status && <div className="modalX index-10">
                 <div className="">
@@ -113,7 +143,7 @@ const Race = () => {
                     </div>
                 </div>
             </div>}
-            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} selectedCan={selectedCan} credits={credits} />}
+            {raceUi && <RaceUi places={places} setRaceUi={setRaceUi} position={position} selectedCan={selectedCan} credits={credits} arrayDogs={arrayDogs} />}
             {modalRace && <div className="modalX">
                 <div className="modalRace ">
                     <div className='selectTittle'>
@@ -138,13 +168,13 @@ const Race = () => {
                                                 <div className='rarity'>
                                                     {rarity(canodrome.type)}
                                                 </div>
-                                                
+
                                                 <div className='d-flex justify-content-center align-items-center energyCanodrome' >
                                                     <img height={"20px"} src={energyLogo} className="mx-2" alt="" />
                                                     <div className='energyCanodromeText'> {canodrome.energy} / {_context.converType(canodrome.type)} </div>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                         {/* {canodrome.energy} / {_context.converType(canodrome.type)}
                                         <div className="border">
