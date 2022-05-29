@@ -10,7 +10,6 @@ import v3 from '../../img/tikets/v3.png'
 import v4 from '../../img/tikets/v4.png'
 import { DataContext } from "../../context/DataContext"
 import w3S from "../../services/w3S"
-import service from "./service"
 import enviroment from "../../env"
 import '../../css/pages/minigame.scss'
 import Loader from '../../components/loader/loader'

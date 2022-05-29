@@ -1,9 +1,9 @@
 import React from "react";
 
-import commonNft from '../../img/nfts/common.png'
-import rareNft from '../../img/nfts/rare.png'
-import epicNft from '../../img/nfts/epic.png'
-import legendaryNft from '../../img/nfts/legendary.png'
+import commonNft from '../../img/nfts/common.webp'
+import rareNft from '../../img/nfts/rare.webp'
+import epicNft from '../../img/nfts/epic.webp'
+import legendaryNft from '../../img/nfts/legendary.webp'
 
 const rarity = (r) => {
     const rarityObj = {

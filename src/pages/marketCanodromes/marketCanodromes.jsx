@@ -6,16 +6,15 @@ import Loader from "../../components/loader/loader"
 import changeStateCanodrome from "../../context/services/changeStateCanodrome"
 import { Link } from "react-router-dom"
 import socket from '../../socket';
-import canodromo from '../../img/canodrome.png'
 import errorManager from '../../services/errorManager'
 import enviroment from "../../env"
 import { nftContractProd } from "../../tokensProd/canes/canes"
 import { testNftContract } from "../../tokensDev/canes/canes"
 
-import commonCanodrome from '../../img/canodromes/common.png'
-import rareCanodrome from '../../img/canodrome/rare-canodrome.png'
-import epicCanodrome from '../../img/canodrome/epic-canodrome.png'
-import legendaryCanodrome from '../../img/canodrome/legendary-canodrome.png'
+import commonCanodrome from '../../img/canodromes/common.webp'
+import rareCanodrome from '../../img/canodromes/rare.webp'
+import epicCanodrome from '../../img/canodromes/epic.webp'
+import legendaryCanodrome from '../../img/canodromes/legendary.webp'
 import '../../css/pages/marketCanodrome.scss'
 
 let nftContract
@@ -276,12 +275,14 @@ const MarketCanodromes = () => {
                                 <div className="row">
                                     {canodromesMarket.length != 0 && canodromesMarket.map((item) => {
                                         return (
-                                            <div key={item._id} onClick={() => { setCanodrome(item); setRenderModal(true) }} className="col-3 p-2 nftCard">
+                                            <div key={item._id}  className="col-3 p-1">
+                                                <div className="nftCard p-2 w-100 mb-1" onClick={() => { setCanodrome(item); setRenderModal(true) }}>
+
                                                 <div className="canodromeCardMarket">
                                                     <div className="">
                                                         <div className="nftCard-header">
-                                                            <div>{item.onSale.price} BNB </div>                
-                                                            <div className="button-market px-1 lb-color item-id">#{item.id} {_context.lastForWallet(item.wallet)}</div>
+                                                            <div>{item.onSale.price}<br/> BNB </div>                
+                                                            <div className="button-market px-1 lb-color item-id">#{item.id}<br/> {_context.lastForWallet(item.wallet)}</div>
                                                         </div>
                                                     </div>
                                                     <div>    
@@ -302,7 +303,7 @@ const MarketCanodromes = () => {
                                                         {/* <button onClick={() => { setCanodrome(item); setRenderModal(true) }} className="btn btn-primary form-control"> Buy </button> */}
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div></div>
                                         )
                                     })
                                     }

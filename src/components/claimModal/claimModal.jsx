@@ -1,5 +1,5 @@
-import logoCCT from '../../img/assets/icons/logoCCT.png'
-import logoCredit from '../../img/assets/icons/credit.png'
+import logoCCT from '../../img/assets/icons/logoCCT.webp'
+import logoCredit from '../../img/assets/icons/credit.webp'
 const ClaimModal = ({ minimunToClaim, claimPercent, claim, ammountToClaim, _setAmmountToClaim, setClaiming, oracule }) => {
     
     const totalValueToClaim = ()=>{

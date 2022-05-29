@@ -12,10 +12,10 @@ import { nftContractProd } from "../../tokensProd/canes/canes"
 import { testNftContract } from "../../tokensDev/canes/canes"
 import '../../css/pages/market.scss'
 
-import commonNft from '../../img/nfts/common.png'
-import rareNft from '../../img/nfts/rare.png'
-import epicNft from '../../img/nfts/epic.png'
-import legendaryNft from '../../img/nfts/legendary.png'
+import commonNft from '../../img/nfts/common.webp'
+import rareNft from '../../img/nfts/rare.webp'
+import epicNft from '../../img/nfts/epic.webp'
+import legendaryNft from '../../img/nfts/legendary.webp'
 
 import Card from '../../components/card/card'
 

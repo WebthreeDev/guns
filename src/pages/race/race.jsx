@@ -1,9 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
-import canodromeImg from '../../img/canodrome.png'
 import { DataContext } from "../../context/DataContext";
 import Loader from "../../components/loader/loader";
 import axios from "axios";
-import NftCard from "../../components/nftCard/nftCard";
 import { Link } from "react-router-dom"
 import RaceUi from "../../components/raceui/raceui";
 import "../../css/pages/games.scss"
@@ -13,15 +11,16 @@ import control from '../../img/assets/icons/control.png'
 import rank from '../../img/assets/icons/rank.png'
 import beats from '../../img/assets/icons/beats.png'
 import '../../css/components/raceUi.scss';
-import commonCanodrome from '../../img/canodromes/common.png'
-import rareCanodrome from '../../img/canodromes/rare.png'
-import epicCanodrome from '../../img/canodromes/epic.png'
-import legendaryCanodrome from '../../img/canodromes/legendary.png'
+import commonCanodrome from '../../img/canodromes/common.webp'
+import rareCanodrome from '../../img/canodromes/rare.webp'
+import epicCanodrome from '../../img/canodromes/epic.webp'
+import legendaryCanodrome from '../../img/canodromes/legendary.webp'
 
-import commonNft from '../../img/nfts/common.png'
-import rareNft from '../../img/nfts/rare.png'
-import epicNft from '../../img/nfts/epic.png'
-import legendaryNft from '../../img/nfts/legendary.png'
+import energyLogo from '../../img/energy.png'
+import commonNft from '../../img/nfts/common.webp'
+import rareNft from '../../img/nfts/rare.webp'
+import epicNft from '../../img/nfts/epic.webp'
+import legendaryNft from '../../img/nfts/legendary.webp'
 import Card from "../../components/card/card";
 
 const Race = () => {
@@ -35,7 +34,7 @@ const Race = () => {
     const [raceUi, setRaceUi] = useState(false)
     const [places, setPlaces] = useState([])
     const [position, setPosition] = useState([])
-    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
+    const [alert, setAlert] = useState({ status: false, title: "", btn: "" })
 
     const clickRun = async () => {
         const canId = selectedCan.id
@@ -52,7 +51,7 @@ const Race = () => {
         } catch (error) { handlertAlert(true, JSON.stringify(error.response.data.error), "Continue") }
     }
 
-    const goRace = (_places) => { 
+    const goRace = (_places) => {
         let aux = []
         for (let i = 0; i <= 5; i++) {
             let randomPosition = Math.round(Math.random() * (5 - 0) + 0)
@@ -84,7 +83,7 @@ const Race = () => {
     const rankRace = () => handlertAlert(true, "Coming Soon!", "Continue")
     const beatsRace = () => handlertAlert(true, "Coming Soon!", "Continue")
 
-    const openCanModal = (can)=>{
+    const openCanModal = (can) => {
         setCan(can)
     }
 
@@ -122,27 +121,53 @@ const Race = () => {
                         {!_context.canodromes && "You need a canodrome to play race"}
                         {_context.canodromes && _context.canodromes.map((canodrome, index) => {
                             return (
-                                <div key={index} className="row raceCanodrome mb-2 ">
+                                <div key={index} className="row raceCanodrome mb-2">
                                     <div className="col-md-3 col-12">
-                                        {canodrome.energy} / {_context.converType(canodrome.type)}
+                                        <div className='bgBlackTrans'>
+                                            <div className='imgCanodromeBg'>
+                                                {canodrome.type === 1 && <img className="img-fluid" src={commonCanodrome} />}
+                                                {canodrome.type === 2 && <img className="img-fluid" src={rareCanodrome} />}
+                                                {canodrome.type === 3 && <img className="img-fluid" src={epicCanodrome} />}
+                                                {canodrome.type === 4 && <img className="img-fluid" src={legendaryCanodrome} />}
+                                                <div className='canodromeId'>
+                                                    #{canodrome.id}
+                                                </div>
+                                                <div className='rarity'>
+                                                    {rarity(canodrome.type)}
+                                                </div>
+                                                
+                                                <div className='d-flex justify-content-center align-items-center energyCanodrome' >
+                                                    <img height={"20px"} src={energyLogo} className="mx-2" alt="" />
+                                                    <div className='energyCanodromeText'> {canodrome.energy} / {_context.converType(canodrome.type)} </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                        {/* {canodrome.energy} / {_context.converType(canodrome.type)}
+                                        <div className="border">
                                         {canodrome.type === 1 && <img className="w-100" src={commonCanodrome} alt="" />}
                                         {canodrome.type === 2 && <img className="w-100" src={rareCanodrome} alt="" />}
                                         {canodrome.type === 3 && <img className="w-100" src={epicCanodrome} alt="" />}
-                                        {canodrome.type === 4 && <img className="w-100" src={legendaryCanodrome} alt="" />}
+                                        {canodrome.type === 4 && <img className="w-100" src={legendaryCanodrome} alt="" />} 
+                                        </div>*/}
                                     </div>
                                     <div className="col-md-9 col-12">
                                         <div className="container-fluid">
                                             <div className="row">
-                                                {canodrome.cans.length == 0 && <div className="h-100 text-center pt-3">
+                                                {canodrome.cans.length == 0 && !canodrome.onSale.sale && <div className="h-100 text-center pt-3">
                                                     <h1 className="text-center"> Add cans in canodrome section</h1>
                                                     <Link className="btn btn-primary" to="/dashboard">
                                                         Go to Canodromes
                                                     </Link>
                                                 </div>}
+                                                {canodrome.onSale.sale && <div className="w-100 onSaleCanodrome text-center p-3 h-100">
+                                                    <h2>On Sale</h2>
+                                                    <p className="loaderText">Remove the canodrome from the sale in your dashboard to be able to use it</p>
+                                                </div>}
                                                 {canodrome.cans && canodrome.cans.map((can, index) => {
                                                     return (
                                                         <div key={index} className="col-4" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
-                                                                <Card openCanModal={openCanModal} sale={true} can={can.can} />
+                                                            <Card openCanModal={openCanModal} sale={true} can={can.can} />
                                                         </div>
                                                     )
                                                 })}

@@ -3,7 +3,7 @@
     background-size: cover;
     height: 100vh;
     width: 100vw;
-    background:linear-gradient(rgba(0, 0, 0, 0.212),rgba(13, 13, 22, 0.219)), url(../../img/raceui/bgGradas.png);
+    background:linear-gradient(rgba(0, 0, 0, 0.212),rgba(13, 13, 22, 0.219)), url(../../img/raceui/bgGradas.webp);
     position: fixed;
     top: 0px;
     left: 0px;
@@ -18,7 +18,7 @@ $gradas:130vw;
 .bg-gradas{
     height: 60vh;
     width: 100%;
-    background-image: url(../../img/raceui/gradas.png);
+    background-image: url(../../img/raceui/gradas.webp);
     background-repeat:repeat-x;
     background-position-x: right;
     background-position-y:top;
@@ -42,7 +42,7 @@ $gradas:130vw;
     margin-top: -45px;
     height: 50vh;
     width: 100%;
-    background-image: url(../../img/raceui/rect843.png);
+    background-image: url(../../img/raceui/rect843.webp);
     background-repeat:repeat-x;
     background-position-x: right;
     background-size: 100vw 50vh;

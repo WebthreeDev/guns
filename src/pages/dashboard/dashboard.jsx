@@ -14,23 +14,22 @@ import { nftContractProd } from "../../tokensProd/canes/canes";
 import { testNftContract } from "../../tokensDev/canes/canes";
 import { cctContractDev } from "../../tokensDev/cct/cct"
 import { cctContractProd } from "../../tokensProd/cct/cct"
-import burguer from '../../img/assets/icons/burguer.png'
 import playIcon from '../../img/assets/icons/play.png'
-import logoCCT from '../../img/assets/icons/logoCCT.png'
-import logoCredit from '../../img/assets/icons/credit.png'
+import logoCCT from '../../img/assets/icons/logoCCT.webp'
+import logoCredit from '../../img/assets/icons/credit.webp'
 import { Link } from 'react-router-dom'
 /* import NftCard from '../../components/nftCard/nftCard' */
 import Card from '../../components/card/card'
 
-import commonNft from '../../img/nfts/common.png'
-import rareNft from '../../img/nfts/rare.png'
-import epicNft from '../../img/nfts/epic.png'
-import legendaryNft from '../../img/nfts/legendary.png'
+import commonNft from '../../img/nfts/common.webp'
+import rareNft from '../../img/nfts/rare.webp'
+import epicNft from '../../img/nfts/epic.webp'
+import legendaryNft from '../../img/nfts/legendary.webp'
 
-import commonCanodrome from '../../img/canodromes/common.png'
-import rareCanodrome from '../../img/canodromes/rare.png'
-import epicCanodrome from '../../img/canodromes/epic.png'
-import legendaryCanodrome from '../../img/canodromes/legendary.png'
+import commonCanodrome from '../../img/canodromes/common.webp'
+import rareCanodrome from '../../img/canodromes/rare.webp'
+import epicCanodrome from '../../img/canodromes/epic.webp'
+import legendaryCanodrome from '../../img/canodromes/legendary.webp'
 
 import energyLogo from '../../img/energy.png'
 import { soloNumeros } from '../../services/number';
@@ -899,7 +898,7 @@ const Dashboard = () => {
                                                                                     Add can in your canodrome
                                                                                 </div>
                                                                                 <div className='row'>
-                                                                                    {canodromeItem.onSale.sale === false && <>
+                                                                                    {!canodromeItem.onSale.sale && <>
                                                                                         {canodromeItemsAndButtons[canodromeItem.type - 1].map((index) => {
                                                                                             return <div key={index} className="col-4">
                                                                                                 {canodromeItem.cans[index] ?
