@@ -155,7 +155,7 @@ const MarketItems = () => {
             </div>
             <div className="">
                 <div className="row">
-                    <div className="col-3 sidebarx">
+                    <div className="col-12 col-sm-5 col-md-3 mb-4">
                         <div className="filter">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
@@ -195,12 +195,12 @@ const MarketItems = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-9">
+                    <div className="col-12 col-sm-7 col-md-9">
                         <div className="container-fluid">
                             <div className="row">
                                 {passMarket.length > 0 && <>
-                                    {passMarket.map((item, index) => <div className="col-2 nftCard m-2" key={index} onClick={() => { setPassId(item._id); setConfirmModal(true) }}>
-                                        <div className="pass mb-2">
+                                    {passMarket.map((item, index) => <div className="col-12 col-sm-6 col-md-4 col-lg-3 p-2" key={index} onClick={() => { setPassId(item._id); setConfirmModal(true) }}>
+                                        <div className="pass nftCard">
                                             <div className="w-100 p-2">
                                                 <div className="wall">
                                                     {lastForWallet(item.wallet)}

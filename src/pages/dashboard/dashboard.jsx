@@ -464,7 +464,7 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="">
+        <div className="w-100">
             {alert.status && <div className="modalX index-10">
                 <div className="">
                     <div className="w-100 d-flex align-items-center justify-content-center h-100">
@@ -730,13 +730,13 @@ const Dashboard = () => {
                     </div>
                 </div>
             }
-            <div className="container-fluid">
+            <div className="container-fluid p-0">
                 <div className="row">
                     <div className="col-12">
                         <div className="dogFeatures">
                             <div className="row g-2 mb-2">
                                 <div className="col-md-8 col-12">
-                                    <h6>CCT {cctAddress && cctAddress}</h6>
+                                    <h6 className='cctAddress'>CCT {cctAddress && cctAddress}</h6>
                                     <h1 className='welcome'>
                                         WELCOME TO CRYPTOCANS.IO
                                     </h1>
@@ -767,37 +767,37 @@ const Dashboard = () => {
                                             </div>
                                             <div className='containet-fluid pt-4'>
                                                 <div className='row'>
-                                                    <div className='col-6'>
+                                                    <div className='col-md-6 col-12 mb-3'>
                                                         <div className='itemSection'>
                                                             <div className='inItem'>
-                                                                <img height={"40px"} src={passTicket} alt="" />
+                                                                <img className='imgPass' src={passTicket} alt="" />
                                                                 <div className='numberItem'> {pass & pass} </div>
                                                                 <button onClick={() => { setModalSellTicket(true); fetch(enviroment().baseurl + "pass") }} className='btn btn-warning mx-2'> <b>Sell</b> </button>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className='col-6'>
+                                                    <div className='col-md-6 col-12 mb-3'>
                                                         <div className='itemSection'>
                                                             <div className='inItem'>
-                                                                <img height={"40px"} src={ticketImg} alt="" />
+                                                                <img className='imgPass' src={ticketImg} alt="" />
                                                                 <div className='numberItem'> {tiket & tiket} </div>
 
                                                             </div>
                                                         </div>
                                                     </div>
 
-                                                    <div className='col-6'>
+                                                    <div className='col-md-6 col-12 mb-3'>
                                                         <div className='itemSection mt-3'>
                                                             <div className='inItem'>
-                                                                <img height={"50px"} src={logoCCT} alt="" />
-                                                                <div className='numberItem2'> {cct ? cct : 0}<br />CCT </div>
+                                                                <img className='imgPass' src={logoCCT} alt="" />
+                                                                <div className='numberItem2'> {cct ? Math.floor(cct) : 0}<br />CCT </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className='col-6'>
+                                                    <div className='col-md-6 col-12 mb-3'>
                                                         <div className='itemSection mt-3'>
                                                             <div className='inItem'>
-                                                                <img height={"50px"} src={logoCredit} alt="" />
+                                                                <img className='imgPass' src={logoCredit} alt="" />
                                                                 <div className='numberItem2'> {balance ? Math.floor(balance) : 0} <br /> credits </div>
                                                             </div>
                                                         </div>
@@ -863,7 +863,7 @@ const Dashboard = () => {
                                                         </div>
                                                         {cans && cans.map((i) => {
                                                             return (
-                                                                <div key={i.id} className='col-md-4 col-6'>
+                                                                <div key={i.id} className='col-md-4 col-sm-6 col-12'>
                                                                     
                                                                     <Card openCanModal={openCanModal} sale={true} can={i} />
                                                                 </div>

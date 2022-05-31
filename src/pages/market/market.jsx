@@ -43,7 +43,7 @@ const Market = () => {
     const [rangoMax, setRangoMax] = useState(360)
     const [canMarket, setCanMarket] = useState([])
     const [cans, setCans] = useState([]);
-    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
+    const [alert, setAlert] = useState({ status: false, title: "", btn: "" })
 
     const setModalText = () => { }
 
@@ -119,7 +119,7 @@ const Market = () => {
                         console.log("error: " + error)
                         console.log(error)
                     }
-                   
+
                 }).catch(async error => {
                     console.log("Rechazo la transaccion")
                     console.log(error)
@@ -179,7 +179,7 @@ const Market = () => {
         setCan(can)
     }
 
-    
+
     const handlertAlert = (status = false, title = "", btn = "") => {
         setAlert({
             status,
@@ -295,7 +295,7 @@ const Market = () => {
                     </Link>
                 </div>
                 <div className="row">
-                    <div className="col-3">
+                    <div className="col-12 col-sm-5 col-md-3 mb-4">
                         <div className="filter">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
@@ -359,7 +359,7 @@ const Market = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-9">
+                    <div className="col-12 col-sm-7 col-md-9">
                         {canMarket.length == 0 ? <>
                             <div className="text-center mt-5">
                                 {/* <button onClick={refresh} className="btn btn-primary"> Refresh Market </button> */}
@@ -369,15 +369,17 @@ const Market = () => {
                             <div className="mb-2">
                                 <div>{canMarket.length} Cans Listed  </div>
                             </div>
-                            <div className="container-card">
-                                {canMarket.map((item) => {
-                                    return (
-                                        <div key={item.id} className="col-6 col-md-3">
-                                            <Card openCanModal={openCanModal} sale={false} can={item} btnPrice={true} />
-                                        </div>
-                                    )
-                                })
-                                }
+                            <div className="container p-0">
+                                <div className="row">
+                                    {canMarket.map((item) => {
+                                        return (
+                                            <div key={item.id} className="col-12 col-md-6 col-lg-3">
+                                                <Card openCanModal={openCanModal} sale={false} can={item} btnPrice={true} />
+                                            </div>
+                                        )
+                                    })
+                                    }
+                                </div>
                             </div>
                         </>}
                     </div>

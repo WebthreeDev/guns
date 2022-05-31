@@ -11,7 +11,7 @@ $dark2:rgba(12, 16, 23, 0.99);
     background: linear-gradient($dark2,$dark);
     border: 1px solid transparent;
     transition: 0.3s;
-    width: 250px;
+    
     position: relative;
     &:hover{
         border: 1px solid rgba(255, 255, 255, 0.39);

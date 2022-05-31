@@ -309,7 +309,7 @@ const Race = () => {
             </div>} */}
             {/* /********************************** */}
             <div className="row racebg">
-                <div className="col-md-3 col-12">
+                <div className="col-md-3 col-12 mb-4">
                     <div onClick={() => race(0)} className="raceButton">
                         <div className="text-center">
                             <img className="flag" src={flag} alt="" />
@@ -319,7 +319,7 @@ const Race = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-3 col-12">
+                <div className="col-md-3 col-12 mb-4">
                     <Link to="/minigame" className="raceButton rbtn4 t">
                         <div className="text-center">
                             <img className="flag" src={control} alt="" />
@@ -329,7 +329,7 @@ const Race = () => {
                         </div>
                     </Link>
                 </div>
-                <div className="col-md-3 col-12">
+                <div className="col-md-3 col-12 mb-4">
                     <div className="raceButtonComingSoon rbtn2">
                         <div>
                             <div className="text-center">
@@ -344,7 +344,7 @@ const Race = () => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-3 col-12">
+                <div className="col-md-3 col-12 mb-4">
                     <div className="raceButtonComingSoon rbtn3">
                         <div>
                             <div className="text-center">

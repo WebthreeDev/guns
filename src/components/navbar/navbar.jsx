@@ -12,7 +12,7 @@ const Navbar = () => {
                     className="mx-2" />
                 <div className="logo-text">Cryptocans.io</div>
             </div>
-            <div className="d-flex align-items-center">
+            <div className="d-none d-md-flex align-items-center ">
                 {wallet ?
                     <div className="wallet">
                       <img style={{"marginTop":"-2px","marginRight":"4px"}} className="walletIcon" src={walletIcon} alt="" /> {resumeWallet(wallet)}

@@ -219,7 +219,7 @@ const MarketCanodromes = () => {
                 </div>
 
                 <div className="row">
-                    <div className="col-3">
+                    <div className="col-12 col-sm-5 col-md-3 mb-4">
                         <div className="filter">
                             <div className="d-flex justify-content-between align-items-center">
                                 <b>Filter</b>
@@ -264,7 +264,7 @@ const MarketCanodromes = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="col-9 ">
+                    <div className="col-12 col-sm-7 col-md-9">
 
                         {canodromesMarket.length != 0 && <>
 
@@ -275,7 +275,7 @@ const MarketCanodromes = () => {
                                 <div className="row">
                                     {canodromesMarket.length != 0 && canodromesMarket.map((item) => {
                                         return (
-                                            <div key={item._id}  className="col-3 p-1">
+                                            <div key={item._id}  className="col-12 col-md-6 col-lg-3">
                                                 <div className="nftCard p-2 w-100 mb-1" onClick={() => { setCanodrome(item); setRenderModal(true) }}>
 
                                                 <div className="canodromeCardMarket">
