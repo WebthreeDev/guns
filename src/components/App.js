@@ -15,7 +15,7 @@ function App() {
           <div className="col-md-2 col-lg-1 d-none d-md-block ">
             <Sidebar />
           </div>
-          <div className="col-md-10 col-lg-11 col-12">
+          <div className="col-md-10 col-lg-11 col-12 mobileMenu">
             <Router />
           </div>
         </div>

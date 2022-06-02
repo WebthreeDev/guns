@@ -122,7 +122,7 @@ const Minigame = () => {
         </div>}
 
         {modalInfo && <div className="modalX">
-            <div className="modalInClaim">
+            <div className="modalInfoMinigame">
                 <div className="text-center p-4">
                     <img src="https://www.gitbook.com/cdn-cgi/image/width=40,height=40,fit=contain,dpr=1,format=auto/https%3A%2F%2F3560466799-files.gitbook.io%2F~%2Ffiles%2Fv0%2Fb%2Fgitbook-x-prod.appspot.com%2Fo%2Fspaces%252FvdVUvBGUcENGvjpmxl0I%252Ficon%252FsEeQ2Ok9hqgKz7s54DHm%252Flogo.png%3Falt%3Dmedia%26token%3D5aa3fb3c-cf78-4d0c-b397-c31cfd419ab9" />
                     <div className="infoText p-4">
@@ -159,7 +159,7 @@ const Minigame = () => {
                     </div>
                 </div>
                 <div className="row p-3">
-                    <div className="col-3">
+                    <div className="col-12 col-md-3">
                         <div className="d-flex">
                             <div className="w-50">
                                 {tiket1 ? <img src={v1} className="w-100" alt="" /> : <img src={t1} className="w-100" alt="" />}
@@ -187,15 +187,15 @@ const Minigame = () => {
                             <button onClick={() => setModalInfo(true)} className="infoBtn"> ! </button>
                         </div>
                     </div>
-                    <div className="col-9">
+                    <div className="col-12 col-md-9">
                         <div className="">
                             {codes && codes.map((item) =>
                                 finded.includes(item) ?
-                                    <button key={item} className="boxy text-white">
+                                    <button key={item} className="boxyMinigame boxy1  text-white">
                                         {item}
                                     </button>
                                     :
-                                    <button key={item} onClick={() => playGame(item)} className="boxy2 text-white">
+                                    <button key={item} onClick={() => playGame(item)} className="boxyMinigame boxy2 text-white">
                                         {item}
                                     </button>
                             )}

@@ -154,7 +154,7 @@ const Race = () => {
                         {!_context.canodromes && "You need a canodrome to play race"}
                         {_context.canodromes && _context.canodromes.map((canodrome, index) => {
                             return (
-                                <div key={index} className="row raceCanodrome mb-2">
+                                <div key={index} className="row raceCanodrome mb-5">
                                     <div className="col-md-3 col-12">
                                         <div className='bgBlackTrans'>
                                             <div className='imgCanodromeBg'>
@@ -174,15 +174,7 @@ const Race = () => {
                                                     <div className='energyCanodromeText'> {canodrome.energy} / {_context.converType(canodrome.type)} </div>
                                                 </div>
                                             </div>
-
                                         </div>
-                                        {/* {canodrome.energy} / {_context.converType(canodrome.type)}
-                                        <div className="border">
-                                        {canodrome.type === 1 && <img className="w-100" src={commonCanodrome} alt="" />}
-                                        {canodrome.type === 2 && <img className="w-100" src={rareCanodrome} alt="" />}
-                                        {canodrome.type === 3 && <img className="w-100" src={epicCanodrome} alt="" />}
-                                        {canodrome.type === 4 && <img className="w-100" src={legendaryCanodrome} alt="" />} 
-                                        </div>*/}
                                     </div>
                                     <div className="col-md-9 col-12">
                                         <div className="container-fluid">
@@ -199,7 +191,7 @@ const Race = () => {
                                                 </div>}
                                                 {canodrome.cans && canodrome.cans.map((can, index) => {
                                                     return (
-                                                        <div key={index} className="col-4" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
+                                                        <div key={index} className="col-12 col-sm-6 col-md-4" onClick={() => { setCan(can.can); setSelectedCanodrome(canodrome) }}>
                                                             <Card openCanModal={openCanModal} sale={true} can={can.can} />
                                                         </div>
                                                     )
@@ -284,31 +276,7 @@ const Race = () => {
                     </div>
                 </div>
             </>}
-            {/* /********** */}
-            {/* {modalRaceActive && <div className="modalX">
-                <div className='selectTittle'>
-                    <div className='tittle'> Single Race </div>
-                    <button onClick={_ => setModalRaceActive(false)}> X </button>
-                </div>
-                <div className="container-fluid">
-                    <div className="row p-4">
-                        <div className="col-3">
-                            {selectedCan &&
-                                <NftCard
-                                    btnPrice={false}
-                                    setRenderModal={setRenderModal}
-                                    setModalText={setModalText}
-                                    setCan={setCan}
-                                    item={selectedCan} />
-                            }
-                        </div>
-                        
-                            
-                    </div>
-                </div>
-            </div>} */}
-            {/* /********************************** */}
-            <div className="row racebg">
+            <div className="row racebg mobileMenu mt-5">
                 <div className="col-md-3 col-12 mb-4">
                     <div onClick={() => race(0)} className="raceButton">
                         <div className="text-center">

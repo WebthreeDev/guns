@@ -16,12 +16,13 @@ const MarketItems = () => {
     const [passMarket, setPassMarket] = useState([])
     const [confirmModal, setConfirmModal] = useState(false)
     const [passId, setPassId] = useState(false)
-    console.log('ok:', passMarket)
+    const [buyPass,setBuyPass] = useState(false)
+
     //filters
     const [order, setOrder] = useState(1)
     const [rangoMin, setRangoMin] = useState(1)
     const [rangoMax, setRangoMax] = useState(200)
-    const [alert, setAlert] = useState({status: false, title: "", btn: ""})
+    const [alert, setAlert] = useState({ status: false, title: "", btn: "" })
 
     useEffect(() => {
         if (pass.length == 0) fetch(enviroment().baseurl + "pass")
@@ -55,6 +56,7 @@ const MarketItems = () => {
 
     const buyTicket = async () => {
         _context.setLoading(true)
+        setBuyPass(false)
         setConfirmModal(false)
         const body = {
             wallet: _context.wallet,
@@ -84,60 +86,44 @@ const MarketItems = () => {
     return (<div>
         {_context.loading && <Loader />}
         {alert.status && <div className="modalX">
-                <div className="">
-                    <div className="w-100 d-flex align-items-center justify-content-center h-100">
-                        <div className="text-center w-100">
-                            <h5 className="">
-                                {alert.title}
-                            </h5>
-                            <button className="btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
-                        </div>
+            <div className="">
+                <div className="w-100 d-flex align-items-center justify-content-center h-100">
+                    <div className="text-center w-100">
+                        <h5 className="">
+                            {alert.title}
+                        </h5>
+                        <button className="btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
                     </div>
                 </div>
-            </div>}
-        {confirmModal && 
-        <div className='modalX'>
-            <div className='canModalIn modal-item'>
-                <div className="container-fluid">
-                    <div className="row gx-2">
-                        <div className="col-6">
-                            <div className='options'>
-                                <h4>You are buying:</h4>
-                            </div>
-                            <div className='canInfo'>
-                                    {/* <div className='d-flex'> */}
-                                        <div> Price: {passMarket[0].amount} Tickets </div>
-                                        <div className='text-warning'> Price: {passMarket[0].price} BNB </div>
-                                    {/* </div>  */}
-                            </div>
-                        </div>
-                        <div className="col-6">
-                            <div className='canPhoto'> 
-                                    {/* <div className='rarity'> */}
-                                    <img style={{width: '150px', margin: '0 auto'}} className="img-fluid" src={passTicket} alt="" />
-                                    {/* </div> */}
+            </div>
+        </div>}
+        {confirmModal &&
+            <div className='modalX'>
+                <div className='canModalIn modal-item'>
+                    <div className="container-fluid">
+                        <div className="row gx-2">
+                            <div className="col-6">
+                                <div className='options'>
+                                    <h4>You are buying:</h4>
+                                </div>
+                                <div className='canInfo'>
+                                    <div> Price: {buyPass && buyPass.amount} Tickets </div>
+                                    <div className='text-warning'> Price: {buyPass && buyPass.price} CREDITS </div>
                                 </div>
                             </div>
-                        <div className="col-12 p-1 d-flex">
-                            {/* <div className='selectedCanHeading'>  */}
-                                <button className='btn btn-danger form-control btnModal' onClick={() => setConfirmModal(false)}> Cancel </button>
+                            <div className="col-6">
+                                <div className='canPhoto'>
+                                    <img style={{ width: '150px', margin: '0 auto' }} className="img-fluid" src={passTicket} alt="" />
+                                </div>
+                            </div>
+                            <div className="col-12 p-1 d-flex">
+                                <button className='btn btn-danger form-control btnModal' onClick={() =>{ setConfirmModal(false); setBuyPass(false)}}> Cancel </button>
                                 <button className='btn btn-warning form-control btnModal' onClick={buyTicket}> Buy </button>
-                            {/* </div> */}
-
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        // <div className="modalX">
-        //     <div className="modalIn">
-        //         <div className="w-100">
-        //             Esta seguro de comprar estos tickets
-        //             <button className="btn btn-primary" onClick={buyTicket}> Confirm </button>
-        //             <button className="btn btn-danger" onClick={() => setConfirmModal(false)}> Cancel </button>
-        //         </div>
-        //     </div>
-        // </div>
         }
         <div className="container-fluid">
             <div className="secondNav mt-50px mb-3 item-bar">
@@ -199,7 +185,7 @@ const MarketItems = () => {
                         <div className="container-fluid">
                             <div className="row">
                                 {passMarket.length > 0 && <>
-                                    {passMarket.map((item, index) => <div className="col-12 col-sm-6 col-md-4 col-lg-3 p-2" key={index} onClick={() => { setPassId(item._id); setConfirmModal(true) }}>
+                                    {passMarket.map((item, index) => <div className="col-12 col-sm-6 col-md-4 col-lg-3 p-2" key={index} onClick={() => { setBuyPass(item); setPassId(item._id); setConfirmModal(true) }}>
                                         <div className="pass nftCard">
                                             <div className="w-100 p-2">
                                                 <div className="wall">
@@ -216,7 +202,6 @@ const MarketItems = () => {
                                                         {item.price} Credits
                                                     </div>
                                                 </div>
-                                                {/* <button onClick={() => { setPassId(item._id); setConfirmModal(true) }} className="btn btn-primary w-100"> Buy </button> */}
                                             </div>
                                         </div>
                                     </div>)
