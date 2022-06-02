@@ -1,4 +1,4 @@
-import React, {  useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import canodrome from "../../img/canodromes/common.webp"
 import canodromeRare from "../../img/canodromes/rare.webp"
 import canodromeEpic from "../../img/canodromes/epic.webp"
@@ -33,7 +33,7 @@ if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
 const Shop = () => {
 
     const {
-         getCans, getERC721Contract, loading, setLoading, wallet,ticketPrice, setTicketPrice,
+        getCans, getERC721Contract, loading, setLoading, wallet, ticketPrice, setTicketPrice,
         commonPackagePrice, epicPackagePrice, legendaryPackagePrice,
         canodromeCommonPrice, canodromeLegendaryPrice, getCanodromes, exectConnect, rarity
     } = useContext(DataContext)
@@ -46,7 +46,8 @@ const Shop = () => {
 
     const [ticketModal, setTicketModal] = useState(false)
     const [ticketAmmount, setTicketAmmount] = useState(false)
-    
+    const [buyTicketSuccess, setBuyTicketSuccess] = useState(false)
+
     const [alert, setAlert] = useState({ status: false, title: "", btn: "" })
 
     /*  useEffect(_ => {
@@ -127,8 +128,9 @@ const Shop = () => {
                         wallet, amount: ticketAmmount
                     }
                     const res = await axios.post(enviroment().baseurl + "ticket", body)
-                    console.log(res.data.response)
+                    
                     await exectConnect(wallet)
+                    setBuyTicketSuccess(true)
                     setLoading(false)
                 }
             }
@@ -166,7 +168,16 @@ const Shop = () => {
                     </div>
                 </div>
             </div>}
+
             <div className="bg1 unikeRouter">
+                {buyTicketSuccess && <div className="modalX">
+                    <div className="text-center">
+                        <img height={"50px"} src={ticket} alt="" />
+                        <h3>Tickets buy: {ticketAmmount && ticketAmmount} </h3>
+                        <button className="btn btn-primary" onClick={() =>setBuyTicketSuccess(false)}> continue </button>
+                    </div>
+                </div>}
+
                 {ticketModal && <div className='modalX'>
                     <div className="modalInClaim">
                         <div>
@@ -202,7 +213,7 @@ const Shop = () => {
                                     </div>
                                     <div className='col-10'>
                                         <div className="w-100 p-0">
-                                            {ticketAmmount ? <input className="inputClaim" value={ticketAmmount} type="text" />:<input className="inputClaim" value={0} type="text" />}
+                                            {ticketAmmount ? <input className="inputClaim" value={ticketAmmount} type="text" /> : <input className="inputClaim" value={0} type="text" />}
                                         </div>
                                     </div>
                                 </div>
@@ -243,7 +254,7 @@ const Shop = () => {
                                 </>}
                             </div>
                             <div className='d-flex justify-content-center mt-3'>
-                            <button onClick={() => setCanodromeMinted(false)} className="btn btn-primary"> Continue </button>
+                                <button onClick={() => setCanodromeMinted(false)} className="btn btn-primary"> Continue </button>
 
                             </div>
                         </div>
@@ -252,6 +263,7 @@ const Shop = () => {
                 }
                 {minted && <MintModal getCans={getCans} wallet={wallet} canMinted={canMinted} setMinted={setMinted} />}
                 {loading && <Loader />}
+
                 <div className="container">
                     <div className="mb-4">
                         <h1> Need Ticket for the minigame? </h1>
