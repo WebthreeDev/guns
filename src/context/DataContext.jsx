@@ -12,6 +12,7 @@ import changeStateCanodrome from './services/changeStateCanodrome'
 import enviroment from '../env'
 import { nftContractProd } from '../tokensProd/canes/canes'
 import { testNftContract } from '../tokensDev/canes/canes'
+import { ticketsContract, _ticketsContract } from "../tokensDev/buyTickets/buyTickets"
 
 let cctContract
 if (process.env.REACT_APP_ENVIROMENT === "prod") cctContract = cctContractProd()
@@ -44,6 +45,7 @@ export const DataProvider = ({ children }) => {
     const [tiket, setTiket] = useState(false)
     const [pass, setPass] = useState(false)
     const [cctAddress, setCctAddress] = useState(false)
+    const [ticketPrice, setTicketPrice] = useState(false)
     
     const gasPrice = web3.eth.getGasPrice()
 
@@ -74,6 +76,11 @@ export const DataProvider = ({ children }) => {
         }
         return rarityObj[r]
     }
+
+    const getTicketPrice = async () => {
+        const price = await ticketsContract.methods.ticketPrice().call()
+        setTicketPrice(price)
+    } 
 
     const exectConnect = async () => {
 
@@ -115,6 +122,7 @@ export const DataProvider = ({ children }) => {
                             setDayReset(_data.dayReset)
                             setTiket(_data.getWallet.ticket)
                             setPass(_data.getWallet.pass)
+                            getTicketPrice()
 
                             await getBnb(wallet)
                             await getCCT(wallet)
@@ -291,8 +299,8 @@ export const DataProvider = ({ children }) => {
         getCanodromeState, poolContract,
         oracule, minimunToClaim, dayReset,
         _cctContractDev, _cctContractProd,
-        tiket, pass, cctAddress,rarity, 
-        getGasPrice
+        tiket, pass, cctAddress,rarity,getGasPrice,
+        ticketPrice, setTicketPrice
     }
 
     return (

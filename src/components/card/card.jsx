@@ -72,7 +72,7 @@ const Card = ({ can, sale, openCanModal,btnPrice }) => {
         </div>
         <div className='W-options'>
             <div className='options'>
-                <div>
+                <div className='nft-name' >
                     {can.name}
                 </div>
                 <div className="cardEnergy">

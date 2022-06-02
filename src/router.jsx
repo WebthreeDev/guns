@@ -24,7 +24,6 @@ const Router = () => {
             <Route path="/marketcanodromes">
                 <MarketCanodromes />
             </Route>
-            
             <Route path="/admin">
                 <Admin />
             </Route>

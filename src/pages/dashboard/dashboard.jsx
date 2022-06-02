@@ -302,13 +302,15 @@ const Dashboard = () => {
 
     const removePass = async (passId) => {
         setLoading(true)
+        setModalSellTicket(false)
         try {
             fetch(enviroment().baseurl + "pass/" + wallet + "/" + passId, {
                 method: 'delete',
             })
                 .then(res => res.json()) // or res.json()
-                .then(res => {
-                    console.log(res)
+                .then( async (res) => {
+                    /**/
+                    await exectConnect()
                     setLoading(false)
                     handlertAlert(true, "Removed Pass", "Continue")
                 }

@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, {  useContext, useEffect, useState } from "react";
 import canodrome from "../../img/canodromes/common.webp"
 import canodromeRare from "../../img/canodromes/rare.webp"
 import canodromeEpic from "../../img/canodromes/epic.webp"
@@ -32,9 +32,8 @@ if (process.env.REACT_APP_ENVIROMENT == "dev") nftContract = testNftContract()
 
 const Shop = () => {
 
-
     const {
-        gas, gasPrice, getCans, getERC721Contract, loading, setLoading, wallet,
+         getCans, getERC721Contract, loading, setLoading, wallet,ticketPrice, setTicketPrice,
         commonPackagePrice, epicPackagePrice, legendaryPackagePrice,
         canodromeCommonPrice, canodromeLegendaryPrice, getCanodromes, exectConnect, rarity
     } = useContext(DataContext)
@@ -47,20 +46,17 @@ const Shop = () => {
 
     const [ticketModal, setTicketModal] = useState(false)
     const [ticketAmmount, setTicketAmmount] = useState(false)
-    const [ticketPrice, setTicketPrice] = useState(false)
+    
     const [alert, setAlert] = useState({ status: false, title: "", btn: "" })
 
-    useEffect(_ => {
-        erc721()
-        getTicketPrice()
-    }, [])
+    /*  useEffect(_ => {
+        //erc721()
+        //getTicketPrice()
+    }, []) */
 
-    const getTicketPrice = async () => {
-        const price = await ticketsContract.methods.ticketPrice().call()
-        setTicketPrice(price)
-    }
+    /* */
 
-    const erc721 = async () => await getERC721Contract()
+    //const erc721 = async () => await getERC721Contract()
 
     const buyPackage = async (packageId, wallet, price) => {
 
@@ -157,7 +153,7 @@ const Shop = () => {
     }
 
     return (
-        <Fragment>
+        <>
             {alert.status && <div className="modalX">
                 <div className="">
                     <div className="w-100 d-flex align-items-center justify-content-center h-100">
@@ -188,8 +184,8 @@ const Shop = () => {
                             </div>
                             <div className='container-fluid p-0 mt-3'>
                                 <div className="row gx-0">
-                                    <div className='col-2'>
-                                        <img className='logoClaim' src={logoCCT} alt="" />
+                                    <div className='col-2 text-center'>
+                                        <img className='logoClaim' src={ticket} alt="" />
                                     </div>
                                     <div className='col-10'>
                                         <input className="inputClaim" onChange={(e) => { setTicketAmmount(e.target.value) }} type="text" />
@@ -200,13 +196,13 @@ const Shop = () => {
                                 ↑↓
                             </div>
                             <div className='container-fluid p-0'>
-                                <div className="row">
-                                    <div className='col-2'>
-                                        <img className='logoClaim' src={ticket} alt="" />
+                                <div className="row gx-0">
+                                    <div className='col-2 text-center'>
+                                        <img className='logoClaim' src={logoCCT} alt="" />
                                     </div>
                                     <div className='col-10'>
-                                        <div className="inputClaim">
-                                            {ticketAmmount && <input className="inputClaim" value={ticketAmmount} type="text" />}
+                                        <div className="w-100 p-0">
+                                            {ticketAmmount ? <input className="inputClaim" value={ticketAmmount} type="text" />:<input className="inputClaim" value={0} type="text" />}
                                         </div>
                                     </div>
                                 </div>
@@ -491,7 +487,7 @@ const Shop = () => {
                     </div>
                 </div>
             </div>
-        </Fragment>
+        </>
     )
 }
 export default Shop

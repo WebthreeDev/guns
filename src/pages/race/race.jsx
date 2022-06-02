@@ -72,7 +72,10 @@ const Race = () => {
                 setRegresive(false)
             },6000)
             _context.setLoading(false)
-        } catch (error) { handlertAlert(true, JSON.stringify(error.response.data.error), "Continue") }
+        } catch (error) { 
+            _context.setLoading(false)
+            handlertAlert(true, JSON.stringify(error.response.data.error), "Continue")
+        }
         
     }
 
@@ -138,7 +141,7 @@ const Race = () => {
                             <h5 className="">
                                 {alert.title}
                             </h5>
-                            <button className="btn btn-primary" onClick={() => handlertAlert(false, "", "")}> {alert.btn} </button>
+                            <button className="btn btn-primary" onClick={() => {_context.setLoading(false); handlertAlert(false, "", "")}}> {alert.btn} </button>
                         </div>
                     </div>
                 </div>
@@ -151,7 +154,7 @@ const Race = () => {
                         <button className="btn btn-danger" onClick={_ => setModalRace(false)}> X </button>
                     </div>
                     <div className="container py-4 ">
-                        {!_context.canodromes && "You need a canodrome to play race"}
+                        {_context.canodromes.length == 0 && "You need a canodrome to play race"}
                         {_context.canodromes && _context.canodromes.map((canodrome, index) => {
                             return (
                                 <div key={index} className="row raceCanodrome mb-5">

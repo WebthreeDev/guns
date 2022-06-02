@@ -29,47 +29,6 @@ const NftCard = ({ item, setCan, setModalText, setRenderModal, btnPrice }) => {
             <div className="">
                 <div className="p-2">
                     <div>
-                        {/* <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color'>
-                                <div>
-                                    Energy
-                                </div>
-                                <div>
-                                    <progress className='' min={"0"} value={item.energy} max={"4"} name="" id="" />
-                                </div>
-                            </div>
-                            <div className='totalStats lb-color'> {item.energy}/4 </div>
-                        </div> */}
-                        {/* <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color'>
-                                <div>
-                                    Acceleration
-                                </div>
-                                <div>
-                                    <progress className='' min={"0"} value={item.aceleracion} max={"300"} name="" id="" />
-                                </div>
-                            </div>
-                            <div className='totalStats lb-color'> {item.aceleracion} </div>
-                        </div>
-                        <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color'>
-                                <div>
-                                    Aerodinamic
-                                </div>
-                                <div > <progress min={"0"} value={item.aerodinamica} max={"300"} name="" id="" /> </div>
-
-                            </div>
-                            <div className='totalStats lb-color'> {item.aerodinamica} </div>
-                        </div>
-                        <div className='d-flex justify-content-between  align-items-center'>
-                            <div className='lb-color'>
-                                <div>
-                                    Resistence
-                                </div>
-                                <div> <progress min={"0"} value={item.resistencia} max={"300"} name="" id="" /> </div>
-                            </div>
-                            <div className='totalStats lb-color'> {item.resistencia} </div>
-                        </div> */}
                         <div className='d-flex justify-content-between'>
                             <span>Total stats</span>
                             {item.resistencia + item.aceleracion + item.aerodinamica}
