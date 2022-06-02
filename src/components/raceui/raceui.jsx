@@ -148,7 +148,7 @@ const RaceUi = ({ setRaceUi, places, position,selectedCan, credits,arrayDogs }) 
                         <p className="place">PLACE</p>
                         {/* <p>Credits: {alert.credit}</p> */}
                     </div>
-                    <div><p>Reward credits: {credits}</p></div>
+                    <div><p>Reward credits: <span className='credits'>{credits}</span></p></div>
                     <button onClick={() => setRaceUi(false)} className='btn btn-primary'>Continue</button>
                 </div>
             </div>}
