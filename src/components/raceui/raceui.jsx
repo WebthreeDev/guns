@@ -47,7 +47,7 @@ const RaceUi = ({ setRaceUi, places, position, selectedCan, credits, arrayDogs }
         //end of race
         setTimeout(() => {
             handlertAlert(true, _place)
-        }, 6000000)
+        }, 60000)
 
         let contador1 = 0
         let contador2 = 0

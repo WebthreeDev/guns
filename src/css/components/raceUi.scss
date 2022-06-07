@@ -66,16 +66,15 @@ $gradasImg:url(../../img/raceui/gradas.png);
 }
 
 .bg-pista{
-    margin-top: -20px;
-    height: 50vh;
-    width: 100%;
+    height: 100vh;
+    width: 100vw;
     background-image:$pista;
     background-repeat:repeat-x;
     background-position-x: right;
-    background-size: 200vw 50vh;
+    background-size: cover;
     animation-name: pista;
     animation-timing-function: linear;
-    animation-duration: 10s;
+    animation-duration: 60s;
     animation-iteration-count: infinite;
     position: fixed;
     bottom: 0px;
@@ -84,52 +83,52 @@ $gradasImg:url(../../img/raceui/gradas.png);
 
 @keyframes pista {
     0%{
-        background-position-x: 200vw;
+        background-position-x: 14000px;
     }
     100%{
-        background-position-x: 0vw;
+        background-position-x: 0px;
     }
 }
 
 .dog1{
     position: absolute;
     left:0px;
-    top: -15px;
+    bottom: 170px;
     height: 120px;
     z-index: 1;
 }
 .dog2{
     position: absolute;
     left: 0px;
-    top: 5px;
+    bottom: 150px;
     height: 125px;
     z-index: 1;
 }
 .dog3{
     position: absolute;
     left: 0px;
-    top: 25px;
+    bottom: 130px;
     height: 140px;
    z-index: 1;
 }
 .dog4{
     position: absolute;
     left: 0px;
-    top: 50px;
+    bottom: 110px;
     height: 150px;
    z-index: 5;
 }
 .dog5{
     position: absolute;
     left: 0px;
-    top: 78px;
+    bottom: 90px;
     height: 158px;
     z-index: 6;
     
 }
 .dog6{
     position: absolute;
-    top: 100px;
+    bottom: 70px;
     height: 170px;
     z-index: 7;
 }
@@ -138,12 +137,12 @@ $gradasImg:url(../../img/raceui/gradas.png);
     height: 100%;
 }
 .meta{
-    height: 50%;
+    height: 150px;
     background-color: rgba(115, 246, 255, 0.664);
     width: 12px;
     transform: skew(20deg);
     left: 120vw;
-    top: 47px;
+    bottom: 55px;
     position: absolute;
     animation-name: meta;
     animation-duration: 7s;
@@ -152,13 +151,13 @@ $gradasImg:url(../../img/raceui/gradas.png);
     z-index: 0;
 }
 .mts{
-    height: 50%;
+    height: 150px;
     color: rgba(240, 248, 255, 0.712);
     transform: skew(20deg);
     padding-left: 10px;
     left: 120vw;
     text-align: center;
-    top: 55px;
+    bottom: 55px;
     width: 10px;
     display: flex;
     align-items: center;
@@ -207,6 +206,7 @@ $gradasImg:url(../../img/raceui/gradas.png);
     left: 55%;
     position: absolute;
     animation: selectorX 1s infinite;
+    z-index: 999;
 }
 @keyframes selectorX {
     0% {

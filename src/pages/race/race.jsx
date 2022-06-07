@@ -32,7 +32,7 @@ const Race = () => {
     const [modalRaceActive, setModalRaceActive] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
-    const [raceUi, setRaceUi] = useState(false)
+    const [raceUi, setRaceUi] = useState(true)
     const [places, setPlaces] = useState([])
     const [credits, setCredits] = useState(0)
     const [position, setPosition] = useState([])
@@ -331,8 +331,7 @@ const Race = () => {
                     </div>
                 </div>
             </div>
-        </div >
-
+        </div>
     )
 }
 export default Race
