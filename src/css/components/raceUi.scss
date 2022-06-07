@@ -1,8 +1,20 @@
-.raceUi{
-    background-size: cover;
+$gradas:100vw;
+$bg:    url(../../img/raceui/bgGradas.png);
+$pista: url(../../img/raceui/pista.png);
+$gradasImg:url(../../img/raceui/gradas.png);
+.bgRaceUi{
+    background-color: #000000;
     height: 100vh;
     width: 100vw;
-    background:linear-gradient(rgba(0, 0, 0, 0.212),rgba(13, 13, 22, 0.219)), url(../../img/raceui/bgGradas.webp);
+    position:fixed;
+    top: 0px;
+    left: 0px;
+}
+.raceUi{
+    height: 100vh;
+    width: 100vw;
+    background-color: #c9c041;
+    background:linear-gradient(rgba(0, 0, 0, 0.315),rgba(13, 13, 22, 0.452)),$bg;
     position: fixed;
     top: 0px;
     left: 0px;
@@ -10,22 +22,37 @@
     right: 0px;
     padding-top: 0px;
     z-index: 1;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: bottom;
-}
-$gradas:130vw;
-.bg-gradas{
-    height: 60vh;
-    width: 100%;
-    background-image: url(../../img/raceui/gradas.webp);
+    background-size: 200vw 80vh;
     background-repeat:repeat-x;
-    background-position-x: right;
-    background-position-y:top;
+    background-position: top;
+    animation-duration:40s;
+    animation-name: backUi;
+    animation-timing-function: linear;
+    animation-duration: 200s;
+    animation-iteration-count: infinite;
+}
+@keyframes backUi{
+    0%{
+        background-position-x: left;
+    }
+    100%{
+        background-position-x: right;
+    } 
+}
+
+.bg-gradas{
+    top: 150px;
+    position: fixed;
+    height: 60vh;
+    width: 100vw;
+    background-image: $gradasImg;
+    background-repeat:repeat-x;
+    /* background-position-x: right;
+    background-position-y:top; */
     background-size:$gradas 100%;
     animation-name: gradas;
     animation-timing-function: linear;
-    animation-duration: 30s;
+    animation-duration: 80s;
     animation-iteration-count: infinite;
 }
 
@@ -39,24 +66,25 @@ $gradas:130vw;
 }
 
 .bg-pista{
-    margin-top: -45px;
+    margin-top: -20px;
     height: 50vh;
     width: 100%;
-    background-image: url(../../img/raceui/pista.webp);
+    background-image:$pista;
     background-repeat:repeat-x;
     background-position-x: right;
-    background-size: 100vw 50vh;
+    background-size: 200vw 50vh;
     animation-name: pista;
     animation-timing-function: linear;
-    animation-duration: 3s;
+    animation-duration: 10s;
     animation-iteration-count: infinite;
-    position: relative;
+    position: fixed;
+    bottom: 0px;
     z-index: inherit;
 }
 
 @keyframes pista {
     0%{
-        background-position-x: 100vw;
+        background-position-x: 200vw;
     }
     100%{
         background-position-x: 0vw;
@@ -66,7 +94,7 @@ $gradas:130vw;
 .dog1{
     position: absolute;
     left:0px;
-    top: -20px;
+    top: -15px;
     height: 120px;
     z-index: 1;
 }
@@ -80,28 +108,28 @@ $gradas:130vw;
 .dog3{
     position: absolute;
     left: 0px;
-    top: 30px;
+    top: 25px;
     height: 140px;
    z-index: 1;
 }
 .dog4{
     position: absolute;
     left: 0px;
-    top: 57px;
+    top: 50px;
     height: 150px;
    z-index: 5;
 }
 .dog5{
     position: absolute;
     left: 0px;
-    top: 85px;
+    top: 78px;
     height: 158px;
     z-index: 6;
     
 }
 .dog6{
     position: absolute;
-    top: 110px;
+    top: 100px;
     height: 170px;
     z-index: 7;
 }
@@ -110,7 +138,7 @@ $gradas:130vw;
     height: 100%;
 }
 .meta{
-    height: 70%;
+    height: 50%;
     background-color: rgba(115, 246, 255, 0.664);
     width: 12px;
     transform: skew(20deg);
@@ -118,12 +146,46 @@ $gradas:130vw;
     top: 47px;
     position: absolute;
     animation-name: meta;
-    animation-duration: 4.2s;
+    animation-duration: 7s;
     animation-delay: 57s;
     animation-timing-function: linear;
     z-index: 0;
 }
+.mts{
+    height: 50%;
+    color: rgba(240, 248, 255, 0.712);
+    transform: skew(20deg);
+    padding-left: 10px;
+    left: 120vw;
+    text-align: center;
+    top: 55px;
+    width: 10px;
+    display: flex;
+    align-items: center;
+    background-color: rgba(240, 248, 255, 0.315);
+    font-size: 40px;
+    position: absolute;
+    animation-name: m100;
+    animation-duration: 7s;
+    animation-timing-function: linear;
+    z-index: 0;
+}
+.mts100{animation-delay: 10s;}
+.mts200{animation-delay: 20s;}
+.mts300{animation-delay: 30s;}
+.mts400{animation-delay: 40s;}
+.mts500{animation-delay: 50s;}
 
+@keyframes m100 {
+    0%{
+        left: 120vw;
+
+    }
+    100%{
+        left: -20vw;
+
+    }
+}
 @keyframes meta {
     0%{
         left: 120vw;
@@ -228,3 +290,63 @@ text-align: center;
     max-width: 80px;
   }
   
+  .timeLine{
+      z-index: 2;
+      position: fixed;
+      padding:10px;
+      box-sizing: border-box;
+      position: fixed;
+      width: 90vw;
+      left: 5vw;
+  }
+
+$timelineColor:rgb(255, 255, 255);
+
+.timeL{
+    position: absolute;
+    height: 50px;
+    width: 10px;
+    background-color: $timelineColor;
+    left: 10px;
+    top: 10px;
+    border-radius: 3px;
+}
+
+.line{
+    width: 100%;
+    background-color: $timelineColor;
+    height: 10px;
+    position: absolute;
+    top: 30px;
+}
+
+.timeR{
+    position: absolute;
+    border-radius: 3px;
+    right: -10px;
+    top: 10px;
+    height: 50px;
+    width: 10px;
+    background-color: $timelineColor;
+}
+
+.logoRace{
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    left: 20px;
+    animation-name: logo;
+    animation-duration:60s;
+    animation-timing-function: linear;
+}
+
+@keyframes logo{
+    0%{
+        left: 0px;
+    }
+    100%{
+        left: 100%;
+    } 
+}
+

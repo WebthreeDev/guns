@@ -10,7 +10,8 @@ import flag from '../../img/assets/icons/flag.png'
 import control from '../../img/assets/icons/control.png'
 import rank from '../../img/assets/icons/rank.png'
 import beats from '../../img/assets/icons/beats.png'
-import '../../css/components/raceUi.scss';
+import '../../css/components/raceUi.scss'
+
 import commonCanodrome from '../../img/canodromes/common.webp'
 import rareCanodrome from '../../img/canodromes/rare.webp'
 import epicCanodrome from '../../img/canodromes/epic.webp'
@@ -21,7 +22,7 @@ import commonNft from '../../img/nfts/common.webp'
 import rareNft from '../../img/nfts/rare.webp'
 import epicNft from '../../img/nfts/epic.webp'
 import legendaryNft from '../../img/nfts/legendary.webp'
-import Card from "../../components/card/card";
+import Card from "../../components/card/card"
 
 const Race = () => {
     const _context = useContext(DataContext)
@@ -59,7 +60,7 @@ const Race = () => {
         const canId = selectedCan.id
         const canodromeId = selectedCanodrome._id
         const body = { canId, wallet: _context.wallet, canodromeId }
-        console.log(body)
+   
         try {
             const res = await axios.post(enviroment().baseurl + "race", body)
             const _places = res.data.response.places
@@ -76,7 +77,6 @@ const Race = () => {
             _context.setLoading(false)
             handlertAlert(true, JSON.stringify(error.response.data.error), "Continue")
         }
-        
     }
 
     const goRace = (_places, credits) => {

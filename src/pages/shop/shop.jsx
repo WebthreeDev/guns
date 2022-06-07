@@ -61,13 +61,14 @@ const Shop = () => {
 
     const buyPackage = async (packageId, wallet, price) => {
 
-        console.log(nftContract.methods)
+       // console.log(nftContract.methods)
         setLoading(true)
         //envio a la blockchain el packageId
         const value = web3.utils.toWei(price.toString(), "ether")
         console.log(price)
         try {
             const contractResponse = await nftContract.methods.mint(packageId).send({ from: wallet, value })
+            console.log(contractResponse)
 
             //Get hash
             const hash = contractResponse.events.Transfer.transactionHash;
