@@ -1,7 +1,7 @@
-import dogCommon from '../../img/nftRace/dogCommon.gif'
-import dogRare from '../../img/nftRace/dogRare.gif'
-import dogEpic from '../../img/nftRace/dogEpic.gif'
-import dogLegendary from '../../img/nftRace/dogLegendary.gif'
+import dogCommon from '../../img/nftRace/dogCommon-min.gif'
+import dogRare from '../../img/nftRace/dogRare-min.gif'
+import dogEpic from '../../img/nftRace/dogEpic-min.gif'
+import dogLegendary from '../../img/nftRace/dogLegendary-min.gif'
 import trofeo from '../../img/trofeo.png'
 
 import { useState, useEffect, useRef, Fragment } from "react";
