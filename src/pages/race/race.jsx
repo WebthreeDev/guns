@@ -32,7 +32,7 @@ const Race = () => {
     const [modalRaceActive, setModalRaceActive] = useState(false)
     const [selectedCan, setSelectedCan] = useState(false)
     const [selectedCanodrome, setSelectedCanodrome] = useState(false)
-    const [raceUi, setRaceUi] = useState(true)
+    const [raceUi, setRaceUi] = useState(false)
     const [places, setPlaces] = useState([])
     const [credits, setCredits] = useState(0)
     const [position, setPosition] = useState([])
